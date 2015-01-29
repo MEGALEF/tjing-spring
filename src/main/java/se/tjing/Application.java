@@ -24,6 +24,12 @@ import se.tjing.restcontrollers.*;
 public class Application {
 
 	public static void main(String[] args) {
+		String webPort = System.getenv("PORT");
+	    if (webPort == null || webPort.isEmpty()) {
+	        webPort = "8080";
+	    }
+	    System.setProperty("server.port", webPort);
+		
 		ApplicationContext ctx = new ClassPathXmlApplicationContext("classpath:META-INF/spring/applicationContext.xml");
 		
 		SpringApplication.run(Application.class, args);
