@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import se.tjing.entity.Person;
+import se.tjing.exception.TjingException;
+import se.tjing.service.PersonService;
 import se.tjing.store.PersonRepository;
 
 @RestController
@@ -18,17 +20,18 @@ import se.tjing.store.PersonRepository;
 public class PersonController {
 	
 	@Autowired
-	private PersonRepository personRepo;
+	PersonService pService;
 	
 	@RequestMapping(value = "/{userId}", method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<Person> getUser(@PathVariable Integer userId){
-		return new ResponseEntity<Person>(personRepo.findOne(userId), null, HttpStatus.OK);
+		return new ResponseEntity<Person>(pService.getPerson(userId), null, HttpStatus.OK);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Person> addUser(@RequestBody Person user){
-		return new ResponseEntity(personRepo.save(user), null, HttpStatus.CREATED);
+		Person addedUser = pService.addPerson(user);
+		return new ResponseEntity(addedUser, null, HttpStatus.CREATED);
 	}
 	
 }
