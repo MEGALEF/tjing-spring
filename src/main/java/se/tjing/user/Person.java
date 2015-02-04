@@ -1,4 +1,4 @@
-package se.tjing.entity;
+package se.tjing.user;
 
 import java.io.Serializable;
 

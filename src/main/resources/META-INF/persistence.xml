@@ -3,7 +3,7 @@
   version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
   <persistence-unit name="persistenceUnit" transaction-type="RESOURCE_LOCAL">
    	<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-   	<class>se.tjing.entity.Person</class>
+   	<class>se.tjing.user.Person</class>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
             <!-- value="create" to build a new database on each run; value="update" to modify an existing database; value="create-drop" means the same as "create" but also drops tables when Hibernate closes; value="validate" makes no changes to the database -->

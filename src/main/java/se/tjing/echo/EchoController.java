@@ -1,4 +1,4 @@
-package se.tjing.restcontrollers;
+package se.tjing.echo;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,10 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/echo")
 public class EchoController {
 
-	@RequestMapping(value="/{echoThis}", method=RequestMethod.GET)
+	@RequestMapping(value = "/{echoThis}", method = RequestMethod.GET)
 	@ResponseBody
-	public String getPerson(@PathVariable String echoThis){
+	public String getPerson(@PathVariable String echoThis) {
+		System.out.println("Eko");
 		return echoThis;
 	}
-	
+
 }

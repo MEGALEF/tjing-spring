@@ -1,11 +1,9 @@
-package se.tjing.service;
+package se.tjing.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import se.tjing.entity.Person;
 import se.tjing.exception.TjingException;
-import se.tjing.store.PersonRepository;
 
 @Service
 public class PersonService {
