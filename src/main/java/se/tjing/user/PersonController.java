@@ -3,6 +3,8 @@ package se.tjing.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +30,14 @@ public class PersonController {
 	public ResponseEntity<Person> addUser(@RequestBody Person user) {
 		Person addedUser = pService.addPerson(user);
 		return new ResponseEntity<Person>(addedUser, null, HttpStatus.CREATED);
+	}
+
+	@RequestMapping(method = RequestMethod.GET)
+	public ResponseEntity<String> getCurrentUser() {
+		Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+		String name = auth.getName();
+		return new ResponseEntity<String>(name, null, HttpStatus.OK);
 	}
 
 }

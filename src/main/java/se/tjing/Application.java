@@ -3,10 +3,15 @@ package se.tjing;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.social.connect.web.SignInAdapter;
+
+import se.tjing.signin.SimpleSignInAdapter;
 
 @Configuration
 @ComponentScan
@@ -25,6 +30,11 @@ public class Application {
 		System.setProperty("server.port", webPort);
 
 		SpringApplication.run(Application.class, args);
+	}
+
+	@Bean
+	public SignInAdapter signInAdapter() {
+		return new SimpleSignInAdapter(new HttpSessionRequestCache());
 	}
 
 }

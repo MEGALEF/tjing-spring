@@ -17,7 +17,15 @@ public class Person implements Serializable {
 	private String firstName;
 	private String lastName;
 	private String email;
-	
+	private String password;
+
+	public Person(String email, String password, String firstName,
+			String lastName) {
+		this.email = email;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.password = password;
+	}
 
 	public String getFirstName() {
 		return firstName;
