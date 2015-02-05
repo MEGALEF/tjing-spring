@@ -10,25 +10,24 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import se.tjing.exception.TjingException;
-
 @RestController
 @RequestMapping("/user")
 public class PersonController {
-	
+
 	@Autowired
 	PersonService pService;
-	
+
 	@RequestMapping(value = "/{userId}", method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<Person> getUser(@PathVariable Integer userId){
-		return new ResponseEntity<Person>(pService.getPerson(userId), null, HttpStatus.OK);
+	public ResponseEntity<Person> getUser(@PathVariable Integer userId) {
+		return new ResponseEntity<Person>(pService.getPerson(userId), null,
+				HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Person> addUser(@RequestBody Person user){
+	public ResponseEntity<Person> addUser(@RequestBody Person user) {
 		Person addedUser = pService.addPerson(user);
-		return new ResponseEntity(addedUser, null, HttpStatus.CREATED);
+		return new ResponseEntity<Person>(addedUser, null, HttpStatus.CREATED);
 	}
-	
+
 }
