@@ -13,17 +13,22 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/facebooktest")
+@RequestMapping("/facebook")
 public class FacebookTestController {
 	@Inject
 	Facebook facebook;
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<FacebookProfile> test(@PathVariable String id) {
-		// System.out.println("Debug");
-		// System.out.println(facebook.getApplicationNamespace());
+	public ResponseEntity<FacebookProfile> getUser(@PathVariable String id) {
 		FacebookProfile profile = facebook.userOperations().getUserProfile(id);
+		return new ResponseEntity<FacebookProfile>(profile, null, HttpStatus.OK);
+	}
+
+	@RequestMapping(method = RequestMethod.GET)
+	@ResponseBody
+	public ResponseEntity<FacebookProfile> getUser() {
+		FacebookProfile profile = facebook.userOperations().getUserProfile();
 		return new ResponseEntity<FacebookProfile>(profile, null, HttpStatus.OK);
 	}
 }
