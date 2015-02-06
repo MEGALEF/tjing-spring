@@ -31,6 +31,7 @@ public class Person implements Serializable {
 	private Set<Item> items;
 
 	@OneToMany(mappedBy = "member")
+	@JsonManagedReference
 	private Set<Membership> memberships;
 
 	public Person() {
