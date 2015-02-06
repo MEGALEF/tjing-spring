@@ -7,25 +7,29 @@ import se.tjing.exception.TjingException;
 
 @Service
 public class PersonService {
-	
+
 	@Autowired
 	private PersonRepository personRepo;
-	
-	public Person addPerson(Person person){
-		if (personRepo.findByEmail(person.getEmail())!=null){
+
+	public Person addPerson(Person person) {
+		if (personRepo.findByEmail(person.getEmail()) != null) {
 			throw new TjingException("User with that email already exists");
 		}
 		personRepo.save(person);
 		return person;
 	}
-	
-	public Person getPerson(Integer userId){
+
+	public Person getPerson(Integer userId) {
 		Person result = personRepo.findOne(userId);
-		if (result == null){
+		if (result == null) {
 			throw new TjingException("User with that id does not exist");
 		} else {
 			return result;
 		}
 	}
-	
+
+	public Person getPersonByEmail(String email) {
+		return personRepo.findByEmail(email);
+	}
+
 }
