@@ -1,5 +1,7 @@
 package se.tjing.item;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,14 +31,19 @@ public class ItemController {
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<Item> addItem(@RequestBody AddItemRestObject addItem) {
-		Authentication authentication = SecurityContextHolder.getContext()
-				.getAuthentication();
-		String currentUserName = (String) authentication.getPrincipal();
-		Person currentUser = personService.getPersonByEmail(currentUserName);
+		Person currentUser = getCurrentUser();
 
 		Item addedItem = itemService.addItem(addItem
 				.buildItemWithOwner(currentUser));
 		return new ResponseEntity<Item>(addedItem, null, HttpStatus.CREATED);
+	}
+
+	public Person getCurrentUser() {
+		Authentication authentication = SecurityContextHolder.getContext()
+				.getAuthentication();
+		String currentUserName = (String) authentication.getPrincipal();
+		Person currentUser = personService.getPersonByEmail(currentUserName);
+		return currentUser;
 	}
 
 	@RequestMapping(value = "/{itemId}/share/{poolId}", method = RequestMethod.POST)
@@ -44,5 +51,12 @@ public class ItemController {
 			@PathVariable Integer poolId) {
 		return new ResponseEntity<Share>(itemService.shareToGroup(itemId,
 				poolId), null, HttpStatus.CREATED);
+	}
+
+	@RequestMapping(value = "/availableitems", method = RequestMethod.GET)
+	public ResponseEntity<List<Item>> getAvailableItems() {
+		return new ResponseEntity<List<Item>>(
+				itemService.getAvailableItemsToUser(getCurrentUser()), null,
+				HttpStatus.OK);
 	}
 }
