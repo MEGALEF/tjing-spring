@@ -8,12 +8,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import se.tjing.common.BaseEntity;
 import se.tjing.user.Person;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-public class Item implements Serializable {
+public class Item extends BaseEntity implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

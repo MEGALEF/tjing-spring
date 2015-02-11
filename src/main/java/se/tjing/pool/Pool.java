@@ -8,10 +8,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import se.tjing.common.BaseEntity;
 import se.tjing.membership.Membership;
+import se.tjing.share.Share;
 
 @Entity
-public class Pool {
+public class Pool extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
@@ -21,7 +23,8 @@ public class Pool {
 	@OneToMany(mappedBy = "pool")
 	private Set<Membership> memberships;
 
-	// TODO: Add and shares
+	@OneToMany(mappedBy = "pool")
+	private Set<Share> shares;
 
 	public Integer getId() {
 		return id;

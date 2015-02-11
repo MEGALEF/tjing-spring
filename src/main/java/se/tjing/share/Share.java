@@ -1,37 +1,48 @@
-package se.tjing.membership;
+package se.tjing.share;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import se.tjing.common.BaseEntity;
+import se.tjing.condition.Condition;
+import se.tjing.item.Item;
 import se.tjing.pool.Pool;
-import se.tjing.user.Person;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-public class Membership extends BaseEntity {
+public class Share extends BaseEntity<Integer> {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	Integer id;
+	private Integer id;
 
 	@ManyToOne
-	@JsonBackReference
-	private Person member;
+	private Item item;
 	@ManyToOne
-	@JsonBackReference
 	private Pool pool;
 
-	public Person getMember() {
-		return member;
+	@OneToOne
+	private Condition condition;
+
+	public Share(Item item, Pool pool) {
+		this.item = item;
+		this.pool = pool;
 	}
 
-	public void setMember(Person member) {
-		this.member = member;
+	@Override
+	public Integer getId() {
+		return id;
+	}
+
+	public Item getItem() {
+		return item;
+	}
+
+	public void setItem(Item item) {
+		this.item = item;
 	}
 
 	public Pool getPool() {
@@ -42,12 +53,8 @@ public class Membership extends BaseEntity {
 		this.pool = pool;
 	}
 
-	@Override
-	public Object getId() {
-		return id;
-	}
-
 	public void setId(Integer id) {
 		this.id = id;
 	}
+
 }

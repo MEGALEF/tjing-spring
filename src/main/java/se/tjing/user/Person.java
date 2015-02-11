@@ -9,13 +9,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import se.tjing.common.BaseEntity;
 import se.tjing.item.Item;
 import se.tjing.membership.Membership;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
-public class Person implements Serializable {
+public class Person extends BaseEntity implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

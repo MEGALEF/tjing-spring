@@ -79,6 +79,15 @@
         	<groupId>org.springframework.boot</groupId>
         	<artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
+        <dependency>
+        	<groupId>joda-time</groupId>
+        	<artifactId>joda-time</artifactId>
+        </dependency>
+        <dependency>
+        	<groupId>org.jadira.usertype</groupId>
+        	<artifactId>usertype.core</artifactId>
+        	<version>3.0.0.GA</version>
+        </dependency>
     </dependencies>
   
 
