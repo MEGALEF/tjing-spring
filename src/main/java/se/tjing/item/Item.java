@@ -2,6 +2,7 @@ package se.tjing.item;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import se.tjing.common.BaseEntity;
+import se.tjing.interaction.Interaction;
 import se.tjing.share.Share;
 import se.tjing.user.Person;
 
@@ -35,6 +37,10 @@ public class Item extends BaseEntity implements Serializable {
 	@OneToMany(mappedBy = "item")
 	@JsonManagedReference
 	private List<Share> shares;
+
+	@OneToMany(mappedBy = "item")
+	@JsonManagedReference
+	private Set<Interaction> interactions;
 
 	public Item() {
 	}

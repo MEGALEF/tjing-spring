@@ -1,6 +1,8 @@
 package se.tjing.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import se.tjing.exception.TjingException;
@@ -30,6 +32,14 @@ public class PersonService {
 
 	public Person getPersonByEmail(String email) {
 		return personRepo.findByEmail(email);
+	}
+
+	public Person getCurrentUser() {
+		Authentication authentication = SecurityContextHolder.getContext()
+				.getAuthentication();
+		String currentUserName = (String) authentication.getPrincipal();
+		Person currentUser = getPersonByEmail(currentUserName);
+		return currentUser;
 	}
 
 }

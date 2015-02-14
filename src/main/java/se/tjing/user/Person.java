@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import se.tjing.common.BaseEntity;
+import se.tjing.interaction.Interaction;
 import se.tjing.item.Item;
 import se.tjing.membership.Membership;
 
@@ -25,6 +26,15 @@ public class Person extends BaseEntity implements Serializable {
 	private String firstName;
 	private String lastName;
 	private String email;
+
+	public Set<Interaction> getInteractions() {
+		return interactions;
+	}
+
+	public void setInteractions(Set<Interaction> interactions) {
+		this.interactions = interactions;
+	}
+
 	private String password;
 
 	@OneToMany(mappedBy = "owner")
@@ -34,6 +44,9 @@ public class Person extends BaseEntity implements Serializable {
 	@OneToMany(mappedBy = "member")
 	@JsonManagedReference
 	private Set<Membership> memberships;
+
+	@OneToMany(mappedBy = "borrower")
+	private Set<Interaction> interactions;
 
 	public Person() {
 

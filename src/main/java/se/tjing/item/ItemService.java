@@ -4,9 +4,12 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import se.tjing.interaction.Interaction;
+import se.tjing.interaction.InteractionRepository;
 import se.tjing.membership.QMembership;
 import se.tjing.pool.Pool;
 import se.tjing.pool.PoolRepository;
@@ -34,6 +37,9 @@ public class ItemService {
 	@Autowired
 	ShareRepository shareRepo;
 
+	@Autowired
+	InteractionRepository interactionRepo;
+
 	public Item addItem(Item item) {
 		// TODO: Business logic. Check for existing items
 		itemRepo.save(item);
@@ -48,7 +54,7 @@ public class ItemService {
 		return shareRepo.save(share);
 	}
 
-	public Boolean isItemAvailableToUser(Person person, Item item) {
+	private Boolean isItemAvailableToUser(Person person, Item item) {
 		// TODO
 		return false;
 	}
@@ -70,6 +76,16 @@ public class ItemService {
 	public List<Item> searchAvailableItems(Person person, String searchStr) {
 		// TODO
 		return null;
+	}
+
+	public Interaction initiateRequest(Person currentUser, Integer itemId) {
+		Item item = itemRepo.findOne(itemId);
+		// TODO: Business logic
+		Interaction interaction = new Interaction();
+		interaction.setBorrower(currentUser);
+		interaction.setItem(item);
+		interaction.setStatusRequested(new DateTime());
+		return interactionRepo.save(interaction);
 	}
 
 }

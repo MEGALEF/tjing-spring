@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
@@ -19,8 +20,11 @@ public class Interaction extends BaseEntity<Integer> {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 
+	@ManyToOne
 	private Item item;
-	private Person counterpart;
+
+	@ManyToOne
+	private Person borrower;
 
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	private DateTime statusRequested;
@@ -44,16 +48,16 @@ public class Interaction extends BaseEntity<Integer> {
 		this.item = item;
 	}
 
-	public Person getCounterpart() {
-		return counterpart;
-	}
-
-	public void setCounterpart(Person counterpart) {
-		this.counterpart = counterpart;
-	}
-
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Person getBorrower() {
+		return borrower;
+	}
+
+	public void setBorrower(Person borrower) {
+		this.borrower = borrower;
 	}
 
 	public DateTime getStatusRequested() {
