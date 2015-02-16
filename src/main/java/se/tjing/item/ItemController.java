@@ -30,7 +30,7 @@ public class ItemController {
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<Item> addItem(@RequestBody AddItemRestObject addItem) {
-		Person currentUser = getCurrentUser();
+		Person currentUser = personService.getCurrentUser();
 
 		Item addedItem = itemService.addItem(addItem
 				.buildItemWithOwner(currentUser));
