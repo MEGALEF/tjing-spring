@@ -11,12 +11,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import se.tjing.membership.Membership;
+import se.tjing.user.PersonService;
 
 @RestController
 @RequestMapping("/pool")
 public class PoolController {
 	@Autowired
 	PoolService poolService;
+
+	@Autowired
+	PersonService personService;
 
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
@@ -28,7 +32,9 @@ public class PoolController {
 	@RequestMapping(value = "/{poolId}/join", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<Membership> joinPool(@PathVariable Integer poolId) {
-		return new ResponseEntity<Membership>(null, null, HttpStatus.CREATED);
+		Membership newMembership = poolService.joinPool(
+				personService.getCurrentUser(), poolId);
+		return new ResponseEntity<Membership>(newMembership, null,
+				HttpStatus.CREATED);
 	}
-
 }

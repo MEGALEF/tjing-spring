@@ -20,11 +20,12 @@ public class PoolService {
 		return poolRepo.save(pool);
 	}
 
-	public Membership joinPool(Person person, Pool pool) {
+	public Membership joinPool(Person person, Integer poolId) {
 		// TODO: Business logic.
 		// Check whether the pool need request approval from admin, member and
 		// so
 		// Check for preexisting memberships
+		Pool pool = poolRepo.findOne(poolId);
 		Membership membership = new Membership();
 		membership.setMember(person);
 		membership.setPool(pool);
