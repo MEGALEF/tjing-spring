@@ -4,7 +4,7 @@
 
 -- Dumped from database version 9.4.0
 -- Dumped by pg_dump version 9.4.0
--- Started on 2015-02-16 11:20:45
+-- Started on 2015-02-16 12:55:11
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -16,7 +16,7 @@ SET client_min_messages = warning;
 SET search_path = public, pg_catalog;
 
 --
--- TOC entry 2039 (class 0 OID 58099)
+-- TOC entry 2030 (class 0 OID 58188)
 -- Dependencies: 172
 -- Data for Name: condition; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -24,25 +24,7 @@ SET search_path = public, pg_catalog;
 
 
 --
--- TOC entry 2051 (class 0 OID 0)
--- Dependencies: 179
--- Name: hibernate_sequence; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('hibernate_sequence', 7, true);
-
-
---
--- TOC entry 2043 (class 0 OID 58122)
--- Dependencies: 176
--- Data for Name: person; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-INSERT INTO person VALUES (1, '2015-02-16 10:13:44.797', '2015-02-16 10:13:44.797', 0, 'qwerqwer', 'Johannes', 'Andersson', 'qwerqwer');
-
-
---
--- TOC entry 2041 (class 0 OID 58109)
+-- TOC entry 2032 (class 0 OID 58198)
 -- Dependencies: 174
 -- Data for Name: item; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -53,7 +35,7 @@ INSERT INTO item VALUES (4, '2015-02-16 10:15:06.174', '2015-02-16 10:15:06.174'
 
 
 --
--- TOC entry 2040 (class 0 OID 58104)
+-- TOC entry 2031 (class 0 OID 58193)
 -- Dependencies: 173
 -- Data for Name: interaction; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -61,7 +43,7 @@ INSERT INTO item VALUES (4, '2015-02-16 10:15:06.174', '2015-02-16 10:15:06.174'
 
 
 --
--- TOC entry 2044 (class 0 OID 58130)
+-- TOC entry 2034 (class 0 OID 58219)
 -- Dependencies: 177
 -- Data for Name: pool; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -72,22 +54,24 @@ INSERT INTO pool VALUES (7, '2015-02-16 10:16:24.874', '2015-02-16 10:16:24.874'
 
 
 --
--- TOC entry 2042 (class 0 OID 58117)
+-- TOC entry 2033 (class 0 OID 58206)
 -- Dependencies: 175
 -- Data for Name: membership; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+INSERT INTO membership VALUES (8, '2015-02-16 11:47:36.856', '2015-02-16 11:47:36.856', 0, 1, 6);
 
 
 --
--- TOC entry 2045 (class 0 OID 58135)
+-- TOC entry 2035 (class 0 OID 58224)
 -- Dependencies: 178
 -- Data for Name: share; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+INSERT INTO share VALUES (9, '2015-02-16 11:53:16.036', '2015-02-16 11:53:16.036', 0, NULL, 2, 6);
 
 
--- Completed on 2015-02-16 11:20:45
+-- Completed on 2015-02-16 12:55:11
 
 --
 -- PostgreSQL database dump complete
