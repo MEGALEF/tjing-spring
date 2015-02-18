@@ -4,7 +4,7 @@
 
 -- Dumped from database version 9.4.0
 -- Dumped by pg_dump version 9.4.0
--- Started on 2015-02-16 12:55:11
+-- Started on 2015-02-17 10:54:43
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -16,7 +16,7 @@ SET client_min_messages = warning;
 SET search_path = public, pg_catalog;
 
 --
--- TOC entry 2030 (class 0 OID 58188)
+-- TOC entry 2030 (class 0 OID 58542)
 -- Dependencies: 172
 -- Data for Name: condition; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -24,7 +24,7 @@ SET search_path = public, pg_catalog;
 
 
 --
--- TOC entry 2032 (class 0 OID 58198)
+-- TOC entry 2032 (class 0 OID 58552)
 -- Dependencies: 174
 -- Data for Name: item; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -35,15 +35,16 @@ INSERT INTO item VALUES (4, '2015-02-16 10:15:06.174', '2015-02-16 10:15:06.174'
 
 
 --
--- TOC entry 2031 (class 0 OID 58193)
+-- TOC entry 2031 (class 0 OID 58547)
 -- Dependencies: 173
 -- Data for Name: interaction; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+INSERT INTO interaction VALUES (2, '2015-02-16 14:15:44.74', '2015-02-16 14:15:44.74', 0, NULL, NULL, '2015-02-16 14:15:44.739', NULL, 1, 2);
 
 
 --
--- TOC entry 2034 (class 0 OID 58219)
+-- TOC entry 2034 (class 0 OID 58573)
 -- Dependencies: 177
 -- Data for Name: pool; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -54,7 +55,7 @@ INSERT INTO pool VALUES (7, '2015-02-16 10:16:24.874', '2015-02-16 10:16:24.874'
 
 
 --
--- TOC entry 2033 (class 0 OID 58206)
+-- TOC entry 2033 (class 0 OID 58560)
 -- Dependencies: 175
 -- Data for Name: membership; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -63,7 +64,7 @@ INSERT INTO membership VALUES (8, '2015-02-16 11:47:36.856', '2015-02-16 11:47:3
 
 
 --
--- TOC entry 2035 (class 0 OID 58224)
+-- TOC entry 2035 (class 0 OID 58578)
 -- Dependencies: 178
 -- Data for Name: share; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -71,7 +72,7 @@ INSERT INTO membership VALUES (8, '2015-02-16 11:47:36.856', '2015-02-16 11:47:3
 INSERT INTO share VALUES (9, '2015-02-16 11:53:16.036', '2015-02-16 11:53:16.036', 0, NULL, 2, 6);
 
 
--- Completed on 2015-02-16 12:55:11
+-- Completed on 2015-02-17 10:54:43
 
 --
 -- PostgreSQL database dump complete

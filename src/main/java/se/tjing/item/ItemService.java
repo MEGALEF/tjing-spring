@@ -78,6 +78,7 @@ public class ItemService {
 		return null;
 	}
 
+	// TODO: Move to InteractionService
 	public Interaction initiateRequest(Person currentUser, Integer itemId) {
 		Item item = itemRepo.findOne(itemId);
 		// TODO: Business logic

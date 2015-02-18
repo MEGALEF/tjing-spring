@@ -14,6 +14,7 @@ import se.tjing.interaction.Interaction;
 import se.tjing.item.Item;
 import se.tjing.membership.Membership;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
@@ -46,6 +47,7 @@ public class Person extends BaseEntity implements Serializable {
 	private Set<Membership> memberships;
 
 	@OneToMany(mappedBy = "borrower")
+	@JsonBackReference
 	private Set<Interaction> interactions;
 
 	public Person() {

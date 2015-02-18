@@ -13,6 +13,8 @@ import se.tjing.common.BaseEntity;
 import se.tjing.item.Item;
 import se.tjing.user.Person;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 public class Interaction extends BaseEntity<Integer> {
 
@@ -24,6 +26,7 @@ public class Interaction extends BaseEntity<Integer> {
 	private Item item;
 
 	@ManyToOne
+	@JsonManagedReference
 	private Person borrower;
 
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
