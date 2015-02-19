@@ -1,19 +1,23 @@
 package se.tjing.rating;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 import se.tjing.common.BaseEntity;
 import se.tjing.interaction.Interaction;
 
+@Entity
 public class Rating extends BaseEntity<Integer> {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	Integer id;
 
-	private Interaction transaction;
+	@OneToOne
+	private Interaction interaction;
 	private String ownerRating;
 	private String borrowerRating;
 
@@ -23,11 +27,11 @@ public class Rating extends BaseEntity<Integer> {
 	}
 
 	public Interaction getTransaction() {
-		return transaction;
+		return interaction;
 	}
 
 	public void setTransaction(Interaction transaction) {
-		this.transaction = transaction;
+		this.interaction = transaction;
 	}
 
 	public String getOwnerRating() {

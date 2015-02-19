@@ -4,10 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import se.tjing.rating.Rating;
+import se.tjing.rating.RatingService;
 import se.tjing.user.PersonService;
 
 @RestController
@@ -16,6 +19,9 @@ public class InteractionController {
 
 	@Autowired
 	InteractionService interactionService;
+
+	@Autowired
+	RatingService ratingService;
 
 	@Autowired
 	PersonService personService;
@@ -42,6 +48,14 @@ public class InteractionController {
 		Interaction result = interactionService.confirmReturn(interactionId,
 				personService.getCurrentUser());
 		return new ResponseEntity<Interaction>(result, null, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/{interactionId}/rate", method = RequestMethod.POST)
+	public ResponseEntity<Rating> rate(@PathVariable Integer interactionId,
+			@RequestBody String ratingStr) {
+		Rating result = ratingService.rate(personService.getCurrentUser(),
+				interactionId, ratingStr);
+		return new ResponseEntity<Rating>(result, null, HttpStatus.CREATED);
 	}
 
 }

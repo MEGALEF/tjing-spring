@@ -5,12 +5,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import se.tjing.common.BaseEntity;
 import se.tjing.item.Item;
+import se.tjing.rating.Rating;
 import se.tjing.user.Person;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -37,6 +39,17 @@ public class Interaction extends BaseEntity<Integer> {
 	private DateTime statusHandedOver;
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	private DateTime statusReturned;
+
+	@OneToOne
+	private Rating rating;
+
+	public Rating getRating() {
+		return rating;
+	}
+
+	public void setRating(Rating rating) {
+		this.rating = rating;
+	}
 
 	@Override
 	public Integer getId() {
