@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/membership")
 public class MembershipController {
 	@Autowired
 	MembershipService membershipService;
