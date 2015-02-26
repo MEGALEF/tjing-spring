@@ -18,6 +18,7 @@ package se.tjing.signup;
 import javax.inject.Inject;
 import javax.validation.Valid;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.stereotype.Controller;
@@ -37,6 +38,9 @@ import se.tjing.user.PersonService;
 
 @Controller
 public class SignupController {
+
+	@Inject
+	PasswordEncoder encoder;
 
 	@Inject
 	PersonRepository accountRepository;
@@ -86,8 +90,8 @@ public class SignupController {
 
 	private Person createAccount(SignupForm form, BindingResult formBinding) {
 		try {
-			Person account = new Person(form.getUsername(), form.getPassword(),
-					form.getFirstName(), form.getLastName());
+			Person account = new Person(form.getUsername(), encoder.encode(form
+					.getPassword()), form.getFirstName(), form.getLastName());
 			personService.addPerson(account);
 			return account;
 		} catch (TjingException e) {

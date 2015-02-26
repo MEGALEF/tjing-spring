@@ -31,10 +31,23 @@ public class ItemController {
 	@ResponseBody
 	public ResponseEntity<Item> addItem(@RequestBody AddItemRestObject addItem) {
 		Person currentUser = personService.getCurrentUser();
-
 		Item addedItem = itemService.addItem(addItem
 				.buildItemWithOwner(currentUser));
 		return new ResponseEntity<Item>(addedItem, null, HttpStatus.CREATED);
+	}
+
+	@RequestMapping(method = RequestMethod.GET)
+	public ResponseEntity<List<Item>> getAvailableItems() {
+		return new ResponseEntity<List<Item>>(
+				itemService.getAvailableItemsToUser(personService
+						.getCurrentUser()), null, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/{itemId}", method = RequestMethod.GET)
+	public ResponseEntity<Item> getItem(@PathVariable Integer itemId) {
+		Person currentUser = personService.getCurrentUser();
+		return new ResponseEntity<Item>(
+				itemService.getItem(currentUser, itemId), null, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{itemId}/share/{poolId}", method = RequestMethod.POST)
@@ -42,13 +55,6 @@ public class ItemController {
 			@PathVariable Integer poolId) {
 		return new ResponseEntity<Share>(itemService.shareToGroup(itemId,
 				poolId), null, HttpStatus.CREATED);
-	}
-
-	@RequestMapping(value = "/availableitems", method = RequestMethod.GET)
-	public ResponseEntity<List<Item>> getAvailableItems() {
-		return new ResponseEntity<List<Item>>(
-				itemService.getAvailableItemsToUser(personService
-						.getCurrentUser()), null, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{itemId}/request", method = RequestMethod.POST)

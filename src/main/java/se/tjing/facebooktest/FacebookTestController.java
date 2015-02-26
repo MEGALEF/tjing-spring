@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/facebook")
+@RequestMapping("/facebooktest")
 public class FacebookTestController {
 	@Inject
 	Facebook facebook;

@@ -32,9 +32,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		auth.jdbcAuthentication()
 				.dataSource(dataSource)
 				.usersByUsernameQuery(
-						"select username, password, true from person where username = ?")
+						"select email, password, true from person where email = ?")
 				.authoritiesByUsernameQuery(
-						"select username, 'ROLE_USER' from person where username = ?")
+						"select email, 'ROLE_USER' from person where email = ?")
 				.passwordEncoder(passwordEncoder());
 	}
 
@@ -59,12 +59,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/admin/**", "/favicon.ico", "/resources/**",
 						"/auth/**", "/signin/**", "/signup/**",
 						"/disconnect/facebook").permitAll().antMatchers("/**")
-				.authenticated().and().rememberMe();
+				.authenticated().and().rememberMe().and().csrf().disable(); // Disable
+																			// CSRF.
+																			// TODO:
+																			// Sort
+																			// out
+																			// and
+																			// reenable
 	}
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-		PasswordEncoder encoder = new BCryptPasswordEncoder();
+		PasswordEncoder encoder = new BCryptPasswordEncoder(10);
 		return encoder;
 	}
 

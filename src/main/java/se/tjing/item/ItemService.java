@@ -8,6 +8,7 @@ import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import se.tjing.exception.TjingException;
 import se.tjing.interaction.Interaction;
 import se.tjing.interaction.InteractionRepository;
 import se.tjing.membership.QMembership;
@@ -18,7 +19,6 @@ import se.tjing.share.QShare;
 import se.tjing.share.Share;
 import se.tjing.share.ShareRepository;
 import se.tjing.user.Person;
-import se.tjing.user.QPerson;
 
 import com.mysema.query.jpa.impl.JPAQuery;
 
@@ -54,9 +54,29 @@ public class ItemService {
 		return shareRepo.save(share);
 	}
 
+	public Item getItem(Person person, Integer itemId) {
+		Item result = itemRepo.findOne(itemId);
+		if (result == null || !isItemAvailableToUser(person, result)) {
+			throw new TjingException("Item does not exist or is not available");
+		} else {
+			return result;
+		}
+
+	}
+
 	private Boolean isItemAvailableToUser(Person person, Item item) {
-		// TODO
-		return false;
+		if (item.getOwner().equals(person)) {
+			return true;
+		}
+		QShare share = QShare.share;
+		QPool pool = QPool.pool;
+		QMembership membership = QMembership.membership;
+		// "Is there a group in which the user is a member to which the item is shared?"
+		JPAQuery query = new JPAQuery(em).from(share)
+				.leftJoin(share.pool, pool)
+				.leftJoin(pool.memberships, membership)
+				.where(membership.member.eq(person).and(share.item.eq(item)));
+		return query.exists();
 	}
 
 	public List<Item> getAvailableItemsToUser(Person p) {
@@ -64,7 +84,7 @@ public class ItemService {
 		QShare share = QShare.share;
 		QPool pool = QPool.pool;
 		QMembership membership = QMembership.membership;
-		QPerson person = QPerson.person;
+		// QPerson person = QPerson.person;
 		JPAQuery query = new JPAQuery(em).from(item)
 				.leftJoin(item.shares, share).leftJoin(share.pool, pool)
 				.leftJoin(pool.memberships, membership)
