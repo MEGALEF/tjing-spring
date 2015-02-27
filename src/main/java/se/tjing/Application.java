@@ -12,13 +12,14 @@ import org.springframework.social.connect.web.SignInAdapter;
 
 import se.tjing.signin.SimpleSignInAdapter;
 
+import com.mangofactory.swagger.plugin.EnableSwagger;
+
 @Configuration
 @ComponentScan
 @EnableAutoConfiguration
 @EnableConfigurationProperties
-// @EnableJpaRepositories
-// @EnableSocial
 @PropertySource("classpath:application.properties")
+@EnableSwagger
 public class Application {
 
 	public static void main(String[] args) {

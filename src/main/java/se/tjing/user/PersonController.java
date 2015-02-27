@@ -39,7 +39,7 @@ public class PersonController {
 		return new ResponseEntity<String>(name, null, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/interactions/incoming")
+	@RequestMapping(value = "/interactions/incoming", method = RequestMethod.GET)
 	public ResponseEntity<List<Interaction>> getIncomingRequests() {
 		List<Interaction> result = interactionService
 				.getUserIncomingInteractions(pService.getCurrentUser());
@@ -47,14 +47,14 @@ public class PersonController {
 				HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/items")
+	@RequestMapping(value = "/items", method = RequestMethod.GET)
 	public ResponseEntity<List<Item>> getOwnItems() {
 		Person currentUser = pService.getCurrentUser();
 		List<Item> result = itemService.getUsersItems(currentUser);
 		return new ResponseEntity<List<Item>>(result, null, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/pools")
+	@RequestMapping(value = "/pools", method = RequestMethod.GET)
 	public ResponseEntity<List<Pool>> getOwnPools() {
 		List<Pool> result = poolService.getUsersPools(currentUser());
 		return new ResponseEntity<List<Pool>>(result, null, HttpStatus.OK);

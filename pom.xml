@@ -106,6 +106,12 @@
     		<groupId>org.springframework.boot</groupId>
     		<artifactId>spring-boot-actuator</artifactId>
     	</dependency>
+    	
+    	<dependency>
+    <groupId>com.mangofactory</groupId>
+    <artifactId>swagger-springmvc</artifactId>
+    <version>0.9.5</version>
+</dependency>
     </dependencies>
   
 
@@ -146,6 +152,12 @@
             <id>spring-releases</id>
             <url>https://repo.spring.io/libs-release</url>
         </repository>
+        
+        <repository>
+      <id>jcenter-release</id>
+      <name>jcenter</name>
+      <url>http://oss.jfrog.org/artifactory/oss-release-local/</url>
+    </repository>
     </repositories>
     <pluginRepositories>
         <pluginRepository>

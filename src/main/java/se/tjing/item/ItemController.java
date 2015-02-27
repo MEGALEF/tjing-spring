@@ -50,7 +50,7 @@ public class ItemController {
 				itemService.getItem(currentUser, itemId), null, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/{itemId}/share/{poolId}", method = RequestMethod.POST)
+	@RequestMapping(value = "/{itemId}/sharetopool/{poolId}", method = RequestMethod.POST)
 	public ResponseEntity<Share> shareItemToGroup(@PathVariable Integer itemId,
 			@PathVariable Integer poolId) {
 		return new ResponseEntity<Share>(itemService.shareToGroup(itemId,
