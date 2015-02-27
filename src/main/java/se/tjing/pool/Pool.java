@@ -12,6 +12,8 @@ import se.tjing.common.BaseEntity;
 import se.tjing.membership.Membership;
 import se.tjing.share.Share;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Pool extends BaseEntity {
 	@Id
@@ -21,9 +23,11 @@ public class Pool extends BaseEntity {
 	private String title;
 
 	@OneToMany(mappedBy = "pool")
+	@JsonIgnore
 	private Set<Membership> memberships;
 
 	@OneToMany(mappedBy = "pool")
+	@JsonIgnore
 	private Set<Share> shares;
 
 	public Integer getId() {

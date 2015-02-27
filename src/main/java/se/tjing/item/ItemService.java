@@ -98,7 +98,7 @@ public class ItemService {
 		return null;
 	}
 
-	// TODO: Move to InteractionService
+	// TODO: Move to InteractionService?
 	public Interaction initiateRequest(Person currentUser, Integer itemId) {
 		Item item = itemRepo.findOne(itemId);
 		// TODO: Business logic
@@ -107,6 +107,13 @@ public class ItemService {
 		interaction.setItem(item);
 		interaction.setStatusRequested(new DateTime());
 		return interactionRepo.save(interaction);
+	}
+
+	public List<Item> getUsersItems(Person user) {
+		QItem item = QItem.item;
+		JPAQuery query = new JPAQuery(em);
+		query.from(item).where(item.owner.eq(user));
+		return query.list(item);
 	}
 
 }

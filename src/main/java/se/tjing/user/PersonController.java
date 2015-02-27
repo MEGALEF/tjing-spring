@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import se.tjing.interaction.Interaction;
 import se.tjing.interaction.InteractionService;
+import se.tjing.item.Item;
+import se.tjing.item.ItemService;
+import se.tjing.pool.Pool;
+import se.tjing.pool.PoolService;
 
 @RestController
 @RequestMapping("/user")
@@ -22,18 +26,11 @@ public class PersonController {
 	@Autowired
 	InteractionService interactionService;
 
-	// @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
-	// @ResponseBody
-	// public ResponseEntity<Person> getUser(@PathVariable Integer userId) {
-	// return new ResponseEntity<Person>(pService.getPerson(userId), null,
-	// HttpStatus.OK);
-	// }
+	@Autowired
+	ItemService itemService;
 
-	// @RequestMapping(method = RequestMethod.POST)
-	// public ResponseEntity<Person> addUser(@RequestBody Person user) {
-	// Person addedUser = pService.addPerson(user);
-	// return new ResponseEntity<Person>(addedUser, null, HttpStatus.CREATED);
-	// }
+	@Autowired
+	PoolService poolService;
 
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<String> getCurrentUser() {
@@ -50,4 +47,20 @@ public class PersonController {
 				HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/items")
+	public ResponseEntity<List<Item>> getOwnItems() {
+		Person currentUser = pService.getCurrentUser();
+		List<Item> result = itemService.getUsersItems(currentUser);
+		return new ResponseEntity<List<Item>>(result, null, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/pools")
+	public ResponseEntity<List<Pool>> getOwnPools() {
+		List<Pool> result = poolService.getUsersPools(currentUser());
+		return new ResponseEntity<List<Pool>>(result, null, HttpStatus.OK);
+	}
+
+	private Person currentUser() {
+		return pService.getCurrentUser();
+	}
 }

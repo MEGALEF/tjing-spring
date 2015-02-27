@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.tjing;
+package se.tjing.home;
 
 import java.security.Principal;
 
@@ -44,6 +44,10 @@ public class HomeController {
 		// this.accountRepository = accountRepository;
 	}
 
+	private ConnectionRepository getConnectionRepository() {
+		return connectionRepositoryProvider.get();
+	}
+
 	@RequestMapping("/")
 	public String home(Principal currentUser, Model model) {
 		model.addAttribute("connectionsToProviders", getConnectionRepository()
@@ -52,7 +56,4 @@ public class HomeController {
 		return "home";
 	}
 
-	private ConnectionRepository getConnectionRepository() {
-		return connectionRepositoryProvider.get();
-	}
 }
