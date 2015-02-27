@@ -28,6 +28,7 @@ public abstract class BaseEntity<ID> {
 	private DateTime modificationTime;
 
 	@Version
+	@JsonIgnore
 	private long version;
 
 	public abstract ID getId();
