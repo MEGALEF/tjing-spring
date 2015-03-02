@@ -15,6 +15,7 @@ import se.tjing.item.Item;
 import se.tjing.membership.Membership;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
@@ -36,6 +37,7 @@ public class Person extends BaseEntity implements Serializable {
 		this.interactions = interactions;
 	}
 
+	@JsonIgnore
 	private String password;
 
 	@OneToMany(mappedBy = "owner")
