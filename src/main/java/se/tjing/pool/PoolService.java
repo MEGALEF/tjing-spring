@@ -86,4 +86,12 @@ public class PoolService {
 				.where(membership.member.eq(user));
 		return query.list(pool);
 	}
+
+	public Pool getPool(Integer poolId) {
+		Pool pool = poolRepo.findOne(poolId);
+		if (pool == null) {
+			throw new TjingException("No such pool");
+		}
+		return pool;
+	}
 }

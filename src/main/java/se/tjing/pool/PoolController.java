@@ -42,6 +42,12 @@ public class PoolController {
 				HttpStatus.CREATED);
 	}
 
+	@RequestMapping(value = "{poolId}", method = RequestMethod.GET)
+	public ResponseEntity<Pool> getPool(@PathVariable Integer poolId) {
+		Pool result = poolService.getPool(poolId);
+		return new ResponseEntity<Pool>(result, null, HttpStatus.OK);
+	}
+
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<Pool>> listPools() {
 		List<Pool> result = poolService.getPools();
