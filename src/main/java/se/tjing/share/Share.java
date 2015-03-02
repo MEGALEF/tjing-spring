@@ -32,6 +32,10 @@ public class Share extends BaseEntity<Integer> {
 		this.pool = pool;
 	}
 
+	public Share() {
+
+	}
+
 	@Override
 	public Integer getId() {
 		return id;

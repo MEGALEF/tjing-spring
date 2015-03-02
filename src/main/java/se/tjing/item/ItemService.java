@@ -101,7 +101,10 @@ public class ItemService {
 	// TODO: Move to InteractionService?
 	public Interaction initiateRequest(Person currentUser, Integer itemId) {
 		Item item = itemRepo.findOne(itemId);
-		// TODO: Business logic
+		if (item == null || !isItemAvailableToUser(currentUser, item)) {
+			throw new TjingException(
+					"Item does not exist or is not available to you");
+		}
 		Interaction interaction = new Interaction();
 		interaction.setBorrower(currentUser);
 		interaction.setItem(item);
