@@ -29,7 +29,8 @@ public class PoolController {
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<Pool> createPool(@RequestBody Pool pool) {
-		Pool newPool = poolService.addPool(pool);
+		Pool newPool = poolService
+				.addPool(personService.getCurrentUser(), pool);
 		return new ResponseEntity<Pool>(newPool, null, HttpStatus.CREATED);
 	}
 

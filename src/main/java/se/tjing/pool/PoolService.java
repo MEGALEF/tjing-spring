@@ -29,9 +29,14 @@ public class PoolService {
 	@Autowired
 	EntityManager em;
 
-	public Pool addPool(Pool pool) {
+	public Pool addPool(Person creator, Pool pool) {
 		// TODO: Business logic I guess
-		return poolRepo.save(pool);
+		Membership creatorMembership = new Membership();
+		creatorMembership.setMember(creator);
+		creatorMembership.setPool(pool);
+		Pool savedPool = poolRepo.save(pool);
+		membershipRepo.save(creatorMembership);
+		return savedPool;
 	}
 
 	public Membership joinPool(Person person, Integer poolId) {
