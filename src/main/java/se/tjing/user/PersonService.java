@@ -3,6 +3,7 @@ package se.tjing.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import se.tjing.exception.TjingException;
@@ -37,9 +38,16 @@ public class PersonService {
 	public Person getCurrentUser() {
 		Authentication authentication = SecurityContextHolder.getContext()
 				.getAuthentication();
-		String currentUserName = (String) authentication.getPrincipal();
-		Person currentUser = getPersonByEmail(currentUserName);
+
+		User currentUserObject = (User) authentication.getPrincipal();
+		Person currentUser = getPersonByEmail(currentUserObject.getUsername());
 		return currentUser;
+	}
+
+	public void addPerson(String username) {
+		Person person = new Person();
+		person.setEmail(username);
+		personRepo.save(person);
 	}
 
 }

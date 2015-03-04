@@ -42,6 +42,7 @@ public class PersistenceContext {
 	}
 
 	@Bean
+	// TODO: This might not do anything
 	LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 		LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
 		factory.setPersistenceUnitName("persistenceUnit");

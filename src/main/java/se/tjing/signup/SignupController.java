@@ -15,9 +15,14 @@
  */
 package se.tjing.signup;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.validation.Valid;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.web.ProviderSignInUtils;
@@ -44,8 +49,7 @@ public class SignupController {
 
 	@Inject
 	PersonRepository accountRepository;
-	// @Inject
-	// ProviderSignInUtils providerSignInUtils;
+
 	@Inject
 	PersonService personService;
 
@@ -79,7 +83,10 @@ public class SignupController {
 		}
 		Person account = createAccount(form, formBinding);
 		if (account != null) {
-			SignInUtils.signin(account.getEmail());
+			List<GrantedAuthority> authorities = AuthorityUtils.NO_AUTHORITIES;
+			User userObj = new User(account.getEmail(), account.getPassword(),
+					authorities);
+			SignInUtils.signin(userObj); // TODO: This probably isn't right
 			providerSignInUtils.doPostSignUp(account.getEmail(), request);
 			return "redirect:/";
 		}

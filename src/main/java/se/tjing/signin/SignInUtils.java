@@ -16,15 +16,19 @@
 package se.tjing.signin;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 
 public class SignInUtils {
-	
+
 	/**
 	 * Programmatically signs in the user with the given the user ID.
 	 */
-	public static void signin(String userId) {
-		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(userId, null, null));	
+	public static void signin(User user) {
+
+		SecurityContextHolder.getContext().setAuthentication(
+				new UsernamePasswordAuthenticationToken(user, null,
+						AuthorityUtils.NO_AUTHORITIES));
 	}
-	
 }

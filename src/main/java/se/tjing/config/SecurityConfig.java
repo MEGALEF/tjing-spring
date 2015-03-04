@@ -10,14 +10,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.social.security.SocialUserDetailsService;
+import org.springframework.social.security.SpringSocialConfigurer;
 
 @Configuration
-// @EnableWebSecurity
+@EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
@@ -59,13 +62,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/admin/**", "/favicon.ico", "/resources/**",
 						"/auth/**", "/signin/**", "/signup/**",
 						"/disconnect/facebook").permitAll().antMatchers("/**")
-				.authenticated().and().rememberMe().and().csrf().disable(); // Disable
-																			// CSRF.
-																			// TODO:
-																			// Sort
-																			// out
-																			// and
-																			// reenable
+				.authenticated().and().rememberMe().and()
+				.apply(new SpringSocialConfigurer()).and().csrf().disable(); // Disable
+																				// CSRF.
+																				// TODO:
+																				// Sort
+																				// out
+																				// and
+																				// reenable
 	}
 
 	@Bean
@@ -77,6 +81,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Bean
 	public TextEncryptor textEncryptor() {
 		return Encryptors.noOpText();
+	}
+
+	@Bean
+	public SocialUserDetailsService socialUsersDetailService() {
+		return new SimpleSocialUsersDetailService(userDetailsService());
 	}
 
 }

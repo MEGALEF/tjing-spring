@@ -53,7 +53,7 @@ public class Person extends BaseEntity implements Serializable {
 	private Set<Interaction> interactions;
 
 	public Person() {
-
+		super();
 	}
 
 	public Person(String email, String password, String firstName,
