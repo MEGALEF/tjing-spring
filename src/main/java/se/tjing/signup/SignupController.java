@@ -84,10 +84,10 @@ public class SignupController {
 		Person account = createAccount(form, formBinding);
 		if (account != null) {
 			List<GrantedAuthority> authorities = AuthorityUtils.NO_AUTHORITIES;
-			User userObj = new User(account.getEmail(), account.getPassword(),
+			User userObj = new User(account.getUsername(), account.getPassword(),
 					authorities);
 			SignInUtils.signin(userObj); // TODO: This probably isn't right
-			providerSignInUtils.doPostSignUp(account.getEmail(), request);
+			providerSignInUtils.doPostSignUp(account.getUsername(), request);
 			return "redirect:/";
 		}
 		return null;

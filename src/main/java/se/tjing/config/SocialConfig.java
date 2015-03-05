@@ -14,6 +14,7 @@ import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
 import org.springframework.social.security.AuthenticationNameUserIdSource;
+import org.springframework.social.security.SocialUserDetailsService;
 
 import se.tjing.user.PersonService;
 
@@ -26,6 +27,9 @@ public class SocialConfig implements SocialConfigurer {
 
 	@Autowired
 	PersonService personService;
+
+	@Autowired
+	SocialUserDetailsService userDetailsService;
 
 	@Override
 	public void addConnectionFactories(

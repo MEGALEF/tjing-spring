@@ -15,9 +15,13 @@ public class PersonService {
 	private PersonRepository personRepo;
 
 	public Person addPerson(Person person) {
-		if (personRepo.findByEmail(person.getEmail()) != null) {
+		if (personRepo.findByUsername(person.getUsername()) != null) {
 			throw new TjingException("User with that email already exists");
 		}
+		// if (personRepo.findByFacebookId(person.getFacebookId()) != null) {
+		// throw new TjingException(
+		// "A user connected to that facebook account already exists");
+		// }
 		personRepo.save(person);
 		return person;
 	}
@@ -32,7 +36,7 @@ public class PersonService {
 	}
 
 	public Person getPersonByEmail(String email) {
-		return personRepo.findByEmail(email);
+		return personRepo.findByUsername(email);
 	}
 
 	public Person getCurrentUser() {
@@ -46,7 +50,7 @@ public class PersonService {
 
 	public void addPerson(String username) {
 		Person person = new Person();
-		person.setEmail(username);
+		person.setUsername(username);
 		personRepo.save(person);
 	}
 

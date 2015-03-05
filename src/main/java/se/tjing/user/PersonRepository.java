@@ -5,5 +5,8 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface PersonRepository extends CrudRepository<Person, Integer> {
 	@Query
-	Person findByEmail(String email);
+	Person findByUsername(String username);
+
+	@Query
+	Person findByFacebookId(String facebookId);
 }

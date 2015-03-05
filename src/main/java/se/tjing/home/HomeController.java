@@ -50,10 +50,10 @@ public class HomeController {
 
 	@RequestMapping("/")
 	public String home(Principal currentUser, Model model) {
-		model.addAttribute("connectionsToProviders", getConnectionRepository()
-				.findAllConnections());
-		model.addAttribute(personRepo.findByEmail(currentUser.getName()));
+		// model.addAttribute("connectionsToProviders",
+		// getConnectionRepository()
+		// .findAllConnections());
+		// model.addAttribute(personRepo.findByEmail(currentUser.getName()));
 		return "home";
 	}
-
 }

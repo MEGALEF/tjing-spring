@@ -14,10 +14,10 @@ public class AccountConnectionSignUpService implements ConnectionSignUp {
 		this.personService = personService;
 	}
 
+	//TODO: Right now the application does not support implicit signups. 
 	@Override
 	public String execute(Connection<?> connection) {
 		UserProfile profile = connection.fetchUserProfile();
-		personService.addPerson(profile.getUsername());
 		return profile.getUsername();
 	}
 

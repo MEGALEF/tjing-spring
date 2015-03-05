@@ -27,7 +27,8 @@ public class Person extends BaseEntity implements Serializable {
 
 	private String firstName;
 	private String lastName;
-	private String email;
+	private String username; // probably going to be email
+	private String facebookId;
 
 	public Set<Interaction> getInteractions() {
 		return interactions;
@@ -58,7 +59,7 @@ public class Person extends BaseEntity implements Serializable {
 
 	public Person(String email, String password, String firstName,
 			String lastName) {
-		this.email = email;
+		this.username = email;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.setPassword(password);
@@ -80,12 +81,12 @@ public class Person extends BaseEntity implements Serializable {
 		this.lastName = lastName;
 	}
 
-	public String getEmail() {
-		return email;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setUsername(String email) {
+		this.username = email;
 	}
 
 	public Set<Item> getItems() {
@@ -118,5 +119,13 @@ public class Person extends BaseEntity implements Serializable {
 
 	public void setMemberships(Set<Membership> memberships) {
 		this.memberships = memberships;
+	}
+
+	public String getFacebookId() {
+		return facebookId;
+	}
+
+	public void setFacebookId(String facebookId) {
+		this.facebookId = facebookId;
 	}
 }
