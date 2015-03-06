@@ -1,5 +1,8 @@
 package se.tjing.interaction;
 
+import java.util.List;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,6 +59,21 @@ public class InteractionController {
 		Rating result = ratingService.rate(personService.getCurrentUser(),
 				interactionId, ratingStr);
 		return new ResponseEntity<Rating>(result, null, HttpStatus.CREATED);
+	}
+
+	@RequestMapping(value = "/incoming", method = RequestMethod.GET)
+	public ResponseEntity<List<Interaction>> getIncomingRequests() {
+		List<Interaction> result = interactionService
+				.getUserIncomingInteractions(personService.getCurrentUser());
+		return new ResponseEntity<List<Interaction>>(result, null,
+				HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/outgoing", method = RequestMethod.GET)
+	public ResponseEntity<Set<Interaction>> getOutgoingRequests() {
+		Set<Interaction> result = interactionService.getOutgoing(personService
+				.getCurrentUser());
+		return new ResponseEntity<Set<Interaction>>(result, null, HttpStatus.OK);
 	}
 
 }

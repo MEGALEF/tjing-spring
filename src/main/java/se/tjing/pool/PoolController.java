@@ -26,6 +26,13 @@ public class PoolController {
 	@Autowired
 	PersonService personService;
 
+	@RequestMapping(value = "/mine", method = RequestMethod.GET)
+	public ResponseEntity<List<Pool>> getOwnPools() {
+		List<Pool> result = poolService.getUsersPools(personService
+				.getCurrentUser());
+		return new ResponseEntity<List<Pool>>(result, null, HttpStatus.OK);
+	}
+
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<Pool> createPool(@RequestBody Pool pool) {

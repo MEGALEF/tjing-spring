@@ -27,6 +27,20 @@ public class ItemController {
 	@Autowired
 	PersonService personService;
 
+	@RequestMapping(value = "/borrowed", method = RequestMethod.GET)
+	public ResponseEntity<List<Item>> getBorrowedItems() {
+		List<Item> result = itemService.getUsersBorrowedItems(personService
+				.getCurrentUser());
+		return new ResponseEntity<List<Item>>(result, null, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/owned", method = RequestMethod.GET)
+	public ResponseEntity<List<Item>> getOwnItems() {
+		Person currentUser = personService.getCurrentUser();
+		List<Item> result = itemService.getUsersItems(currentUser);
+		return new ResponseEntity<List<Item>>(result, null, HttpStatus.OK);
+	}
+
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<Item> addItem(@RequestBody AddItemRestObject addItem) {
