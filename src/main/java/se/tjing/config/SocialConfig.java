@@ -16,6 +16,7 @@ import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
 import org.springframework.social.security.AuthenticationNameUserIdSource;
 import org.springframework.social.security.SocialUserDetailsService;
 
+import se.tjing.signup.AccountConnectionSignUpService;
 import se.tjing.user.PersonService;
 
 @Configuration

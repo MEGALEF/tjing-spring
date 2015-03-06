@@ -1,4 +1,4 @@
-package se.tjing.config;
+package se.tjing.signin;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,4 +1,4 @@
-package se.tjing.config;
+package se.tjing.signup;
 
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionSignUp;
