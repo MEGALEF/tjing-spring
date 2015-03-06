@@ -65,4 +65,11 @@ public class ItemController {
 		return new ResponseEntity<Interaction>(newInteraction, null,
 				HttpStatus.CREATED);
 	}
+
+	@RequestMapping(value = "/search/{searchString}", method = RequestMethod.GET)
+	public ResponseEntity<List<Item>> search(@PathVariable String searchString) {
+		List<Item> result = itemService.searchAvailableItems(
+				personService.getCurrentUser(), searchString);
+		return new ResponseEntity<List<Item>>(result, null, HttpStatus.OK);
+	}
 }

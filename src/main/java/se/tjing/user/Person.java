@@ -25,8 +25,11 @@ public class Person extends BaseEntity implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 
+	// TODO sort out the fullname business. Plenty of opportunity for stuff to
+	// go wrong here. Sorry
 	private String firstName;
 	private String lastName;
+	private String fullName;
 	private String username; // probably going to be email
 	private String facebookId;
 
@@ -71,6 +74,7 @@ public class Person extends BaseEntity implements Serializable {
 
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
+		this.fullName = firstName + " " + lastName;
 	}
 
 	public String getLastName() {
@@ -79,6 +83,7 @@ public class Person extends BaseEntity implements Serializable {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+		this.fullName = firstName + " " + lastName;
 	}
 
 	public String getUsername() {
@@ -127,5 +132,13 @@ public class Person extends BaseEntity implements Serializable {
 
 	public void setFacebookId(String facebookId) {
 		this.facebookId = facebookId;
+	}
+
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
 }

@@ -43,6 +43,12 @@ public class PoolController {
 				HttpStatus.CREATED);
 	}
 
+	@RequestMapping(value = "/{poolId}/invite/{userId}", method = RequestMethod.POST)
+	public ResponseEntity<Membership> inviteUserToPool(
+			@PathVariable Integer poolId, @PathVariable Integer userId) {
+		return null; // TODO: Not yet implemented;
+	}
+
 	@RequestMapping(value = "{poolId}", method = RequestMethod.GET)
 	public ResponseEntity<Pool> getPool(@PathVariable Integer poolId) {
 		Pool result = poolService.getPool(poolId);
@@ -61,5 +67,12 @@ public class PoolController {
 		Person currentUser = personService.getCurrentUser();
 		List<Item> result = poolService.getItemsInPool(currentUser, poolId);
 		return new ResponseEntity<List<Item>>(result, null, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/search/{searchString}", method = RequestMethod.GET)
+	public ResponseEntity<List<Pool>> searchPools(
+			@PathVariable String searchString) {
+		List<Pool> result = poolService.search(searchString);
+		return new ResponseEntity<List<Pool>>(result, null, HttpStatus.OK);
 	}
 }

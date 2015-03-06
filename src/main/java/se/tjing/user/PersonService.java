@@ -1,5 +1,9 @@
 package se.tjing.user;
 
+import java.util.List;
+
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -8,8 +12,13 @@ import org.springframework.stereotype.Service;
 
 import se.tjing.exception.TjingException;
 
+import com.mysema.query.jpa.impl.JPAQuery;
+
 @Service
 public class PersonService {
+
+	@Autowired
+	EntityManager em;
 
 	@Autowired
 	private PersonRepository personRepo;
@@ -52,6 +61,16 @@ public class PersonService {
 		Person person = new Person();
 		person.setUsername(username);
 		personRepo.save(person);
+	}
+
+	public List<Person> search(String searchStr) {
+		QPerson person = QPerson.person;
+		JPAQuery query = new JPAQuery(em);
+		query.from(person)
+				.where(person.fullName.containsIgnoreCase(searchStr).or(
+						person.firstName.containsIgnoreCase(searchStr).or(
+								person.lastName.containsIgnoreCase(searchStr))));
+		return query.list(person);
 	}
 
 }

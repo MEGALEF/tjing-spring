@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import se.tjing.exception.TjingException;
 import se.tjing.interaction.Interaction;
 import se.tjing.interaction.InteractionRepository;
+import se.tjing.interaction.QInteraction;
 import se.tjing.membership.QMembership;
 import se.tjing.pool.Pool;
 import se.tjing.pool.PoolRepository;
@@ -84,7 +85,6 @@ public class ItemService {
 		QShare share = QShare.share;
 		QPool pool = QPool.pool;
 		QMembership membership = QMembership.membership;
-		// QPerson person = QPerson.person;
 		JPAQuery query = new JPAQuery(em).from(item)
 				.leftJoin(item.shares, share).leftJoin(share.pool, pool)
 				.leftJoin(pool.memberships, membership)
@@ -94,8 +94,19 @@ public class ItemService {
 	}
 
 	public List<Item> searchAvailableItems(Person person, String searchStr) {
-		// TODO
-		return null;
+		QItem item = QItem.item;
+		QShare share = QShare.share;
+		QPool pool = QPool.pool;
+		QMembership membership = QMembership.membership;
+		JPAQuery query = new JPAQuery(em)
+				.from(item)
+				.leftJoin(item.shares, share)
+				.leftJoin(share.pool, pool)
+				.leftJoin(pool.memberships, membership)
+				.where(membership.member.eq(person).and(
+						item.title.containsIgnoreCase(searchStr)));
+
+		return query.list(item);
 	}
 
 	// TODO: Move to InteractionService?
@@ -116,6 +127,18 @@ public class ItemService {
 		QItem item = QItem.item;
 		JPAQuery query = new JPAQuery(em);
 		query.from(item).where(item.owner.eq(user));
+		return query.list(item);
+	}
+
+	public List<Item> getUsersBorrowedItems(Person person) {
+		QInteraction interaction = QInteraction.interaction;
+		QItem item = QItem.item;
+		JPAQuery query = new JPAQuery(em);
+		query.from(item)
+				.leftJoin(item.interactions, interaction)
+				.where(interaction.borrower.eq(person)
+						.and(interaction.statusHandedOver.isNotNull())
+						.and(interaction.statusReturned.isNull()));
 		return query.list(item);
 	}
 

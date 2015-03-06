@@ -99,4 +99,11 @@ public class PoolService {
 		}
 		return pool;
 	}
+
+	public List<Pool> search(String searchString) {
+		QPool pool = QPool.pool;
+		JPAQuery query = new JPAQuery(em);
+		query.from(pool).where(pool.title.containsIgnoreCase(searchString));
+		return query.list(pool);
+	}
 }
