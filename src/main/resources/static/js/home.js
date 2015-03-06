@@ -2,10 +2,10 @@
  * 
  */
 function Home($scope, $http){
-	$http.get('/user/items').success(function(data){
+	$http.get('/item/owned').success(function(data){
 		$scope.items = data;
 	});
-	$http.get('/user/pools').success(function(data){
+	$http.get('/pool/mine').success(function(data){
 		$scope.pools = data;
 	});
 }
