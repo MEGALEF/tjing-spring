@@ -8,13 +8,13 @@ import se.tjing.user.PersonService;
 
 public class AccountConnectionSignUpService implements ConnectionSignUp {
 
-	private final PersonService personService;
+	// private final PersonService personService;
 
 	public AccountConnectionSignUpService(PersonService personService) {
-		this.personService = personService;
+		// this.personService = personService;
 	}
 
-	//TODO: Right now the application does not support implicit signups. 
+	// TODO: Right now the application does not support implicit signups.
 	@Override
 	public String execute(Connection<?> connection) {
 		UserProfile profile = connection.fetchUserProfile();

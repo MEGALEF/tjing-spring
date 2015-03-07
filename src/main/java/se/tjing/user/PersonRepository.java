@@ -7,6 +7,4 @@ public interface PersonRepository extends CrudRepository<Person, Integer> {
 	@Query
 	Person findByUsername(String username);
 
-	@Query
-	Person findByFacebookId(String facebookId);
 }

@@ -16,8 +16,10 @@ import se.tjing.interaction.Interaction;
 import se.tjing.share.Share;
 import se.tjing.user.Person;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 public class Item extends BaseEntity implements Serializable {
@@ -31,15 +33,16 @@ public class Item extends BaseEntity implements Serializable {
 	private String title;
 
 	@ManyToOne
-	@JsonBackReference
+	@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+	@JsonIdentityReference(alwaysAsId = true)
 	private Person owner;
 
 	@OneToMany(mappedBy = "item")
-	@JsonManagedReference
+	@JsonIgnore
 	private List<Share> shares;
 
 	@OneToMany(mappedBy = "item")
-	@JsonManagedReference
+	@JsonIgnore
 	private Set<Interaction> interactions;
 
 	public Item() {

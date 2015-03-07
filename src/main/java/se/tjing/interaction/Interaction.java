@@ -15,7 +15,9 @@ import se.tjing.item.Item;
 import se.tjing.rating.Rating;
 import se.tjing.user.Person;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 public class Interaction extends BaseEntity<Integer> {
@@ -28,7 +30,8 @@ public class Interaction extends BaseEntity<Integer> {
 	private Item item;
 
 	@ManyToOne
-	@JsonManagedReference
+	@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+	@JsonIdentityReference(alwaysAsId = true)
 	private Person borrower;
 
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
