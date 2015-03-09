@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import se.tjing.common.BaseEntity;
 import se.tjing.interaction.Interaction;
@@ -44,6 +45,9 @@ public class Item extends BaseEntity implements Serializable {
 	@OneToMany(mappedBy = "item")
 	@JsonIgnore
 	private Set<Interaction> interactions;
+
+	@OneToOne
+	private Interaction activeInteraction;
 
 	public Item() {
 	}
@@ -84,6 +88,14 @@ public class Item extends BaseEntity implements Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Interaction getActiveInteraction() {
+		return activeInteraction;
+	}
+
+	public void setActiveInteraction(Interaction activeInteraction) {
+		this.activeInteraction = activeInteraction;
 	}
 
 }

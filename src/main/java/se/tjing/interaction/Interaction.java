@@ -17,6 +17,7 @@ import se.tjing.user.Person;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
@@ -27,6 +28,7 @@ public class Interaction extends BaseEntity<Integer> {
 	private Integer id;
 
 	@ManyToOne
+	@JsonIgnoreProperties("activeInteraction")
 	private Item item;
 
 	@ManyToOne
