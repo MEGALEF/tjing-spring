@@ -9,6 +9,8 @@ import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import se.tjing.exception.TjingException;
+import se.tjing.item.Item;
 import se.tjing.item.ItemRepository;
 import se.tjing.item.QItem;
 import se.tjing.user.Person;
@@ -29,22 +31,33 @@ public class InteractionService {
 
 	public Interaction accept(Integer interactionId, Person person) {
 		Interaction interaction = interactionRepo.findOne(interactionId);
-		// TODO: Confirm user is owner
+		if (!isPersonItemOwner(person, interaction)) {
+			throw new TjingException("Only the item owner may do this");
+		}
 		interaction.setStatusAccepted(DateTime.now());
+		Item item = interaction.getItem();
+		item.setActiveInteraction(interaction);
+		itemRepo.save(item);
 		return interactionRepo.save(interaction);
 	}
 
 	public Interaction confirmHandover(Integer interactionId, Person person) {
 		Interaction interaction = interactionRepo.findOne(interactionId);
-		// TODO: confirm that user is borrower
+		if (!isPersonBorrower(person, interaction)) {
+			throw new TjingException(
+					"Only the user who initially sent the request may do this");
+		}
 		interaction.setStatusHandedOver(DateTime.now());
 		return interactionRepo.save(interaction);
 	}
 
 	public Interaction confirmReturn(Integer interactionId, Person person) {
 		Interaction interaction = interactionRepo.findOne(interactionId);
-		// TODO: Confirm that user is owner
+		if (!isPersonItemOwner(person, interaction)) {
+			throw new TjingException("Only the item owner may do this");
+		}
 		interaction.setStatusReturned(DateTime.now());
+		interaction.getItem().setActiveInteraction(null);
 		return interactionRepo.save(interaction);
 	}
 
@@ -62,5 +75,21 @@ public class InteractionService {
 		JPAQuery query = new JPAQuery(em).from(interaction)
 				.leftJoin(interaction.item, item).where(item.owner.eq(person));
 		return query.list(interaction);
+	}
+
+	private boolean isPersonItemOwner(Person p, Interaction i) {
+		if (!p.equals(i.getItem().getOwner())) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	private boolean isPersonBorrower(Person p, Interaction i) {
+		if (!p.equals(i.getBorrower())) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 }
