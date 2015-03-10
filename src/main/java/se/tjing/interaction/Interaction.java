@@ -48,6 +48,8 @@ public class Interaction extends BaseEntity<Integer> {
 	@OneToOne
 	private Rating rating;
 
+	private Boolean active = true;
+
 	public Rating getRating() {
 		return rating;
 	}
@@ -111,6 +113,14 @@ public class Interaction extends BaseEntity<Integer> {
 
 	public void setStatusReturned(DateTime statusReturned) {
 		this.statusReturned = statusReturned;
+	}
+
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
 	}
 
 }

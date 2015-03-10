@@ -1,7 +1,6 @@
 package se.tjing.interaction;
 
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.EntityManager;
 
@@ -58,11 +57,16 @@ public class InteractionService {
 		}
 		interaction.setStatusReturned(DateTime.now());
 		interaction.getItem().setActiveInteraction(null);
+		interaction.setActive(false);
 		return interactionRepo.save(interaction);
 	}
 
-	public Set<Interaction> getOutgoing(Person person) {
-		return person.getInteractions();
+	public List<Interaction> getOutgoing(Person person) {
+		QInteraction interaction = QInteraction.interaction;
+		JPAQuery query = new JPAQuery(em);
+		query.from(interaction).where(
+				interaction.borrower.eq(person).and(interaction.active));
+		return query.list(interaction);
 	}
 
 	/**

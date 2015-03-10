@@ -1,7 +1,6 @@
 package se.tjing.interaction;
 
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import se.tjing.rating.Rating;
 import se.tjing.rating.RatingService;
 import se.tjing.user.PersonService;
+
+import com.wordnik.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/interaction")
@@ -105,11 +106,13 @@ public class InteractionController {
 	 * 
 	 * @return
 	 */
+	@ApiOperation(value = "Returns interactions created by the user (requests)", notes = "Returns all active interactions initiated by the user (requests)")
 	@RequestMapping(value = "/outgoing", method = RequestMethod.GET)
-	public ResponseEntity<Set<Interaction>> getOutgoingRequests() {
-		Set<Interaction> result = interactionService.getOutgoing(personService
+	public ResponseEntity<List<Interaction>> getOutgoingRequests() {
+		List<Interaction> result = interactionService.getOutgoing(personService
 				.getCurrentUser());
-		return new ResponseEntity<Set<Interaction>>(result, null, HttpStatus.OK);
+		return new ResponseEntity<List<Interaction>>(result, null,
+				HttpStatus.OK);
 	}
 
 }
