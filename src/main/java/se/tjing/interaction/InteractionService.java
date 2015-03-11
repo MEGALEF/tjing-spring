@@ -96,4 +96,17 @@ public class InteractionService {
 			return true;
 		}
 	}
+
+	public Interaction deny(Integer interactionId, Person currentUser) {
+		Interaction interaction = interactionRepo.findOne(interactionId);
+		if (!isPersonItemOwner(currentUser, interaction)) {
+			throw new TjingException("Only the owner of the item may do this");
+		}
+		if (interaction.getStatusAccepted() != null) {
+			throw new TjingException(
+					"The interaction has already been accepted.");
+		}
+		interaction.setActive(false);
+		return null;
+	}
 }

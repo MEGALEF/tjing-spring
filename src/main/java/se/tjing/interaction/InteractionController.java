@@ -44,6 +44,14 @@ public class InteractionController {
 		return new ResponseEntity<Interaction>(result, null, HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/{interactionId}/deny", method = RequestMethod.PUT)
+	public ResponseEntity<Interaction> denyRequest(
+			@PathVariable Integer interactionId) {
+		Interaction result = interactionService.deny(interactionId,
+				personService.getCurrentUser());
+		return new ResponseEntity<Interaction>(result, null, HttpStatus.OK);
+	}
+
 	/**
 	 * Confirm that the physical item has been handed over to the requesting
 	 * user.
@@ -93,6 +101,7 @@ public class InteractionController {
 	 * 
 	 * @return
 	 */
+	@ApiOperation("Returns interactions initiated by other users, targeting items owned by the user")
 	@RequestMapping(value = "/incoming", method = RequestMethod.GET)
 	public ResponseEntity<List<Interaction>> getIncomingRequests() {
 		List<Interaction> result = interactionService
@@ -106,7 +115,7 @@ public class InteractionController {
 	 * 
 	 * @return
 	 */
-	@ApiOperation(value = "Returns interactions created by the user (requests)", notes = "Returns all active interactions initiated by the user (requests)")
+	@ApiOperation(value = "Returns active interactions created by the user (requests)")
 	@RequestMapping(value = "/outgoing", method = RequestMethod.GET)
 	public ResponseEntity<List<Interaction>> getOutgoingRequests() {
 		List<Interaction> result = interactionService.getOutgoing(personService
