@@ -65,7 +65,8 @@ public class InteractionService {
 		QInteraction interaction = QInteraction.interaction;
 		JPAQuery query = new JPAQuery(em);
 		query.from(interaction).where(
-				interaction.borrower.eq(person).and(interaction.active));
+				interaction.borrower.eq(person)
+						.and(interaction.active.isTrue()));
 		return query.list(interaction);
 	}
 
@@ -77,7 +78,8 @@ public class InteractionService {
 		QInteraction interaction = QInteraction.interaction;
 		QItem item = QItem.item;
 		JPAQuery query = new JPAQuery(em).from(interaction)
-				.leftJoin(interaction.item, item).where(item.owner.eq(person));
+				.leftJoin(interaction.item, item)
+				.where(item.owner.eq(person).and(interaction.active.isTrue()));
 		return query.list(interaction);
 	}
 
@@ -107,6 +109,6 @@ public class InteractionService {
 					"The interaction has already been accepted.");
 		}
 		interaction.setActive(false);
-		return null;
+		return interactionRepo.save(interaction);
 	}
 }
