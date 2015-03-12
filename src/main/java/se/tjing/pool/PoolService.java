@@ -30,7 +30,15 @@ public class PoolService {
 	EntityManager em;
 
 	public Pool addPool(Person creator, Pool pool) {
-		// TODO: Business logic I guess
+		if (pool.getTitle().trim().isEmpty()) {
+			throw new TjingException("A pool must have a title");
+		}
+		List<Pool> sameNamePools = poolRepo.findByTitle(pool.getTitle());
+		if (sameNamePools.size() > 0) {
+			throw new TjingException("Title of a pool must be unique");
+		}
+
+		// Set pool creator as member in the pool
 		Membership creatorMembership = new Membership();
 		creatorMembership.setMember(creator);
 		creatorMembership.setPool(pool);
