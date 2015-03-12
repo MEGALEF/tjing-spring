@@ -8,4 +8,7 @@ function Home($scope, $http){
 	$http.get('/pool/mine').success(function(data){
 		$scope.pools = data;
 	});
+	$http.get('/interaction/incoming').success(function(data){
+		$scope.incoming = data;
+	});
 }
