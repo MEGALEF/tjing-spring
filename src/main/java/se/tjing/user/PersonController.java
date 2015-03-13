@@ -43,4 +43,10 @@ public class PersonController {
 		List<Person> result = pService.search(searchStr);
 		return new ResponseEntity<List<Person>>(result, null, HttpStatus.OK);
 	}
+
+	@RequestMapping(value = "{userId}", method = RequestMethod.GET)
+	public ResponseEntity<Person> getUser(@PathVariable Integer userId) {
+		Person user = pService.getPerson(userId);
+		return new ResponseEntity<Person>(user, null, HttpStatus.OK);
+	}
 }
