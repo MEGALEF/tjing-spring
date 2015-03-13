@@ -50,6 +50,16 @@ public class PoolController {
 				HttpStatus.CREATED);
 	}
 
+	@RequestMapping(value = "/{poolId}/leave", method = RequestMethod.DELETE)
+	@ResponseBody
+	public ResponseEntity<List<Membership>> leavePool(
+			@PathVariable Integer poolId) {
+		List<Membership> result = poolService.leavePool(
+				personService.getCurrentUser(), poolId);
+		return new ResponseEntity<List<Membership>>(result, null,
+				HttpStatus.ACCEPTED);
+	}
+
 	@RequestMapping(value = "/{poolId}/invite/{userId}", method = RequestMethod.POST)
 	public ResponseEntity<Membership> inviteUserToPool(
 			@PathVariable Integer poolId, @PathVariable Integer userId) {
@@ -68,11 +78,19 @@ public class PoolController {
 		return new ResponseEntity<List<Pool>>(result, null, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/{poolId}/items", method = RequestMethod.GET)
+	@RequestMapping(value = "/{poolId}/item", method = RequestMethod.GET)
 	public ResponseEntity<List<Item>> listItemsInPool(
 			@PathVariable Integer poolId) {
 		Person currentUser = personService.getCurrentUser();
 		List<Item> result = poolService.getItemsInPool(currentUser, poolId);
+		return new ResponseEntity<List<Item>>(result, null, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/{poolId}/item/owned", method = RequestMethod.GET)
+	public ResponseEntity<List<Item>> listOwnItemsInPool(
+			@PathVariable Integer poolId) {
+		List<Item> result = poolService.getOwnedItemsInPool(
+				personService.getCurrentUser(), poolId);
 		return new ResponseEntity<List<Item>>(result, null, HttpStatus.OK);
 	}
 

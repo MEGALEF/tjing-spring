@@ -14,6 +14,8 @@ import se.tjing.membership.Membership;
 import se.tjing.membership.MembershipRepository;
 import se.tjing.membership.QMembership;
 import se.tjing.share.QShare;
+import se.tjing.share.Share;
+import se.tjing.share.ShareRepository;
 import se.tjing.user.Person;
 
 import com.mysema.query.jpa.impl.JPAQuery;
@@ -25,6 +27,9 @@ public class PoolService {
 
 	@Autowired
 	MembershipRepository membershipRepo;
+
+	@Autowired
+	ShareRepository shareRepo;
 
 	@Autowired
 	EntityManager em;
@@ -114,4 +119,47 @@ public class PoolService {
 		query.from(pool).where(pool.title.containsIgnoreCase(searchString));
 		return query.list(pool);
 	}
+
+	public List<Item> getOwnedItemsInPool(Person currentUser, Integer poolId) {
+		QItem item = QItem.item;
+		QShare share = QShare.share;
+		Pool pool = poolRepo.findOne(poolId);
+		if (!isUserMemberOfPool(currentUser, pool)) {
+			throw new TjingException("User is not a member of this pool");
+		}
+		JPAQuery query = new JPAQuery(em);
+		query.from(item).leftJoin(item.shares, share)
+				.where(item.owner.eq(currentUser).and(share.pool.eq(pool)));
+		return query.list(item);
+	}
+
+	public List<Membership> leavePool(Person currentUser, Integer poolId) {
+		Pool pool = poolRepo.findOne(poolId);
+
+		// Remove users shares to pool
+		QShare share = QShare.share;
+		QItem item = QItem.item;
+		JPAQuery sharesQuery = new JPAQuery(em);
+		sharesQuery.from(share).leftJoin(share.item, item)
+				.where(item.owner.eq(currentUser).and(share.pool.eq(pool)));
+		List<Share> shares = sharesQuery.list(share);
+		for (Share shareToDelete : shares) {
+			shareRepo.delete(shareToDelete);
+		}
+
+		// Remove users membership in pool
+		QMembership membership = QMembership.membership;
+		JPAQuery membershipQuery = new JPAQuery(em);
+		membershipQuery.from(membership)
+				.where(membership.member.eq(currentUser).and(
+						membership.pool.eq(pool)));
+		Membership membershipToDelete = membershipQuery
+				.singleResult(membership);
+		membershipRepo.delete(membershipToDelete);
+
+		// Return list of users remaining memberships
+		return currentUser.getMemberships();
+	}
+
+	// TODO: create private getPool(poolId) method
 }

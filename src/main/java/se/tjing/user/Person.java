@@ -1,6 +1,7 @@
 package se.tjing.user;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -42,7 +43,7 @@ public class Person extends BaseEntity implements Serializable {
 
 	@OneToMany(mappedBy = "member")
 	@JsonIgnore
-	private Set<Membership> memberships;
+	private List<Membership> memberships;
 
 	@JsonIgnore
 	private String password;
@@ -85,7 +86,7 @@ public class Person extends BaseEntity implements Serializable {
 		return lastName;
 	}
 
-	public Set<Membership> getMemberships() {
+	public List<Membership> getMemberships() {
 		return memberships;
 	}
 
@@ -123,7 +124,7 @@ public class Person extends BaseEntity implements Serializable {
 		this.fullName = firstName + " " + lastName;
 	}
 
-	public void setMemberships(Set<Membership> memberships) {
+	public void setMemberships(List<Membership> memberships) {
 		this.memberships = memberships;
 	}
 
