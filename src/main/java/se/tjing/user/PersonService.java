@@ -73,4 +73,11 @@ public class PersonService {
 		return query.list(person);
 	}
 
+	public void setPersonFacebookId(User userObj, String id) {
+		Person person = personRepo.findByUsername(userObj.getUsername());
+		person.setFacebookId(id);
+		personRepo.save(person);
+
+	}
+
 }

@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.WebAttributes;
@@ -27,11 +28,20 @@ import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.web.SignInAdapter;
+import org.springframework.social.facebook.api.Facebook;
 import org.springframework.web.context.request.NativeWebRequest;
+
+import se.tjing.user.PersonService;
 
 public class SimpleSignInAdapter implements SignInAdapter {
 
 	private final RequestCache requestCache;
+
+	@Autowired
+	Facebook facebook;
+
+	@Autowired
+	PersonService personService;
 
 	@Inject
 	public SimpleSignInAdapter(RequestCache requestCache) {
@@ -49,6 +59,10 @@ public class SimpleSignInAdapter implements SignInAdapter {
 		// location.
 
 		SignInUtils.signin(userObj);
+		if (facebook.isAuthorized()) {
+			personService.setPersonFacebookId(userObj, facebook
+					.userOperations().getUserProfile().getId());
+		}
 		return extractOriginalUrl(request);
 	}
 

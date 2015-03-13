@@ -26,6 +26,7 @@ public class Person extends BaseEntity implements Serializable {
 	// go wrong here. Sorry
 	private String firstName;
 	private String fullName;
+	private String facebookId;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -134,5 +135,13 @@ public class Person extends BaseEntity implements Serializable {
 
 	public void setUsername(String email) {
 		this.username = email;
+	}
+
+	public String getFacebookId() {
+		return facebookId;
+	}
+
+	public void setFacebookId(String facebookId) {
+		this.facebookId = facebookId;
 	}
 }

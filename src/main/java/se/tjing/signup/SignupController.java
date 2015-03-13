@@ -20,12 +20,14 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.web.ProviderSignInUtils;
+import org.springframework.social.facebook.api.Facebook;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
@@ -43,6 +45,9 @@ import se.tjing.user.PersonService;
 
 @Controller
 public class SignupController {
+
+	@Autowired
+	Facebook facebook;
 
 	@Inject
 	PasswordEncoder encoder;
@@ -84,8 +89,8 @@ public class SignupController {
 		Person account = createAccount(form, formBinding);
 		if (account != null) {
 			List<GrantedAuthority> authorities = AuthorityUtils.NO_AUTHORITIES;
-			User userObj = new User(account.getUsername(), account.getPassword(),
-					authorities);
+			User userObj = new User(account.getUsername(),
+					account.getPassword(), authorities);
 			SignInUtils.signin(userObj); // TODO: This probably isn't right
 			providerSignInUtils.doPostSignUp(account.getUsername(), request);
 			return "redirect:/";
@@ -99,6 +104,7 @@ public class SignupController {
 		try {
 			Person account = new Person(form.getUsername(), encoder.encode(form
 					.getPassword()), form.getFirstName(), form.getLastName());
+
 			personService.addPerson(account);
 			return account;
 		} catch (TjingException e) {
