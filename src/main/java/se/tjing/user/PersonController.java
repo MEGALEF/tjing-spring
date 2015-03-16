@@ -31,10 +31,9 @@ public class PersonController {
 	PoolService poolService;
 
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<String> getCurrentUser() {
-		String name;
-		name = pService.getCurrentUser().getFirstName();
-		return new ResponseEntity<String>(name, null, HttpStatus.OK);
+	public ResponseEntity<Person> getCurrentUser() {
+		Person person = pService.getCurrentUser();
+		return new ResponseEntity<Person>(person, null, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/search/{searchStr}", method = RequestMethod.GET)
