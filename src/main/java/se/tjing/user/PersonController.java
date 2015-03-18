@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 import se.tjing.interaction.InteractionService;
 import se.tjing.item.ItemService;
 import se.tjing.pool.PoolService;
+import se.tjing.rating.Rating;
+import se.tjing.rating.RatingService;
+
+import com.wordnik.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/user")
@@ -25,17 +29,22 @@ public class PersonController {
 	InteractionService interactionService;
 
 	@Autowired
+	RatingService ratingservice;
+
+	@Autowired
 	ItemService itemService;
 
 	@Autowired
 	PoolService poolService;
 
+	@ApiOperation("Returns information on the current user")
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<Person> getCurrentUser() {
 		Person person = pService.getCurrentUser();
 		return new ResponseEntity<Person>(person, null, HttpStatus.OK);
 	}
 
+	@ApiOperation("Search for users based on the users names. Returns a list of matching users")
 	@RequestMapping(value = "/search/{searchStr}", method = RequestMethod.GET)
 	public ResponseEntity<List<Person>> searchUser(
 			@PathVariable String searchStr) {
@@ -43,9 +52,18 @@ public class PersonController {
 		return new ResponseEntity<List<Person>>(result, null, HttpStatus.OK);
 	}
 
+	@ApiOperation("Returns information on a specific user")
 	@RequestMapping(value = "{userId}", method = RequestMethod.GET)
 	public ResponseEntity<Person> getUser(@PathVariable Integer userId) {
 		Person user = pService.getPerson(userId);
 		return new ResponseEntity<Person>(user, null, HttpStatus.OK);
+	}
+
+	@ApiOperation("Returns a list of all ratings the user plays a part in, either as item owner or borrower")
+	@RequestMapping(value = "{userId}/rating", method = RequestMethod.GET)
+	public ResponseEntity<List<Rating>> getRatings(@PathVariable Integer userId) {
+		List<Rating> result = ratingservice.getRatings(pService
+				.getPerson(userId));
+		return new ResponseEntity<List<Rating>>(result, null, HttpStatus.OK);
 	}
 }

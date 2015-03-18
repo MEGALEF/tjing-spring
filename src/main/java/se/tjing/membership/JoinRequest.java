@@ -1,55 +1,43 @@
-package se.tjing.share;
+package se.tjing.membership;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import se.tjing.common.BaseEntity;
-import se.tjing.condition.Condition;
-import se.tjing.item.Item;
 import se.tjing.pool.Pool;
+import se.tjing.user.Person;
 
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "pool", "item" }))
-public class Share extends BaseEntity<Integer> {
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "pool", "member" }))
+public class JoinRequest extends BaseEntity<Integer> {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 
 	@ManyToOne
-	private Item item;
-	@ManyToOne
 	private Pool pool;
 
-	@OneToOne
-	private Condition condition;
+	@ManyToOne
+	private Person member;
 
-	public Share(Item item, Pool pool) {
-		this.item = item;
+	public JoinRequest(Person person, Pool pool) {
+		this.member = person;
 		this.pool = pool;
 	}
 
-	public Share() {
+	public JoinRequest() {
 
 	}
 
 	@Override
 	public Integer getId() {
 		return id;
-	}
-
-	public Item getItem() {
-		return item;
-	}
-
-	public void setItem(Item item) {
-		this.item = item;
 	}
 
 	public Pool getPool() {
@@ -60,8 +48,12 @@ public class Share extends BaseEntity<Integer> {
 		this.pool = pool;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public Person getMember() {
+		return member;
+	}
+
+	public void setMember(Person member) {
+		this.member = member;
 	}
 
 }
