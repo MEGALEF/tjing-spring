@@ -33,6 +33,10 @@
 			<div ng-repeat="pool in pools">
 				{{pool.id}} {{pool.title}}
 			</div>
+			<h2>Prylar delade till mina pooler</h2>
+			<div ng-repeat="item in poolitems">
+				{{item.id}} {{item.title}}
+			</div>
 			<h2>Incoming requests</h2>
 			<div ng-repeat="request in incoming">
 				{{request.id}} {{request.borrower.firstName}} wants to borrow {{request.item.title}} {{request.statusRequested}} {{request.statusAccepted}} {{request.statusHandedOver}} 

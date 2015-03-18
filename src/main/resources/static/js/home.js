@@ -11,4 +11,8 @@ function Home($scope, $http){
 	$http.get('/interaction/incoming').success(function(data){
 		$scope.incoming = data;
 	});
+	
+	$http.get('/item/').success(function(data){
+		$scope.poolitems = data;
+	});
 }
