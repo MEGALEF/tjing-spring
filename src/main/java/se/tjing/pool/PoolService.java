@@ -64,8 +64,8 @@ public class PoolService {
 		Pool pool = poolRepo.findOne(poolId);
 
 		// If the group is closed or secret, a request is created
-		if (pool.getMode() == PrivacyMode.CLOSED
-				|| pool.getMode() == PrivacyMode.SECRET) {
+		if (pool.getPrivacy() == PrivacyMode.CLOSED
+				|| pool.getPrivacy() == PrivacyMode.SECRET) {
 			JoinRequest request = new JoinRequest(person, pool);
 			requestRepo.save(request);
 			return null;

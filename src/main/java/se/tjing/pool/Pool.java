@@ -62,11 +62,11 @@ public class Pool extends BaseEntity {
 		this.memberships = memberships;
 	}
 
-	public PrivacyMode getMode() {
+	public PrivacyMode getPrivacy() {
 		return privacy;
 	}
 
-	public void setMode(PrivacyMode mode) {
+	public void setPrivacy(PrivacyMode mode) {
 		this.privacy = mode;
 	}
 }
