@@ -51,6 +51,6 @@ public class HomeController {
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Principal currentUser, Model model) {
-		return "home";
+		return "redirect:home.html";
 	}
 }
