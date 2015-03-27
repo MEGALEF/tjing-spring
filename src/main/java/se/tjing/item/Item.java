@@ -20,6 +20,7 @@ import se.tjing.user.Person;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
@@ -39,7 +40,7 @@ public class Item extends BaseEntity implements Serializable {
 	private Person owner;
 
 	@OneToMany(mappedBy = "item")
-	@JsonIgnore
+	@JsonIgnoreProperties("item")
 	private List<Share> shares;
 
 	public List<Share> getShares() {

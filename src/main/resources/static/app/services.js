@@ -66,4 +66,17 @@ var tjingServices = angular.module("tjingApp.services", ["ngResource"]);
       }
     })
   }]);
+
+  tjingServices.factory("User", ['$resource', function($resource){
+    var userUrl = '/user/:id';
+    return $resource(userUrl, {
+      id: '@id'
+    }, {
+      current: {
+        method: "GET",
+        url:"/user/"
+      }
+    }
+    )
+  }]);
 }(angular));

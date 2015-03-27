@@ -84,5 +84,9 @@
     };
   }]);
 
+  angular.module("tjingApp.controllers").controller("UserController", ["$scope", "User", function($scope, User){
+    $scope.currentUser = User.current();
+  }]);
+
 
 }(angular));

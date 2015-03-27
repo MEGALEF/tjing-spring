@@ -1,122 +1,155 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <link rel="stylesheet" href="./bower_components/bootstrap-css-only/css/bootstrap.min.css" />
-  </head>
-  <body ng-app="tjingApp">
-    <div ng-controller="ItemController">
-      <h1>Available items</h1>
-      <div ng-repeat="item in items">
-        <label>
-          {{item.id}} {{item.owner.firstName}} {{item.title}} 
-          <button type="button" title="Request" ng-click="requestItem(item)">Request
-          </button>
-        </label>
-      </div>
-<hr />
-      <h1>My items</h1>      
-      <div ng-repeat="item in owneditems">
-         <label>
-            {{item.id}} {{item.title}} 
-            <button type="button" title="Delete"
-            ng-click="deleteItem(item)">
-            <span class="glyphicon glyphicon-trash"></span>
-          </button>
-          <button ng-click="shareItem(item.id, poolToShareTo)" ng-disabled="!poolToShareTo">Share</button> 
+<head>
+  <link rel="stylesheet" href="./bower_components/bootstrap-css-only/css/bootstrap.min.css" />
+</head>
+<body ng-app="tjingApp">
+  <div ng-controller="UserController">
+    <h1>Welcome, {{currentUser.firstName}}!</h1>
+  </div>
+  <div ng-controller="ItemController">
+    <h1>Available items</h1>
+    <ul>
+      <li ng-repeat="item in items">
+        {{item.id}} {{item.owner.firstName}} {{item.title}} 
+        <button type="button" title="Request" ng-click="requestItem(item)">Request
+        </button>
+      </li>
+    </ul>
+    <hr />
+    <h1>My items</h1> 
+    <div ng-hide="owneditems && owneditems.length >0">
+      You don't own any items. Add an item!
+    </div>
+    <ul>
+      <li ng-repeat="item in owneditems" >
+        {{item.id}} {{item.title}} 
+        <button type="button" title="Delete" ng-click="deleteItem(item)">
+          <span class="glyphicon glyphicon-trash"></span>
+        </button>
+        <ul ng-show="item.shares[0]">
+          shared with 
+          <li ng-repeat="share in item.shares">{{share.pool.title}} </li>
+        </ul>
+        <div ng-show="item.activeInteraction">borrowed by {{item.activeInteraction.borrower.firstName}}</div>
+        <form role="form" ng-submit="shareItem(item.id, poolToShareTo)">
+          <button type="submit" ng-disabled="!poolToShareTo">share to</button> 
           <select ng-model ="poolToShareTo">
+            <option value="" selected>pool</option>
             <option ng-repeat="pool in mypools" value="{{pool.id}}" >
               {{pool.title}}
             </option>
           </select>
-        </label>
-      </div>
-<hr />
+        </form> 
+      </li>
+    </ul>     
+    <hr />
     <h1>Add item</h1>
-      <form role="form" ng-submit="addItem(newItem)">
-        <div>
-          <input type="text" ng-model="newItem" placeholder="Enter item title.." />
-          <span>
-            <button type="submit" ng-disabled="!newItem" title="Add">
-              <span class="glyphicon glyphicon-plus"></span>
-            </button>
-          </span>
-        </div>
-      </form>
-<hr />
-      <h1>Borrowed items</h1>
-      <div ng-hide="borroweditems && borroweditems.length > 0">
-        You have no borrowed items.
+    <form role="form" ng-submit="addItem(newItem)">
+      <div>
+        <input type="text" ng-model="newItem" placeholder="Enter item title.." />
+        <span>
+          <button type="submit" ng-disabled="!newItem" title="Add">
+            <span class="glyphicon glyphicon-plus"></span>
+          </button>
+        </span>
       </div>
-      <div ng-repeat="item in borroweditems">
+    </form>
+    <hr />
+    <h1>My borrowed items</h1>
+    <div ng-hide="borroweditems && borroweditems.length > 0">
+      You don't hold any borrowed items.
+    </div>
+    <ul>
+      <li ng-repeat="item in borroweditems">
         <div>
-          <label>
-            {{item.id}} {{item.title}} 
+          {{item.id}} {{item.title}} 
         </div>
-      </div>
+      </li>
+    </li>
+  </ul>
+  <hr />
+
+  <div ng-controller="PoolController">
+    <h1>All pools</h1>
+    <div ng-hide="allpools && allpools.length > 0">
+      No pools exist yet. Add a pool!
+    </div>
+    <ul>
+      <li ng-repeat="pool in allpools">
+        {{pool.id}} {{pool.title}}
+        <button type="button" ng-click="joinPool(pool)">Join</button>
+      </li>
+    </ul>
+    <hr />
+    <h1>My pools</h1>
+    <div ng-hide="mypools && mypools.length >0">
+      You are not a member of any pools. Join a pool!
+    </div>
+    <ul>
+      <li ng-repeat="pool in mypools">
+        {{pool.id}} {{pool.title}}
+      </li>
+    </ul>
+    <hr/>
+    <h1>Create pool</h1>
+    <form role="form" ng-submit="createPool(newPool)">
+      <input type="text" ng-model="newPool.title" placeholder="Enter pool name.." />
+      <button type="submit" ng-disabled="!newPool.title" title="Add">
+        <span class="glyphicon glyphicon-plus"></span>
+      </button>
+    </form>
+  </div>
+  <hr />
+  <div ng-controller="InteractionController">
+    <h1>All interactions</h1>
+    <div ng-repeat="interaction in allinteractions">
+      <label>
+        {{interaction.id}} {{interaction.borrower.firstName}} wants to borrow {{interaction.item.owner.firstName}} {{interaction.item.title}}
+      </label>
     </div>
     <hr />
 
-    <div ng-controller="PoolController">
-      <h1>All pools</h1>
-      <div ng-repeat="pool in allpools">
-        <label>
-          {{pool.id}} {{pool.title}}
-          <button type="button" ng-click="joinPool(pool)">Join</button>
-        </label>
-      </div>
-<hr />
-      <h1>My pools</h1>
-      <div ng-repeat="pool in mypools">
-        {{pool.id}} {{pool.title}}
-      </div>
-
-      <hr/>
-      <h1>Create pool (you will be added as a member)</h1>
-      <form role="form" ng-submit="createPool(newPool)">
-        <input type="text" ng-model="newPool.title" placeholder="Enter pool name.." />
-        <button type="submit" ng-disabled="!newPool.title" title="Add">
-              <span class="glyphicon glyphicon-plus"></span>
-            </button>
-      </form>
-    </div>
-<hr />
-    <div ng-controller="InteractionController">
-      <h1>All interactions</h1>
-      <div ng-repeat="interaction in allinteractions">
-        <label>
-          {{interaction.id}} {{interaction.borrower.firstName}} wants to borrow {{interaction.item.owner.firstName}} {{interaction.item.title}}
-        </label>
-      </div>
-      <hr />
-
-      <h1>Outgoing requests</h1>
-      <div ng-repeat="request in outgoingrequests">
-        <label>
-        {{request.id}} Asked {{request.item.owner.firstName}} for his {{request.item.title}} 
-        <button ng-show="request.statusAccepted" ng-disabled="request.statusHandedOver" ng-click="confirmHandover(request)">
+    <h1>Outgoing requests</h1>
+    <ul>
+    <li ng-repeat="request in outgoingrequests">
+        {{request.id}} You asked {{request.item.owner.firstName}} for his {{request.item.title}} 
+        <div ng-show="request.statusAccepted">(Accepted on {{request.statusAccepted | date}})
+        <button  ng-disabled="request.statusHandedOver" ng-click="confirmHandover(request)">
           Confirm handover
         </button>
-        </label>
-      </div>
-      <hr />
-      <h1>Incoming requests</h1>
-      <div ng-repeat="request in incomingrequests">
-        <label>
-          {{request.id}} {{request.borrower.firstName}} wants to borrow your {{request.item.title}}
-          <button ng-disabled="request.statusAccepted" ng-click="acceptRequest(request)">Accept</button>
-          <button ng-disabled="request.statusAccepted" ng-click="denyRequest(request)">Deny</button>
-          <div ng-show="request.statusHandedOver">
-            <button ng-disabled="request.statusReturned" ng-click="confirmReturn(request)">Confirm return</button>
-          </div>
-        </label>
-      </div>
-      <hr />
-    </div>
-    <script type="text/javascript" src="./bower_components/angular/angular.min.js"></script>
-    <script type="text/javascript" src="./bower_components/angular-resource/angular-resource.min.js"></script>
-<!--     <script type="text/javascript" src="./bower_components/lodash/dist/lodash.min.js"></script> -->
-    <script type="text/javascript" src="./app/app.js"></script>
-    <script type="text/javascript" src="./app/controllers.js"></script>
-    <script type="text/javascript" src="./app/services.js"></script>
-  </body>
+        </div>
+    </li>
+    </ul>
+    <hr />
+    <h1>Incoming requests</h1>
+    <ul>
+    <li ng-repeat="request in incomingrequests">
+      
+        {{request.id}} {{request.borrower.firstName}}
+        
+         wants to borrow your {{request.item.title}}
+        <div ng-hide="request.statusAccepted">
+        <button ng-disabled="request.statusAccepted" ng-click="acceptRequest(request)">Accept</button>
+        <button ng-disabled="request.statusAccepted" ng-click="denyRequest(request)">Deny</button>
+        </div>
+        <div ng-show="request.statusAccepted">
+          (Accepted on {{request.statusAccepted | date}})
+        </div>
+        <div ng-show="request.statusHandedOver">
+          (Handed over on {{request.statusHandedOver | date}})
+          <button ng-disabled="request.statusReturned" ng-click="confirmReturn(request)">Confirm return</button>
+        </div>
+      
+    </li>
+    </ul>
+    <hr />
+  </div>
+  <script type="text/javascript" src="./bower_components/angular/angular.min.js"></script>
+  <script type="text/javascript" src="./bower_components/angular-resource/angular-resource.min.js"></script>
+  <!--     <script type="text/javascript" src="./bower_components/lodash/dist/lodash.min.js"></script> -->
+  <script type="text/javascript" src="./app/app.js"></script>
+  <script type="text/javascript" src="./app/controllers.js"></script>
+  <script type="text/javascript" src="./app/services.js"></script>
+</body>
 </html>

@@ -9,6 +9,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import se.tjing.common.BaseEntity;
 import se.tjing.condition.Condition;
 import se.tjing.item.Item;
@@ -25,6 +27,7 @@ public class Share extends BaseEntity<Integer> {
 	@ManyToOne
 	private Item item;
 	@ManyToOne
+	@JsonIgnoreProperties("shares")
 	private Pool pool;
 
 	@OneToOne
