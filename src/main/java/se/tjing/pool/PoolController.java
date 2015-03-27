@@ -2,6 +2,7 @@ package se.tjing.pool;
 
 import java.util.List;
 
+import org.apache.xalan.lib.sql.QueryParameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -73,7 +75,12 @@ public class PoolController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<List<Pool>> listPools() {
+	public ResponseEntity<List<Pool>> listPools(@RequestParam(value="q", required=false) String searchStr, @RequestParam(value="param", required=false) String param) {
+		if ("mine".equals(param)){
+			return this.getOwnPools();
+		} else if (searchStr!= null && !searchStr.isEmpty()){
+			return this.searchPools(searchStr);
+		} //TODO: Handle multiple parameters at the same time
 		List<Pool> result = poolService.getPools();
 		return new ResponseEntity<List<Pool>>(result, null, HttpStatus.OK);
 	}

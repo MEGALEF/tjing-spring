@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,6 +34,12 @@ public class ItemController {
 				.getCurrentUser());
 		return new ResponseEntity<List<Item>>(result, null, HttpStatus.OK);
 	}
+	
+	@RequestMapping(value="{itemId}", method = RequestMethod.DELETE)
+	public ResponseEntity<Object> deleteItem(@PathVariable Integer itemId){
+		itemService.removeItem(personService.getCurrentUser(), itemId);
+		return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
+	}
 
 	@RequestMapping(value = "/owned", method = RequestMethod.GET)
 	public ResponseEntity<List<Item>> getOwnItems() {
@@ -51,7 +58,12 @@ public class ItemController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<List<Item>> getAvailableItems() {
+	public ResponseEntity<List<Item>> getItems(@RequestParam(value = "param", required=false) String param) {
+		if ("owned".equals(param)){
+			return this.getOwnItems();
+		} else if ("borrowed".equals(param)){
+			return this.getBorrowedItems();
+		}
 		return new ResponseEntity<List<Item>>(
 				itemService.getAvailableItemsToUser(personService
 						.getCurrentUser()), null, HttpStatus.OK);

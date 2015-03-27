@@ -142,4 +142,17 @@ public class ItemService {
 		return query.list(item);
 	}
 
+	public void removeItem(Person user, Integer itemId) {
+		Item item = itemRepo.findOne(itemId);
+		if (!item.getOwner().equals(user)){
+			throw new TjingException("Only the item owner may delete it");
+		} else if (item.getActiveInteraction() != null){
+			throw new TjingException("This item is in active transaction"); //TODO: PRobabla stuff to do here
+		} else {
+			shareRepo.delete(item.getShares());
+			interactionRepo.delete(item.getInteractions());
+			itemRepo.delete(item);
+		}
+	}
+
 }

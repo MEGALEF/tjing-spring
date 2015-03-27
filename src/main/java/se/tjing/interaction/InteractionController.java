@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import se.tjing.rating.Rating;
@@ -122,6 +123,18 @@ public class InteractionController {
 				.getCurrentUser());
 		return new ResponseEntity<List<Interaction>>(result, null,
 				HttpStatus.OK);
+	}
+	
+	@RequestMapping(method=RequestMethod.GET)
+	public ResponseEntity<List<Interaction>> getInteractions(@RequestParam(value="param", required = false) String param){
+		if (param!=null && param.equals("incoming")){
+			return this.getIncomingRequests();
+		} else if (param!=null && param.equals("outgoing")){
+			return this.getOutgoingRequests();
+		} else {
+			List<Interaction> result = interactionService.getUserInteractions(personService.getCurrentUser());
+			return new ResponseEntity<List<Interaction>>(result, null, HttpStatus.OK);
+		}
 	}
 
 }

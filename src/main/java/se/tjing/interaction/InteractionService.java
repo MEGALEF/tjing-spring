@@ -111,4 +111,14 @@ public class InteractionService {
 		interaction.setActive(false);
 		return interactionRepo.save(interaction);
 	}
+
+	public List<Interaction> getUserInteractions(Person currentUser) {
+		JPAQuery query = new JPAQuery(em);
+		QInteraction interaction = QInteraction.interaction;
+		QItem item = QItem.item;
+		query.from(interaction).leftJoin(interaction.item, item)
+		.where(interaction.borrower.eq(currentUser).or(item.owner.eq(currentUser))
+				.and(interaction.active.isTrue()));
+		return query.list(interaction);
+	}
 }

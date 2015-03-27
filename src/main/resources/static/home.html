@@ -4,37 +4,113 @@
     <link rel="stylesheet" href="./bower_components/bootstrap-css-only/css/bootstrap.min.css" />
   </head>
   <body ng-app="tjingApp">
-    <div class="container" ng-controller="AppController">
-      <div class="page-header">
-        <h1>Available items</h1>
+    <div ng-controller="ItemController">
+      <h1>Available items</h1>
+      <div ng-repeat="item in items">
+        <label>
+          {{item.id}} {{item.owner.firstName}} {{item.title}} 
+          <button type="button" title="Request" ng-click="requestItem(item)">Request
+          </button>
+        </label>
       </div>
-      <div class="alert alert-info" role="alert" ng-hide="items && items.length > 0">
-        There are no items yet.
+<hr />
+      <h1>My items</h1>      
+      <div ng-repeat="item in owneditems">
+         <label>
+            {{item.id}} {{item.title}} 
+            <button type="button" title="Delete"
+            ng-click="deleteItem(item)">
+            <span class="glyphicon glyphicon-trash"></span>
+          </button>
+          <button ng-click="shareItem(item.id, poolToShareTo)" ng-disabled="!poolToShareTo">Share</button> 
+          <select ng-model ="poolToShareTo">
+            <option ng-repeat="pool in mypools" value="{{pool.id}}" >
+              {{pool.title}}
+            </option>
+          </select>
+        </label>
       </div>
-      <form class="form-horizontal" role="form" ng-submit="addItem(newItem)">
-        <div class="form-group" ng-repeat="item in items">
-          <div class="checkbox col-xs-9">
-            <label>
-              {{item.id}} {{item.title}}
-            </label>
-          </div>
-          <div class="col-xs-3">
-            <button class="pull-right btn btn-danger" type="button" title="Delete"
-              ng-click="deleteItem(item)">
-              <span class="glyphicon glyphicon-trash"></span>
-            </button>
-          </div>
-        </div>
-        <hr />
-        <div class="input-group">
-          <input type="text" class="form-control" ng-model="newItem" placeholder="Enter the description..." />
-          <span class="input-group-btn">
-            <button class="btn btn-default" type="submit" ng-disabled="!newItem" title="Add">
+<hr />
+    <h1>Add item</h1>
+      <form role="form" ng-submit="addItem(newItem)">
+        <div>
+          <input type="text" ng-model="newItem" placeholder="Enter item title.." />
+          <span>
+            <button type="submit" ng-disabled="!newItem" title="Add">
               <span class="glyphicon glyphicon-plus"></span>
             </button>
           </span>
         </div>
       </form>
+<hr />
+      <h1>Borrowed items</h1>
+      <div ng-hide="borroweditems && borroweditems.length > 0">
+        You have no borrowed items.
+      </div>
+      <div ng-repeat="item in borroweditems">
+        <div>
+          <label>
+            {{item.id}} {{item.title}} 
+        </div>
+      </div>
+    </div>
+    <hr />
+
+    <div ng-controller="PoolController">
+      <h1>All pools</h1>
+      <div ng-repeat="pool in allpools">
+        <label>
+          {{pool.id}} {{pool.title}}
+          <button type="button" ng-click="joinPool(pool)">Join</button>
+        </label>
+      </div>
+<hr />
+      <h1>My pools</h1>
+      <div ng-repeat="pool in mypools">
+        {{pool.id}} {{pool.title}}
+      </div>
+
+      <hr/>
+      <h1>Create pool (you will be added as a member)</h1>
+      <form role="form" ng-submit="createPool(newPool)">
+        <input type="text" ng-model="newPool.title" placeholder="Enter pool name.." />
+        <button type="submit" ng-disabled="!newPool.title" title="Add">
+              <span class="glyphicon glyphicon-plus"></span>
+            </button>
+      </form>
+    </div>
+<hr />
+    <div ng-controller="InteractionController">
+      <h1>All interactions</h1>
+      <div ng-repeat="interaction in allinteractions">
+        <label>
+          {{interaction.id}} {{interaction.borrower.firstName}} wants to borrow {{interaction.item.owner.firstName}} {{interaction.item.title}}
+        </label>
+      </div>
+      <hr />
+
+      <h1>Outgoing requests</h1>
+      <div ng-repeat="request in outgoingrequests">
+        <label>
+        {{request.id}} Asked {{request.item.owner.firstName}} for his {{request.item.title}} 
+        <button ng-show="request.statusAccepted" ng-disabled="request.statusHandedOver" ng-click="confirmHandover(request)">
+          Confirm handover
+        </button>
+        </label>
+      </div>
+      <hr />
+      <h1>Incoming requests</h1>
+      <div ng-repeat="request in incomingrequests">
+        <label>
+          {{request.id}} {{request.borrower.firstName}} wants to borrow your {{request.item.title}}
+          <button ng-disabled="request.statusAccepted" ng-click="acceptRequest(request)">Accept</button>
+          <button ng-disabled="request.statusAccepted" ng-click="denyRequest(request)">Deny</button>
+          <div ng-show="request.statusHandedOver">
+            <button ng-disabled="request.statusReturned" ng-click="confirmReturn(request)">Confirm return</button>
+          </div>
+        </label>
+      </div>
+      <hr />
     </div>
     <script type="text/javascript" src="./bower_components/angular/angular.min.js"></script>
     <script type="text/javascript" src="./bower_components/angular-resource/angular-resource.min.js"></script>

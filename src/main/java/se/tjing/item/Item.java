@@ -34,13 +34,29 @@ public class Item extends BaseEntity implements Serializable {
 	private String title;
 
 	@ManyToOne
-	@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-	@JsonIdentityReference(alwaysAsId = true)
+//	@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+//	@JsonIdentityReference(alwaysAsId = true)
 	private Person owner;
 
 	@OneToMany(mappedBy = "item")
 	@JsonIgnore
 	private List<Share> shares;
+
+	public List<Share> getShares() {
+		return shares;
+	}
+
+	public void setShares(List<Share> shares) {
+		this.shares = shares;
+	}
+
+	public Set<Interaction> getInteractions() {
+		return interactions;
+	}
+
+	public void setInteractions(Set<Interaction> interactions) {
+		this.interactions = interactions;
+	}
 
 	@OneToMany(mappedBy = "item")
 	@JsonIgnore
