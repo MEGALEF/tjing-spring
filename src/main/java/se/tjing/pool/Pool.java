@@ -24,8 +24,9 @@ public class Pool extends BaseEntity {
 	private String title;
 
 	private PrivacyMode privacy = PrivacyMode.CLOSED; // Pool privacy set to
-														// closed by default
-
+	// closed by default
+	private PoolRole approval = PoolRole.MEMBER; //By default members can approve joining members
+	
 	@OneToMany(mappedBy = "pool")
 	@JsonIgnore
 	private Set<Membership> memberships;
@@ -68,5 +69,13 @@ public class Pool extends BaseEntity {
 
 	public void setPrivacy(PrivacyMode mode) {
 		this.privacy = mode;
+	}
+
+	public PoolRole getApproval() {
+		return approval;
+	}
+
+	public void setApproval(PoolRole approval) {
+		this.approval = approval;
 	}
 }

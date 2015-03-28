@@ -24,8 +24,15 @@ var tjingServices = angular.module("tjingApp.services", ["ngResource"]);
         method: "POST",
         url: itemlURL +'/sharetopool/:poolId',
         params : {
-          id: "@item.id",
+          id: '@item.id',
           poolId: '@pool.id'
+        }
+      },
+      unshare: {
+        method :"DELETE",
+        url : '/share/:id', //Deletes from the share resource. Like a proper REST call should. Look into making everything like this maybe.
+        params : {
+          id: '@id'
         }
       }
     });
@@ -88,6 +95,13 @@ var tjingServices = angular.module("tjingApp.services", ["ngResource"]);
       current: {
         method: "GET",
         url:"/user/"
+      },
+      profilepic: { //TODO: This doesn't seem to be working
+        method: "GET",
+        url: "http://graph.facebook.com/:userId/picture?type=small",
+        params: {
+          userId: "@facebookId"
+        }
       }
     }
     )

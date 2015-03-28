@@ -6,6 +6,7 @@
 <body ng-app="tjingApp">
   <div ng-controller="UserController">
     <h1>Welcome, {{currentUser.firstName}}!</h1>
+    <img ng-src="{{profilePicUrl}}">
   </div>
   <div ng-controller="ItemController">
     <h1>Available items</h1>
@@ -28,10 +29,13 @@
           <span class="glyphicon glyphicon-trash"></span>
         </button>
         <ul ng-show="item.shares[0]">
-          shared with 
-          <li ng-repeat="share in item.shares">{{share.pool.title}} </li>
+          Shared with 
+          <li ng-repeat="share in item.shares">
+            {{share.pool.title}} 
+            <button ng-click="unshareItem(share)">Unshare</button>
+          </li>
         </ul>
-        <div ng-show="item.activeInteraction">borrowed by {{item.activeInteraction.borrower.firstName}}</div>
+        <div ng-show="item.activeInteraction">Borrowed by {{item.activeInteraction.borrower.firstName}} on {{item.activeInteraction.statusHandedOver | date}}</div>
         <form role="form" ng-submit="shareItem(item, poolToShareTo)">
           <button type="submit" ng-disabled="!poolToShareTo">share to</button> 
           <select ng-options="pool.title for pool in mypools" ng-model ="poolToShareTo" >

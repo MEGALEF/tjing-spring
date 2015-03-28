@@ -80,7 +80,13 @@ public class ItemController {
 	public ResponseEntity<Share> shareItemToGroup(@PathVariable Integer itemId,
 			@PathVariable Integer poolId) {
 		return new ResponseEntity<Share>(itemService.shareToGroup(itemId,
-				poolId), null, HttpStatus.CREATED);
+				poolId), null, HttpStatus.CREATED); //TODO: Only item owner should be allowed to do this
+	}
+	
+	@RequestMapping(value="/{itemId}/unsharefrompool/{poolId}", method = RequestMethod.DELETE)
+	public ResponseEntity<List<Share>> unshareItemFromPool(@PathVariable Integer itemId, @PathVariable Integer poolId){
+		List<Share> result = itemService.unshareItemFromPool(personService.getCurrentUser(), itemId, poolId);
+		return new ResponseEntity<List<Share>>(result, null, HttpStatus.ACCEPTED);
 	}
 
 	@RequestMapping(value = "/{itemId}/request", method = RequestMethod.POST)

@@ -72,6 +72,12 @@
         $scope.owneditems = Item.query({param:'owned'});
       });
     };
+
+    $scope.unshareItem = function(share){ //TODO: It would be better to post a DELETE to the share resource
+      Item.unshare({id: share.id}, function(){
+        $scope.owneditems = Item.query({param:'owned'});
+      });
+    }
   }]);
 
   angular.module("tjingApp.controllers").controller("PoolController", ["$scope", "Pool", "Item", function($scope, Pool, Item) {
@@ -108,7 +114,12 @@
   }]);
 
   angular.module("tjingApp.controllers").controller("UserController", ["$scope", "User", function($scope, User){
-    $scope.currentUser = User.current();
+    $scope.currentUser = User.current(function(data){
+      if (data.facebookId!=null){ //If the User object contains a facebookId, use it to get the profile picture from facebook
+        $scope.profilePicUrl = "http://graph.facebook.com/" +data.facebookId + "/picture?type=small"
+      }
+    });
+    $scope.profilePicUrl = "/messages/error.png"
   }]);
 
 

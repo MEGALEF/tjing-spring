@@ -155,4 +155,24 @@ public class ItemService {
 		}
 	}
 
+	public List<Share> unshareItemFromPool(Person currentUser, Integer itemId,
+			Integer poolId) {
+		Item item = itemRepo.findOne(itemId);
+		Pool pool = poolRepo.findOne(poolId);
+		
+		if (!item.getOwner().equals(currentUser)){
+			throw new TjingException("Only the item owner may do this");
+		} else {
+			JPAQuery query = new JPAQuery(em);
+			QShare share = QShare.share;
+			query.from(share).where(share.item.eq(item).and(share.pool.eq(pool)));
+			List<Share> queryresult = query.list(share);
+			for (Share res : queryresult){
+				shareRepo.delete(res);
+			}
+			
+			return item.getShares();
+		}
+	}
+
 }
