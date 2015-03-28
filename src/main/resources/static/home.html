@@ -32,13 +32,10 @@
           <li ng-repeat="share in item.shares">{{share.pool.title}} </li>
         </ul>
         <div ng-show="item.activeInteraction">borrowed by {{item.activeInteraction.borrower.firstName}}</div>
-        <form role="form" ng-submit="shareItem(item.id, poolToShareTo)">
+        <form role="form" ng-submit="shareItem(item, poolToShareTo)">
           <button type="submit" ng-disabled="!poolToShareTo">share to</button> 
-          <select ng-model ="poolToShareTo">
+          <select ng-options="pool.title for pool in mypools" ng-model ="poolToShareTo" >
             <option value="" selected>pool</option>
-            <option ng-repeat="pool in mypools" value="{{pool.id}}" >
-              {{pool.title}}
-            </option>
           </select>
         </form> 
       </li>
@@ -46,14 +43,12 @@
     <hr />
     <h1>Add item</h1>
     <form role="form" ng-submit="addItem(newItem)">
-      <div>
-        <input type="text" ng-model="newItem" placeholder="Enter item title.." />
+        <input type="text" ng-model="newItem" placeholder="Enter item title.." required/>
         <span>
           <button type="submit" ng-disabled="!newItem" title="Add">
             <span class="glyphicon glyphicon-plus"></span>
           </button>
         </span>
-      </div>
     </form>
     <hr />
     <h1>My borrowed items</h1>
@@ -63,7 +58,7 @@
     <ul>
       <li ng-repeat="item in borroweditems">
         <div>
-          {{item.id}} {{item.title}} 
+          {{item.id}} {{item.title}}, borrowed from {{item.owner.firstName}} on {{item.activeInteraction.statusHandedOver | date}}
         </div>
       </li>
     </li>
@@ -89,12 +84,13 @@
     <ul>
       <li ng-repeat="pool in mypools">
         {{pool.id}} {{pool.title}}
+        <button type="button" ng-click="leavePool(pool)">Leave</button>
       </li>
     </ul>
     <hr/>
     <h1>Create pool</h1>
     <form role="form" ng-submit="createPool(newPool)">
-      <input type="text" ng-model="newPool.title" placeholder="Enter pool name.." />
+      <input type="text" ng-model="newPool.title" placeholder="Enter pool name.." required/>
       <button type="submit" ng-disabled="!newPool.title" title="Add">
         <span class="glyphicon glyphicon-plus"></span>
       </button>
@@ -115,9 +111,10 @@
     <li ng-repeat="request in outgoingrequests">
         {{request.id}} You asked {{request.item.owner.firstName}} for his {{request.item.title}} 
         <div ng-show="request.statusAccepted">(Accepted on {{request.statusAccepted | date}})
-        <button  ng-disabled="request.statusHandedOver" ng-click="confirmHandover(request)">
+        <button  ng-hide="request.statusHandedOver" ng-click="confirmHandover(request)">
           Confirm handover
         </button>
+        <div ng-show="request.statusHandedOver">(Handed over on {{request.statusHandedOver | date}})</div>
         </div>
     </li>
     </ul>

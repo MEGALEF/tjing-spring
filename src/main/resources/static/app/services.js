@@ -24,7 +24,8 @@ var tjingServices = angular.module("tjingApp.services", ["ngResource"]);
         method: "POST",
         url: itemlURL +'/sharetopool/:poolId',
         params : {
-          poolId: '@poolId'
+          id: "@item.id",
+          poolId: '@pool.id'
         }
       }
     });
@@ -37,7 +38,19 @@ var tjingServices = angular.module("tjingApp.services", ["ngResource"]);
     }, {
       join: {
         method : "POST",
-        url: '/pool/:id/join'
+        url: '/pool/:id/join',
+        params: {
+          id: "@id"
+        }
+      },
+      leave: {
+        method: "DELETE",
+        url: "pool/:id/leave",
+        params: {
+          id: "@id"
+        },
+        isArray: true //This endpoint returns an array of the remaining member pools. Possibly use this method for all the other actions
+
       }
     })
   }]);
