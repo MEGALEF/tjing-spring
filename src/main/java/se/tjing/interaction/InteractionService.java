@@ -121,4 +121,17 @@ public class InteractionService {
 				.and(interaction.active.isTrue()));
 		return query.list(interaction);
 	}
+
+	public Interaction cancel(Integer interactionId, Person currentUser) { //TODO: Maybe this isn't useful
+		Interaction interaction = interactionRepo.findOne(interactionId);
+		if (!isPersonItemOwner(currentUser, interaction) && !isPersonBorrower(currentUser, interaction)){
+			throw new TjingException("Only parties of the interaction may do this");
+		} else {
+			interaction.setStatusCancelled(DateTime.now());
+			interaction.setActive(false);
+			return interaction;
+		}
+		//TODO Cancel interactions even when item is handed over? Ok or not?
+		
+	}
 }

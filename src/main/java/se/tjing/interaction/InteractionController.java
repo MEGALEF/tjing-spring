@@ -52,6 +52,17 @@ public class InteractionController {
 				personService.getCurrentUser());
 		return new ResponseEntity<Interaction>(result, null, HttpStatus.OK);
 	}
+	
+	/**
+	 * Cancels an interaction. Similar to deny except it can be done to an accepted interaction and should leave a mark on the users interaction history
+	 * @param interactionId
+	 * @return
+	 */
+	@RequestMapping(value ="{interactionId}/cancel", method = RequestMethod.PUT)
+	public ResponseEntity<Interaction> cancelRequest(@PathVariable Integer interactionId){
+		Interaction result = interactionService.cancel(interactionId, personService.getCurrentUser());
+		return new ResponseEntity<Interaction>(result, null, HttpStatus.OK);
+	}
 
 	/**
 	 * Confirm that the physical item has been handed over to the requesting

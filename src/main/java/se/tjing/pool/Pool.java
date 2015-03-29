@@ -17,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Pool extends BaseEntity {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;

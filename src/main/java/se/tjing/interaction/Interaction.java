@@ -42,6 +42,16 @@ public class Interaction extends BaseEntity<Integer> {
 	private DateTime statusHandedOver;
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	private DateTime statusReturned;
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+	private DateTime statusCancelled;
+	
+	public DateTime getStatusCancelled() {
+		return statusCancelled;
+	}
+
+	public void setStatusCancelled(DateTime statusCancelled) {
+		this.statusCancelled = statusCancelled;
+	}
 
 	@OneToOne
 	private Rating rating;
