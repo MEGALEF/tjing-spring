@@ -5,16 +5,20 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import org.joda.time.DateTime;
+
 import se.tjing.common.BaseEntity;
+import se.tjing.feed.FeedEvent;
 import se.tjing.pool.Pool;
 import se.tjing.user.Person;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = { "pool", "member" }))
-public class JoinRequest extends BaseEntity<Integer> {
+public class JoinRequest extends FeedEvent{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,6 +29,12 @@ public class JoinRequest extends BaseEntity<Integer> {
 
 	@ManyToOne
 	private Person member;
+
+	@OneToOne
+	private Pool notifyPool;
+
+	@OneToOne
+	private Person notifyUser;
 
 	public JoinRequest(Person person, Pool pool) {
 		this.member = person;
@@ -54,6 +64,27 @@ public class JoinRequest extends BaseEntity<Integer> {
 
 	public void setMember(Person member) {
 		this.member = member;
+	}
+
+	@Override
+	public Person getNotifyUser() {
+		return notifyUser;
+	}
+
+	@Override
+	public Pool getNotifyPool() {
+		return notifyPool;
+	}
+
+	@Override
+	public void setNotifyUser(Person user) {
+		this.notifyUser = user;
+		
+	}
+
+	@Override
+	public void setNotifyPool(Pool pool) {
+		this.notifyPool = pool;
 	}
 
 }

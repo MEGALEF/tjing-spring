@@ -34,6 +34,11 @@
       });
     }
   }]);
+
+  angular.module('tjingApp.controllers').controller('FeedController', ["$scope", "Feed", function($scope, Feed){
+    $scope.feedItems = Feed.query();
+
+  }]);
   
   angular.module("tjingApp.controllers").controller("ItemController", ["$scope", "Item", "Pool",
     function($scope, Item, Pool) {

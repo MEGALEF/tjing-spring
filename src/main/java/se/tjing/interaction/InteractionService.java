@@ -34,6 +34,8 @@ public class InteractionService {
 			throw new TjingException("Only the item owner may do this");
 		}
 		interaction.setStatusAccepted(DateTime.now());
+		interaction.setNotifyUser(interaction.getBorrower());
+		
 		Item item = interaction.getItem();
 		item.setActiveInteraction(interaction);
 		itemRepo.save(item);
@@ -46,6 +48,7 @@ public class InteractionService {
 			throw new TjingException(
 					"Only the user who initially sent the request may do this");
 		}
+		interaction.setNotifyUser(interaction.getItem().getOwner());
 		interaction.setStatusHandedOver(DateTime.now());
 		return interactionRepo.save(interaction);
 	}
@@ -56,6 +59,7 @@ public class InteractionService {
 			throw new TjingException("Only the item owner may do this");
 		}
 		interaction.setStatusReturned(DateTime.now());
+		interaction.setNotifyUser(interaction.getBorrower());
 		interaction.getItem().setActiveInteraction(null);
 		interaction.setActive(false);
 		return interactionRepo.save(interaction);

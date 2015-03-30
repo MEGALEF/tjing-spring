@@ -11,14 +11,16 @@ import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import se.tjing.common.BaseEntity;
+import se.tjing.feed.FeedEvent;
 import se.tjing.item.Item;
+import se.tjing.pool.Pool;
 import se.tjing.rating.Rating;
 import se.tjing.user.Person;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-public class Interaction extends BaseEntity<Integer> {
+public class Interaction extends FeedEvent{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -45,25 +47,33 @@ public class Interaction extends BaseEntity<Integer> {
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	private DateTime statusCancelled;
 	
-	public DateTime getStatusCancelled() {
-		return statusCancelled;
-	}
-
-	public void setStatusCancelled(DateTime statusCancelled) {
-		this.statusCancelled = statusCancelled;
-	}
-
 	@OneToOne
 	private Rating rating;
 
 	private Boolean active = true;
 
-	public Rating getRating() {
-		return rating;
+	@OneToOne
+	private Person notifyUser;
+
+	@OneToOne
+	private Pool notifyPool;
+
+	public Interaction(Person currentUser, Item item2, DateTime now) {
+this.borrower = currentUser;
+this.item = item2;
+this.statusRequested = now;
+	}
+	
+	public Interaction(){
+		
 	}
 
-	public void setRating(Rating rating) {
-		this.rating = rating;
+	public Boolean getActive() {
+		return active;
+	}
+
+	public Person getBorrower() {
+		return borrower;
 	}
 
 	@Override
@@ -75,60 +85,88 @@ public class Interaction extends BaseEntity<Integer> {
 		return item;
 	}
 
-	public void setItem(Item item) {
-		this.item = item;
+	@Override
+	public Pool getNotifyPool() {
+		
+		return notifyPool;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	@Override
+	public Person getNotifyUser() {
+		return notifyUser;
 	}
 
-	public Person getBorrower() {
-		return borrower;
-	}
-
-	public void setBorrower(Person borrower) {
-		this.borrower = borrower;
-	}
-
-	public DateTime getStatusRequested() {
-		return statusRequested;
-	}
-
-	public void setStatusRequested(DateTime statusRequested) {
-		this.statusRequested = statusRequested;
+	public Rating getRating() {
+		return rating;
 	}
 
 	public DateTime getStatusAccepted() {
 		return statusAccepted;
 	}
 
-	public void setStatusAccepted(DateTime statusAccepted) {
-		this.statusAccepted = statusAccepted;
+	public DateTime getStatusCancelled() {
+		return statusCancelled;
 	}
 
 	public DateTime getStatusHandedOver() {
 		return statusHandedOver;
 	}
 
-	public void setStatusHandedOver(DateTime statusHandedOver) {
-		this.statusHandedOver = statusHandedOver;
+	public DateTime getStatusRequested() {
+		return statusRequested;
 	}
 
 	public DateTime getStatusReturned() {
 		return statusReturned;
 	}
 
-	public void setStatusReturned(DateTime statusReturned) {
-		this.statusReturned = statusReturned;
-	}
-
-	public Boolean getActive() {
-		return active;
-	}
-
 	public void setActive(Boolean active) {
 		this.active = active;
+	}
+
+	public void setBorrower(Person borrower) {
+		this.borrower = borrower;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public void setItem(Item item) {
+		this.item = item;
+	}
+
+	@Override
+	public void setNotifyPool(Pool pool) {	
+	}
+
+	@Override
+	public void setNotifyUser(Person user) {
+		this.notifyUser = user;
+		
+	}
+
+	public void setRating(Rating rating) {
+		this.rating = rating;
+	}
+
+	public void setStatusAccepted(DateTime statusAccepted) {
+		this.statusAccepted = statusAccepted;
+	}
+
+	public void setStatusCancelled(DateTime statusCancelled) {
+		this.statusCancelled = statusCancelled;
+	}
+	
+	public void setStatusHandedOver(DateTime statusHandedOver) {
+		this.statusHandedOver = statusHandedOver;
+	}
+	public void setStatusRequested(DateTime statusRequested) {
+		this.statusRequested = statusRequested;
+	} 
+
+	public void setStatusReturned(DateTime statusReturned) {
+		this.statusReturned = statusReturned;
 	}
 
 }

@@ -8,6 +8,7 @@
     <h1>Welcome, {{currentUser.firstName}}!</h1>
     <img ng-src="{{profilePicUrl}}">
   </div>
+  
   <div ng-controller="ItemController">
     <h1>Available items</h1>
     <ul>
@@ -17,7 +18,7 @@
         </button>
       </li>
     </ul>
-    <hr />
+    <hr/>
     <h1>My items</h1> 
     <div ng-hide="owneditems && owneditems.length >0">
       You don't own any items. Add an item!

@@ -67,6 +67,8 @@ public class PoolService {
 		if (pool.getPrivacy() == PrivacyMode.CLOSED
 				|| pool.getPrivacy() == PrivacyMode.SECRET) {
 			JoinRequest request = new JoinRequest(person, pool);
+			
+			request.setNotifyPool(pool);
 			requestRepo.save(request);
 			return null;
 
@@ -184,7 +186,7 @@ public class PoolService {
 		query.from(request).leftJoin(request.pool, pool)
 				.leftJoin(pool.memberships, membership)
 				.where(membership.member.eq(currentUser));
-
+		
 		return query.list(request);
 	}
 
