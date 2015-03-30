@@ -12,7 +12,7 @@
     <h1>Available items</h1>
     <ul>
       <li ng-repeat="item in items">
-        {{item.id}} {{item.owner.firstName}} {{item.title}} 
+        {{item.owner.firstName}} {{item.title}}
         <button type="button" title="Request" ng-click="requestItem(item)">Request
         </button>
       </li>
@@ -24,10 +24,11 @@
     </div>
     <ul>
       <li ng-repeat="item in owneditems" >
-        {{item.id}} {{item.title}} 
+        {{item.title}} 
         <button type="button" title="Delete" ng-click="deleteItem(item)">
           <span class="glyphicon glyphicon-trash"></span>
         </button>
+        <div ng-show="!item.shares[0]">This item isn't shared with anyone. Share it to a pool!</div>
         <ul ng-show="item.shares[0]">
           Shared with 
           <li ng-repeat="share in item.shares">
@@ -62,7 +63,7 @@
     <ul>
       <li ng-repeat="item in borroweditems">
         <div>
-          {{item.id}} {{item.title}}, borrowed from {{item.owner.firstName}} on {{item.activeInteraction.statusHandedOver | date}}
+          {{item.title}}, borrowed from {{item.owner.firstName}} on {{item.activeInteraction.statusHandedOver | date}}
         </div>
       </li>
     </li>
@@ -76,7 +77,7 @@
     </div>
     <ul>
       <li ng-repeat="pool in allpools">
-        {{pool.id}} {{pool.title}} ({{pool.privacy}}<div ng-hide="pool.privacy == 'OPEN'">, requires approval from {{pool.approval}}</div>)
+        {{pool.title}} ({{pool.privacy}}<div ng-hide="pool.privacy == 'OPEN'">, requires approval from {{pool.approval}}</div>)
         <button type="button" ng-click="joinPool(pool)">Join</button>
       </li>
     </ul>
@@ -87,7 +88,7 @@
     </div>
     <ul>
       <li ng-repeat="pool in mypools">
-        {{pool.id}} {{pool.title}}
+        {{pool.title}}
         <button type="button" ng-click="leavePool(pool)">Leave</button>
       </li>
     </ul>
@@ -105,7 +106,7 @@
     <h1>All interactions</h1>
     <div ng-repeat="interaction in allinteractions">
       <label>
-        {{interaction.id}} {{interaction.borrower.firstName}} wants to borrow {{interaction.item.owner.firstName}} {{interaction.item.title}}
+        {{interaction.borrower.firstName}} wants to borrow {{interaction.item.owner.firstName}} {{interaction.item.title}}
       </label>
     </div>
     <hr />
@@ -113,7 +114,7 @@
     <h1>Outgoing requests</h1>
     <ul>
     <li ng-repeat="request in outgoingrequests">
-        {{request.id}} You asked {{request.item.owner.firstName}} for his {{request.item.title}} 
+        You asked {{request.item.owner.firstName}} for his {{request.item.title}} 
         <div ng-show="request.statusAccepted">(Accepted on {{request.statusAccepted | date}})
         <button  ng-hide="request.statusHandedOver" ng-click="confirmHandover(request)">
           Confirm handover
@@ -127,7 +128,7 @@
     <ul>
     <li ng-repeat="request in incomingrequests">
       
-        {{request.id}} {{request.borrower.firstName}}
+        {{request.borrower.firstName}}
         
          wants to borrow your {{request.item.title}}
         <div ng-hide="request.statusAccepted">
