@@ -25,6 +25,16 @@ public class Membership extends FeedEvent {
 	@ManyToOne
 	private Person member;
 	
+
+	@ManyToOne
+	private Pool pool;
+
+	@OneToOne
+	private Pool notifyPool = null;
+
+	@OneToOne
+	private Person notifyUser = null;
+	
 	private Boolean approved = false;
 	
 	public Membership(Person member, Pool pool) {
@@ -39,15 +49,6 @@ public class Membership extends FeedEvent {
 	public void approve(){
 		this.approved = true;
 	}
-
-	@ManyToOne
-	private Pool pool;
-
-	@OneToOne
-	private Pool notifyPool;
-
-	@OneToOne
-	private Person notifyUser;
 
 	public Person getMember() {
 		return member;

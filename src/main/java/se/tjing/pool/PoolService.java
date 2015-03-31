@@ -53,21 +53,7 @@ public class PoolService {
 		return savedPool;
 	}
 
-	public Membership joinPool(Person person, Integer poolId) {
-		// TODO: Business logic.
-		// Check for preexisting memberships
-		Pool pool = poolRepo.findOne(poolId);
-		Membership membership = new Membership(person, pool);
-
-		// If the group is closed or secret, notify users to approve. If Pool is open, preapprove membership
-		if (PrivacyMode.CLOSED.equals(pool.getPrivacy()) 
-				|| PrivacyMode.SECRET.equals(pool.getPrivacy())) {
-			membership.setNotifyPool(pool);
-		} else if (PrivacyMode.OPEN.equals(pool.getPrivacy())){
-			membership.approve();
-		}
-		return membershipRepo.save(membership);
-	}
+	
 
 	public List<Pool> getPools() {
 		// TODO: Limit to user visible pools. Business Logic
@@ -178,10 +164,11 @@ public class PoolService {
 
 	public Membership approveJoin(Person user, Integer requestId) {
 		Membership req = membershipRepo.findOne(requestId);
+		
+		//TODO: Make sure the user role in the pool is correct
 		if (!isUserMemberOfPool(user, req.getPool())) {
 			throw new TjingException("Only pool members may do this");
 		} else {
-			
 			req.approve();
 
 			return membershipRepo.save(req);

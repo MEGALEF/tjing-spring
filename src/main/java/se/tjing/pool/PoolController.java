@@ -43,15 +43,6 @@ public class PoolController {
 		return new ResponseEntity<Pool>(newPool, null, HttpStatus.CREATED);
 	}
 
-	@RequestMapping(value = "/{poolId}/join", method = RequestMethod.POST)
-	@ResponseBody
-	public ResponseEntity<Membership> joinPool(@PathVariable Integer poolId) {
-		Membership newMembership = poolService.joinPool(
-				personService.getCurrentUser(), poolId);
-		return new ResponseEntity<Membership>(newMembership, null,
-				HttpStatus.CREATED);
-	}
-
 	@RequestMapping(value = "/{poolId}/leave", method = RequestMethod.DELETE)
 	@ResponseBody
 	public ResponseEntity<List<Membership>> leavePool(
