@@ -59,9 +59,9 @@ public class Interaction extends FeedEvent{
 	private Pool notifyPool;
 
 	public Interaction(Person currentUser, Item item2, DateTime now) {
-this.borrower = currentUser;
-this.item = item2;
-this.statusRequested = now;
+		this.borrower = currentUser;
+		this.item = item2;
+		this.statusRequested = now;
 	}
 	
 	public Interaction(){

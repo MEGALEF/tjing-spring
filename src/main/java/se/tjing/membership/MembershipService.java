@@ -29,16 +29,15 @@ public class MembershipService {
 	 * @return
 	 */
 	public Membership addMembership(Person currentUser, AddMembership addMembership) {
-		// TODO: Business logic.
-		// Check for preexisting memberships
+		// TODO: Moar business logic.
 		Pool pool = poolRepo.findOne(addMembership.poolId);
-		Person user = personRepo.findOne(addMembership.userId);
+		//Person user = personRepo.findOne(addMembership.userId);
 		
-		if (!currentUser.equals(user)){
-			throw new TjingException("Can't add memberships for other users");
-		}
+//		if (!currentUser.equals(user)){
+//			throw new TjingException("Can't add memberships for other users");
+//		}
 		
-		Membership membership = new Membership(user, pool);
+		Membership membership = new Membership(currentUser, pool);
 		
 		// If the group is closed or secret, notify users to approve. If Pool is open, preapprove membership
 		if (PrivacyMode.CLOSED.equals(pool.getPrivacy()) 

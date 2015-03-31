@@ -43,6 +43,7 @@ public class PoolController {
 		return new ResponseEntity<Pool>(newPool, null, HttpStatus.CREATED);
 	}
 
+	//TODO: Make this RESTful instead
 	@RequestMapping(value = "/{poolId}/leave", method = RequestMethod.DELETE)
 	@ResponseBody
 	public ResponseEntity<List<Membership>> leavePool(

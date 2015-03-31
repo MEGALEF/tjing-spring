@@ -4,6 +4,11 @@
 (function(angular) {
 var tjingServices = angular.module("tjingApp.services", ["ngResource"]);
 
+  tjingServices.factory("Membership", ['$resource', function($resource){
+    var membershipUrl = "/membership/:id";
+    return $resource(membershipUrl);
+  }]);
+
   //Item factory
   tjingServices.factory("Item", ['$resource', function($resource) {
     var itemlURL = "/item/:id";
@@ -47,13 +52,6 @@ var tjingServices = angular.module("tjingApp.services", ["ngResource"]);
     return $resource('/pool/:id', {
       id : '@id'
     }, {
-      join: {
-        method : "POST",
-        url: '/pool/:id/join',
-        params: {
-          id: "@id"
-        }
-      },
       leave: {
         method: "DELETE",
         url: "pool/:id/leave",

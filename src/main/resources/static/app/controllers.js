@@ -85,7 +85,7 @@
     }
   }]);
 
-  angular.module("tjingApp.controllers").controller("PoolController", ["$scope", "Pool", "Item", function($scope, Pool, Item) {
+  angular.module("tjingApp.controllers").controller("PoolController", ["$scope", "Pool", "Item", "Membership", function($scope, Pool, Item, Membership) {
     $scope.mypools = Pool.query({param:'mine'});
     $scope.allpools = Pool.query();
 
@@ -94,10 +94,7 @@
     };
 
     $scope.joinPool = function(pool){
-      Pool.join(pool, function(){
-        $scope.mypools = Pool.query({param:'mine'});
-        $scope.items=Item.query();
-      } );
+      Membership.save({poolId:pool.id});
     };
 
     $scope.leavePool = function(pool){
