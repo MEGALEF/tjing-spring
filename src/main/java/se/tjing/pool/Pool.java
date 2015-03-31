@@ -9,7 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import se.tjing.common.BaseEntity;
-import se.tjing.membership.JoinRequest;
 import se.tjing.membership.Membership;
 import se.tjing.share.Share;
 
@@ -31,10 +30,6 @@ public class Pool extends BaseEntity {
 	@OneToMany(mappedBy = "pool")
 	@JsonIgnore
 	private Set<Membership> memberships;
-
-	@OneToMany(mappedBy = "pool")
-	@JsonIgnore
-	private Set<JoinRequest> requests;
 
 	@OneToMany(mappedBy = "pool")
 	@JsonIgnore

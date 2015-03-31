@@ -5,16 +5,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import se.tjing.common.BaseEntity;
+import se.tjing.feed.FeedEvent;
 import se.tjing.pool.Pool;
+import se.tjing.pool.PrivacyMode;
 import se.tjing.user.Person;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = { "pool", "member" }))
-public class Membership extends BaseEntity {
+public class Membership extends FeedEvent {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,9 +24,30 @@ public class Membership extends BaseEntity {
 
 	@ManyToOne
 	private Person member;
+	
+	private Boolean approved = false;
+	
+	public Membership(Person member, Pool pool) {
+		this.member = member;
+		this.pool = pool;
+	}
+
+	public Membership() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public void approve(){
+		this.approved = true;
+	}
 
 	@ManyToOne
 	private Pool pool;
+
+	@OneToOne
+	private Pool notifyPool;
+
+	@OneToOne
+	private Person notifyUser;
 
 	public Person getMember() {
 		return member;
@@ -43,11 +66,40 @@ public class Membership extends BaseEntity {
 	}
 
 	@Override
-	public Object getId() {
+	public Integer getId() {
 		return id;
 	}
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Boolean getApproved() {
+		return approved;
+	}
+
+	public void setApproved(Boolean approved) {
+		this.approved = approved;
+	}
+
+	@Override
+	public Person getNotifyUser() {
+		return notifyUser;
+	}
+
+	@Override
+	public Pool getNotifyPool() {
+		return notifyPool;
+	}
+
+	@Override
+	public void setNotifyUser(Person user) {
+		this.notifyUser = user;
+		
+	}
+
+	@Override
+	public void setNotifyPool(Pool pool) {
+		this.notifyPool = pool;
 	}
 }

@@ -10,17 +10,15 @@ import org.springframework.stereotype.Service;
 import se.tjing.exception.TjingException;
 import se.tjing.item.Item;
 import se.tjing.item.QItem;
-import se.tjing.membership.JoinRequest;
-import se.tjing.membership.JoinRequestRepository;
 import se.tjing.membership.Membership;
 import se.tjing.membership.MembershipRepository;
-import se.tjing.membership.QJoinRequest;
 import se.tjing.membership.QMembership;
 import se.tjing.share.QShare;
 import se.tjing.share.Share;
 import se.tjing.share.ShareRepository;
 import se.tjing.user.Person;
 
+import com.mysema.query.jpa.JPASubQuery;
 import com.mysema.query.jpa.impl.JPAQuery;
 
 @Service
@@ -35,9 +33,6 @@ public class PoolService {
 	ShareRepository shareRepo;
 
 	@Autowired
-	JoinRequestRepository requestRepo;
-
-	@Autowired
 	EntityManager em;
 
 	public Pool addPool(Person creator, Pool pool) {
@@ -50,9 +45,9 @@ public class PoolService {
 		}
 
 		// Set pool creator as member in the pool
-		Membership creatorMembership = new Membership();
-		creatorMembership.setMember(creator);
-		creatorMembership.setPool(pool);
+		Membership creatorMembership = new Membership(creator, pool);
+		creatorMembership.approve();
+		
 		Pool savedPool = poolRepo.save(pool);
 		membershipRepo.save(creatorMembership);
 		return savedPool;
@@ -62,23 +57,16 @@ public class PoolService {
 		// TODO: Business logic.
 		// Check for preexisting memberships
 		Pool pool = poolRepo.findOne(poolId);
+		Membership membership = new Membership(person, pool);
 
-		// If the group is closed or secret, a request is created
-		if (pool.getPrivacy() == PrivacyMode.CLOSED
-				|| pool.getPrivacy() == PrivacyMode.SECRET) {
-			JoinRequest request = new JoinRequest(person, pool);
-			
-			request.setNotifyPool(pool);
-			requestRepo.save(request);
-			return null;
-
-		} else {
-			Membership membership = new Membership();
-			membership.setMember(person);
-			membership.setPool(pool);
-
-			return membershipRepo.save(membership);
+		// If the group is closed or secret, notify users to approve. If Pool is open, preapprove membership
+		if (PrivacyMode.CLOSED.equals(pool.getPrivacy()) 
+				|| PrivacyMode.SECRET.equals(pool.getPrivacy())) {
+			membership.setNotifyPool(pool);
+		} else if (PrivacyMode.OPEN.equals(pool.getPrivacy())){
+			membership.approve();
 		}
+		return membershipRepo.save(membership);
 	}
 
 	public List<Pool> getPools() {
@@ -108,7 +96,7 @@ public class PoolService {
 		QMembership membership = QMembership.membership;
 		JPAQuery query = new JPAQuery(em);
 		query.from(membership).where(
-				membership.pool.eq(pool).and(membership.member.eq(person)));
+				membership.pool.eq(pool).and(membership.member.eq(person).and(membership.approved.isTrue())));
 		return query.exists();
 	}
 
@@ -117,7 +105,7 @@ public class PoolService {
 		QPool pool = QPool.pool;
 		JPAQuery query = new JPAQuery(em);
 		query.from(pool).leftJoin(pool.memberships, membership)
-				.where(membership.member.eq(user));
+				.where(membership.member.eq(user).and(membership.approved.isTrue()));
 		return query.list(pool);
 	}
 
@@ -177,41 +165,44 @@ public class PoolService {
 		return currentUser.getMemberships();
 	}
 
-	public List<JoinRequest> getRelevantRequests(Person currentUser) {
+	public List<Membership> getPendingMemberships(Person currentUser) {
 		JPAQuery query = new JPAQuery(em);
-		QJoinRequest request = QJoinRequest.joinRequest;
 		QMembership membership = QMembership.membership;
-		QPool pool = QPool.pool;
 		// Get requests to groups in which the user is a member
-		query.from(request).leftJoin(request.pool, pool)
-				.leftJoin(pool.memberships, membership)
-				.where(membership.member.eq(currentUser));
 		
-		return query.list(request);
+		query.from(membership)
+				.where(membership.approved.isFalse().and(membership.pool.in(this.getUsersPools(currentUser))));
+		
+		return query.list(membership);
 	}
 
 	public Membership approveJoin(Person user, Integer requestId) {
-		JoinRequest req = requestRepo.findOne(requestId);
+		Membership req = membershipRepo.findOne(requestId);
 		if (!isUserMemberOfPool(user, req.getPool())) {
 			throw new TjingException("Only pool members may do this");
 		} else {
-			requestRepo.delete(req);
-			Membership membership = new Membership();
-			membership.setMember(req.getMember());
-			membership.setPool(req.getPool());
+			
+			req.approve();
 
-			return membershipRepo.save(membership);
+			return membershipRepo.save(req);
 		}
 	}
 
 	public boolean denyJoin(Person user, Integer requestId) {
-		JoinRequest req = requestRepo.findOne(requestId);
+		Membership req = membershipRepo.findOne(requestId);
 		if (!isUserMemberOfPool(user, req.getPool())) {
 			throw new TjingException("Only pool members may do this");
 		} else {
-			requestRepo.delete(req);
+			membershipRepo.delete(req);
 			return true;
 		}
 	}
 	// TODO: create private getPool(poolId) method
+
+	public List<Membership> getUserMemberships(Person user) {
+		JPAQuery query = new JPAQuery(em);
+		QMembership membership = QMembership.membership;
+		query.from(membership).where(membership.member.eq(user).and(membership.approved.isTrue()));
+		return query.list(membership);
+	}
 }

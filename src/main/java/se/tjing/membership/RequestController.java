@@ -8,13 +8,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import se.tjing.pool.PoolService;
 import se.tjing.user.PersonService;
 
 @RestController
-@RequestMapping("/request")
+@RequestMapping("/membership")
 public class RequestController {
 
 	@Autowired
@@ -24,10 +25,15 @@ public class RequestController {
 	PersonService personService;
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public ResponseEntity<List<JoinRequest>> getPoolRequests() {
-		List<JoinRequest> result = poolService
-				.getRelevantRequests(personService.getCurrentUser());
-		return new ResponseEntity<List<JoinRequest>>(result, null,
+	public ResponseEntity<List<Membership>> getPoolRequests(@RequestParam(value="pending", defaultValue="false") Boolean pending) {
+		List<Membership> result; 
+		
+		if (pending) {
+			result = poolService.getPendingMemberships(personService.getCurrentUser());
+		} else {
+			result = poolService.getUserMemberships(personService.getCurrentUser());
+		}
+		return new ResponseEntity<List<Membership>>(result, null,
 				HttpStatus.OK);
 	}
 
@@ -40,10 +46,10 @@ public class RequestController {
 	}
 
 	@RequestMapping(value = "{requestId}/deny", method = RequestMethod.POST)
-	public ResponseEntity<Boolean> deny(@PathVariable Integer requestId) {
+	public ResponseEntity<Object> deny(@PathVariable Integer requestId) {
 		Boolean result = poolService.denyJoin(personService.getCurrentUser(),
 				requestId);
-		return new ResponseEntity<Boolean>(result, null, HttpStatus.CREATED);
+		return new ResponseEntity<Object>(null, null, HttpStatus.CREATED);
 	}
 
 }
