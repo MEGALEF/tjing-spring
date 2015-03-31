@@ -28,8 +28,8 @@ public class PoolController {
 	@Autowired
 	PersonService personService;
 
-	@RequestMapping(value = "/mine", method = RequestMethod.GET)
-	public ResponseEntity<List<Pool>> getOwnPools() {
+	
+	private ResponseEntity<List<Pool>> getOwnPools() {
 		List<Pool> result = poolService.getUsersPools(personService
 				.getCurrentUser());
 		return new ResponseEntity<List<Pool>>(result, null, HttpStatus.OK);
@@ -41,23 +41,6 @@ public class PoolController {
 		Pool newPool = poolService
 				.addPool(personService.getCurrentUser(), pool);
 		return new ResponseEntity<Pool>(newPool, null, HttpStatus.CREATED);
-	}
-
-	//TODO: Make this RESTful instead
-	@RequestMapping(value = "/{poolId}/leave", method = RequestMethod.DELETE)
-	@ResponseBody
-	public ResponseEntity<List<Membership>> leavePool(
-			@PathVariable Integer poolId) {
-		List<Membership> result = poolService.leavePool(
-				personService.getCurrentUser(), poolId);
-		return new ResponseEntity<List<Membership>>(result, null,
-				HttpStatus.ACCEPTED);
-	}
-
-	@RequestMapping(value = "/{poolId}/invite/{userId}", method = RequestMethod.POST)
-	public ResponseEntity<Membership> inviteUserToPool(
-			@PathVariable Integer poolId, @PathVariable Integer userId) {
-		return null; // TODO: Not yet implemented;
 	}
 
 	@RequestMapping(value = "{poolId}", method = RequestMethod.GET)

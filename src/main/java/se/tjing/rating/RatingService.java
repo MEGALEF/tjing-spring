@@ -24,17 +24,15 @@ public class RatingService {
 	@Autowired
 	EntityManager em;
 
-	public Rating rate(Person user, Integer interactionId, String str) {
-		Interaction interaction = interactionRepo.findOne(interactionId);
-		Rating rating = interaction.getRating();
-		if (rating == null) {
-			rating = new Rating();
-			interaction.setRating(rating);
-		}
+	public Rating rate(Person user, AddRating newRating) {
+		Interaction interaction = interactionRepo.findOne(newRating.getInteractionId());
+		
+		Rating rating = new Rating(newRating);
+		
 		if (user.equals(interaction.getBorrower())) {
-			rating.setBorrowerRating(str);
+			interaction.setBorrowerRating(rating);
 		} else if (user.equals(interaction.getItem().getOwner())) {
-			rating.setOwnerRating(str);
+			interaction.setOwnerRating(rating);
 		}
 		return ratingRepo.save(rating);
 	}

@@ -19,7 +19,7 @@ import com.mangofactory.swagger.plugin.EnableSwagger;
 @EnableAutoConfiguration
 @EnableConfigurationProperties
 @PropertySource("classpath:application.properties")
-//@EnableSwagger
+@EnableSwagger
 public class Application {
 
 	public static void main(String[] args) {

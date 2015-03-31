@@ -56,8 +56,8 @@ public class MembershipController {
 	}
 
 	@RequestMapping(value = "{requestId}", method = RequestMethod.DELETE)
-	public ResponseEntity<Object> deny(@PathVariable Integer requestId) {
-		Boolean result = poolService.denyJoin(personService.getCurrentUser(),
+	public ResponseEntity<Object> deleteMembership(@PathVariable Integer requestId) {
+		poolService.removeMembership(personService.getCurrentUser(),
 				requestId);
 		return new ResponseEntity<Object>(null, null, HttpStatus.CREATED);
 	}

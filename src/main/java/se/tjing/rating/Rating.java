@@ -18,40 +18,39 @@ public class Rating extends BaseEntity<Integer> {
 
 	@OneToOne
 	private Interaction interaction;
-	private String ownerRating;
-	private String borrowerRating;
+	private String text;
+
+	public Rating(AddRating newRating) {
+		this.text = newRating.getText();
+	}
+	
+	public Rating(){
+		
+	}
 
 	@Override
 	public Integer getId() {
 		return id;
 	}
 
-	public Interaction getTransaction() {
-		return interaction;
+	public void setInteraction(Interaction interaction) {
+		this.interaction = interaction;
 	}
 
-	public void setTransaction(Interaction transaction) {
-		this.interaction = transaction;
-	}
 
-	public String getOwnerRating() {
-		return ownerRating;
-	}
-
-	public void setOwnerRating(String ownerRating) {
-		this.ownerRating = ownerRating;
-	}
-
-	public String getBorrowerRating() {
-		return borrowerRating;
-	}
-
-	public void setBorrowerRating(String borrowerRating) {
-		this.borrowerRating = borrowerRating;
+	public void setText(String text) {
+		this.text = text;
 	}
 
 	public void setId(Integer id) {
 		this.id = id;
 	}
 
+	public Interaction getInteraction() {
+		return interaction;
+	}
+
+	public String getText() {
+		return text;
+	}
 }

@@ -37,7 +37,7 @@ public class InteractionController {
 	 * @param interactionId
 	 * @return
 	 */
-	@RequestMapping(value = "/{interactionId}/accept", method = RequestMethod.PUT)
+	@RequestMapping(value = "/{interactionId}/accept", method = RequestMethod.PATCH)
 	public ResponseEntity<Interaction> approveRequest(
 			@PathVariable Integer interactionId) {
 		Interaction result = interactionService.accept(interactionId,
@@ -45,7 +45,7 @@ public class InteractionController {
 		return new ResponseEntity<Interaction>(result, null, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/{interactionId}/deny", method = RequestMethod.PUT)
+	@RequestMapping(value = "/{interactionId}/deny", method = RequestMethod.DELETE)
 	public ResponseEntity<Interaction> denyRequest(
 			@PathVariable Integer interactionId) {
 		Interaction result = interactionService.deny(interactionId,
@@ -58,7 +58,7 @@ public class InteractionController {
 	 * @param interactionId
 	 * @return
 	 */
-	@RequestMapping(value ="{interactionId}/cancel", method = RequestMethod.PUT)
+	@RequestMapping(value ="{interactionId}/cancel", method = RequestMethod.PATCH)
 	public ResponseEntity<Interaction> cancelRequest(@PathVariable Integer interactionId){
 		Interaction result = interactionService.cancel(interactionId, personService.getCurrentUser());
 		return new ResponseEntity<Interaction>(result, null, HttpStatus.OK);
@@ -71,7 +71,7 @@ public class InteractionController {
 	 * @param interactionId
 	 * @return
 	 */
-	@RequestMapping(value = "/{interactionId}/handoverconfirm", method = RequestMethod.PUT)
+	@RequestMapping(value = "/{interactionId}/handoverconfirm", method = RequestMethod.PATCH)
 	public ResponseEntity<Interaction> confirmHandover(
 			@PathVariable Integer interactionId) {
 		Interaction result = interactionService.confirmHandover(interactionId,
@@ -85,27 +85,12 @@ public class InteractionController {
 	 * @param interactionId
 	 * @return
 	 */
-	@RequestMapping(value = "/{interactionId}/returnconfirm", method = RequestMethod.PUT)
+	@RequestMapping(value = "/{interactionId}/returnconfirm", method = RequestMethod.PATCH)
 	public ResponseEntity<Interaction> confirmReturn(
 			@PathVariable Integer interactionId) {
 		Interaction result = interactionService.confirmReturn(interactionId,
 				personService.getCurrentUser());
 		return new ResponseEntity<Interaction>(result, null, HttpStatus.OK);
-	}
-
-	/**
-	 * Post a rating of the interaction.
-	 * 
-	 * @param interactionId
-	 * @param ratingStr
-	 * @return
-	 */
-	@RequestMapping(value = "/{interactionId}/rate", method = RequestMethod.POST)
-	public ResponseEntity<Rating> rate(@PathVariable Integer interactionId,
-			@RequestBody String ratingStr) {
-		Rating result = ratingService.rate(personService.getCurrentUser(),
-				interactionId, ratingStr);
-		return new ResponseEntity<Rating>(result, null, HttpStatus.CREATED);
 	}
 
 	/**

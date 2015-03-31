@@ -86,8 +86,15 @@
   }]);
 
   angular.module("tjingApp.controllers").controller("PoolController", ["$scope", "Pool", "Item", "Membership", function($scope, Pool, Item, Membership) {
-    $scope.mypools = Pool.query({param:'mine'});
     $scope.allpools = Pool.query();
+    $scope.myPools = [];
+    $scope.myMemberships = Membership.query({}, function(){
+      for (membership in $scope.myMemberships){
+      $scope.myPools.push(membership.pool);
+    }
+    });
+    
+
 
     $scope.searchPools = function(searchStr){
       return Pool.query({q: searchStr});
@@ -98,8 +105,8 @@
     };
 
     $scope.leavePool = function(pool){
-      Pool.leave(pool, function(data){ //This resource action returns an array of the remaining member pools
-        $scope.mypools = data;
+      Membership.delete({membershipId:'0'}, function(){ //TODO äuuuuuäuäuuähh
+        //$scope.mypools = ; //Refresh pools
       })
     };
 

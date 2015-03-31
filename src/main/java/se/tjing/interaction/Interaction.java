@@ -48,7 +48,26 @@ public class Interaction extends FeedEvent{
 	private DateTime statusCancelled;
 	
 	@OneToOne
-	private Rating rating;
+	private Rating borrowerRating;
+	
+	public Rating getBorrowerRating() {
+		return borrowerRating;
+	}
+
+	public void setBorrowerRating(Rating borrowerRating) {
+		this.borrowerRating = borrowerRating;
+	}
+
+	public Rating getOwnerRating() {
+		return ownerRating;
+	}
+
+	public void setOwnerRating(Rating ownerRating) {
+		this.ownerRating = ownerRating;
+	}
+
+	@OneToOne
+	private Rating ownerRating;
 
 	private Boolean active = true;
 
@@ -96,9 +115,6 @@ public class Interaction extends FeedEvent{
 		return notifyUser;
 	}
 
-	public Rating getRating() {
-		return rating;
-	}
 
 	public DateTime getStatusAccepted() {
 		return statusAccepted;
@@ -146,9 +162,7 @@ public class Interaction extends FeedEvent{
 		
 	}
 
-	public void setRating(Rating rating) {
-		this.rating = rating;
-	}
+	
 
 	public void setStatusAccepted(DateTime statusAccepted) {
 		this.statusAccepted = statusAccepted;

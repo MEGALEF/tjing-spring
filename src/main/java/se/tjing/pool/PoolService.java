@@ -175,13 +175,22 @@ public class PoolService {
 		}
 	}
 
-	public boolean denyJoin(Person user, Integer requestId) {
-		Membership req = membershipRepo.findOne(requestId);
-		if (!isUserMemberOfPool(user, req.getPool())) {
-			throw new TjingException("Only pool members may do this");
+	public void removeMembership(Person user, Integer requestId) {
+		Membership membership = membershipRepo.findOne(requestId);
+		if (membership.getApproved()){ //Member is an approved member of the pool
+			if (!user.equals(membership.getMember())){
+				throw new TjingException("Only admins may remove other users");
+				//TODO: Implement admin kicking
+			} else {
+				membershipRepo.delete(membership);
+			}
 		} else {
-			membershipRepo.delete(req);
-			return true;
+			if (!isUserMemberOfPool(user, membership.getPool())) {
+				//TODO Here is for implementation of pool role approval
+				throw new TjingException("Only pool members may deny join requests");
+			} else {
+				membershipRepo.delete(membership);
+			}
 		}
 	}
 	// TODO: create private getPool(poolId) method

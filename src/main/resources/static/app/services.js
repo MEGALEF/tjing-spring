@@ -5,7 +5,7 @@
 var tjingServices = angular.module("tjingApp.services", ["ngResource"]);
 
   tjingServices.factory("Membership", ['$resource', function($resource){
-    var membershipUrl = "/membership/:id";
+    var membershipUrl = "/membership/:membershipId";
     return $resource(membershipUrl);
   }]);
 
