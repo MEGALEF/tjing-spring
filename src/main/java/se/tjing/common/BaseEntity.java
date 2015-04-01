@@ -44,14 +44,26 @@ public abstract class BaseEntity<ID> {
 	
 	private Boolean needsAction = false;
 
-	public abstract ID getId();
+	public void addNotification(Notification<? extends BaseEntity<Integer>> notification){
+		this.notifications.add(notification);
+	}
 
 	public DateTime getCreationTime() {
 		return creationTime;
 	}
 
+	public abstract ID getId();
+
 	public DateTime getModificationTime() {
 		return modificationTime;
+	}
+
+	public Boolean getNeedsAction() {
+		return needsAction;
+	}
+
+	public List<Notification<? extends BaseEntity<Integer>>> getNotifications() {
+		return notifications;
 	}
 
 	public long getVersion() {
@@ -64,29 +76,17 @@ public abstract class BaseEntity<ID> {
 		this.creationTime = now;
 		this.modificationTime = now;
 	}
-
+	
 	@PreUpdate
 	public void preUpdate() {
 		this.modificationTime = DateTime.now();
 	}
 
-	public List<Notification<? extends BaseEntity<Integer>>> getNotifications() {
-		return notifications;
+	public void setNeedsAction(Boolean needsAction) {
+		this.needsAction = needsAction;
 	}
 
 	public void setNotifications(List<Notification<? extends BaseEntity<Integer>>> notifications) {
 		this.notifications = notifications;
-	}
-	
-	public void addNotification(Notification<? extends BaseEntity<Integer>> notification){
-		this.notifications.add(notification);
-	}
-
-	public Boolean getNeedsAction() {
-		return needsAction;
-	}
-
-	public void setNeedsAction(Boolean needsAction) {
-		this.needsAction = needsAction;
 	}
 }

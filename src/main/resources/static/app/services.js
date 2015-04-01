@@ -44,7 +44,7 @@ var tjingServices = angular.module("tjingApp.services", ["ngResource"]);
   }]);
 
   tjingServices.factory('Feed', ['$resource', function($resource){
-    return $resource('/feed/', {});
+    return $resource('/feed/:id', {});
   }]);
 
   //Pool factory

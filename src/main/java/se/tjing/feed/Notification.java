@@ -35,6 +35,8 @@ public abstract class Notification<T extends BaseEntity<Integer>> extends BaseEn
 	@ManyToOne
 	private T event;
 	
+	private String message;
+	
 	public Notification(Person target, T event){
 		this.target = target;
 		this.event = event;
@@ -67,5 +69,13 @@ public abstract class Notification<T extends BaseEntity<Integer>> extends BaseEn
 	@Override
 	public Integer getId() {
 		return id;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
 }

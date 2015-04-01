@@ -13,7 +13,8 @@
     <ul>
       <div ng-repeat="feed in feedItems"> 
         <li ng-show="feed.notificationType==='INTERACTION'">
-          Hey, {{feed.target.firstName}}! Something happened with interaction #{{feed.event.id}} so check that out maybe..
+          Hey, {{feed.target.firstName}}! Something happened with interaction #{{feed.event.id}} so check that out maybe.. 
+          <button ng-click="delete(feed)">I get it!</button>
       </li>
       <li ng-show="feed.notificationType==='MEMBERSHIP'">
         <!--TODO --> 

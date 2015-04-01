@@ -25,6 +25,9 @@ public class FeedService {
 	
 	@Autowired
 	PoolService poolService;
+	
+	@Autowired
+	NotificationRepository notifRepo;
 
 	public List<? extends Notification<? extends BaseEntity<Integer>>> getFeed(Person currentUser) {
 		JPAQuery query = new JPAQuery(em);
@@ -32,5 +35,9 @@ public class FeedService {
 		query.from(notification).where(notification.target.eq(currentUser));
 		
 		return query.list(notification);
+	}
+	
+	public void killNotification(Integer notifId){
+		notifRepo.delete(notifId);
 	}
 }
