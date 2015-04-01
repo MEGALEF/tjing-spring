@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.mysema.query.jpa.impl.JPAQuery;
 
+import se.tjing.common.BaseEntity;
 import se.tjing.interaction.QInteraction;
 import se.tjing.membership.QMembership;
 import se.tjing.pool.PoolService;
@@ -25,31 +26,11 @@ public class FeedService {
 	@Autowired
 	PoolService poolService;
 
-	public List<? extends FeedEvent> getFeed(Person currentUser) {
-		QInteraction interaction = QInteraction.interaction;
-		QPool pool = QPool.pool;
-		QMembership membership = QMembership.membership;
-		
+	public List<? extends Notification<? extends BaseEntity<Integer>>> getFeed(Person currentUser) {
 		JPAQuery query = new JPAQuery(em);
+		QNotification notification = QNotification.notification;
+		query.from(notification).where(notification.target.eq(currentUser));
 		
-		//Get Interaction events directly targeted at user
-		query.from(interaction).where(interaction.notifyUser.eq(currentUser));
-		List<? extends FeedEvent> interactionEvents = query.list(interaction);
-		
-		//Get join request events targeted at the users pools
-		List<? extends FeedEvent> pendingMemberships;
-		JPAQuery pendingMemberquery = new JPAQuery(em);
-		pendingMemberquery.from(membership).where(membership.notifyPool.in(poolService.getUsersPools(currentUser)));
-		pendingMemberships = pendingMemberquery.list(membership);
-		
-		//query.from(joinRequest).where(joinRequest.notifyUser.eq(currentUser)); 
-		//List<? extends FeedEvent> joinRequests = query.list(joinRequest);
-		
-		//TODO: Add all attention-calling stuff here
-		
-		@SuppressWarnings("unchecked")
-		List<? extends FeedEvent> allEvents = ListUtils.union(pendingMemberships, interactionEvents);
-		
-		return allEvents;
+		return query.list(notification);
 	}
 }

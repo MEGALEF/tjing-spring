@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import se.tjing.exception.TjingException;
+import se.tjing.feed.InteractionNotification;
+import se.tjing.feed.Notification;
+import se.tjing.feed.NotificationRepository;
 import se.tjing.item.Item;
 import se.tjing.item.ItemRepository;
 import se.tjing.item.QItem;
@@ -27,6 +30,9 @@ public class InteractionService {
 
 	@Autowired
 	ItemRepository itemRepo;
+	
+	@Autowired
+	NotificationRepository notifRepo;
 
 	public Interaction accept(Integer interactionId, Person person) {
 		Interaction interaction = interactionRepo.findOne(interactionId);
@@ -34,12 +40,24 @@ public class InteractionService {
 			throw new TjingException("Only the item owner may do this");
 		}
 		interaction.setStatusAccepted(DateTime.now());
-		interaction.setNotifyUser(interaction.getBorrower());
+		
+		InteractionNotification notification = makeInteractionNotification(interaction, interaction.getBorrower());
 		
 		Item item = interaction.getItem();
 		item.setActiveInteraction(interaction);
 		itemRepo.save(item);
-		return interactionRepo.save(interaction);
+		interactionRepo.save(interaction);
+		notifRepo.save(notification);
+		return interaction;
+	}
+
+	private InteractionNotification makeInteractionNotification(
+			Interaction interaction, Person target) {
+		InteractionNotification notification = new InteractionNotification();
+		notification.setEvent(interaction);
+		notification.setTarget(target);
+		interaction.addNotification(notification);
+		return notification;
 	}
 
 	public Interaction confirmHandover(Integer interactionId, Person person) {
@@ -48,8 +66,9 @@ public class InteractionService {
 			throw new TjingException(
 					"Only the user who initially sent the request may do this");
 		}
-		interaction.setNotifyUser(interaction.getItem().getOwner());
+		//TODO interaction.setNotifyUser(interaction.getItem().getOwner());
 		interaction.setStatusHandedOver(DateTime.now());
+		notifRepo.save(makeInteractionNotification(interaction, interaction.getItem().getOwner()));
 		return interactionRepo.save(interaction);
 	}
 
@@ -59,7 +78,8 @@ public class InteractionService {
 			throw new TjingException("Only the item owner may do this");
 		}
 		interaction.setStatusReturned(DateTime.now());
-		interaction.setNotifyUser(interaction.getBorrower());
+		//TODO interaction.setNotifyUser(interaction.getBorrower());
+		notifRepo.save(makeInteractionNotification(interaction, interaction.getBorrower()));
 		interaction.getItem().setActiveInteraction(null);
 		interaction.setActive(false);
 		return interactionRepo.save(interaction);

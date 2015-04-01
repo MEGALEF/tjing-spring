@@ -11,7 +11,7 @@ import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import se.tjing.common.BaseEntity;
-import se.tjing.feed.FeedEvent;
+import se.tjing.feed.InteractionNotification;
 import se.tjing.item.Item;
 import se.tjing.pool.Pool;
 import se.tjing.rating.Rating;
@@ -20,7 +20,7 @@ import se.tjing.user.Person;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-public class Interaction extends FeedEvent{
+public class Interaction extends BaseEntity<Integer>{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -71,12 +71,6 @@ public class Interaction extends FeedEvent{
 
 	private Boolean active = true;
 
-	@OneToOne
-	private Person notifyUser;
-
-	@OneToOne
-	private Pool notifyPool;
-
 	public Interaction(Person currentUser, Item item2, DateTime now) {
 		this.borrower = currentUser;
 		this.item = item2;
@@ -104,16 +98,7 @@ public class Interaction extends FeedEvent{
 		return item;
 	}
 
-	@Override
-	public Pool getNotifyPool() {
-		
-		return notifyPool;
-	}
-
-	@Override
-	public Person getNotifyUser() {
-		return notifyUser;
-	}
+	
 
 
 	public DateTime getStatusAccepted() {
@@ -150,19 +135,7 @@ public class Interaction extends FeedEvent{
 
 	public void setItem(Item item) {
 		this.item = item;
-	}
-
-	@Override
-	public void setNotifyPool(Pool pool) {	
-	}
-
-	@Override
-	public void setNotifyUser(Person user) {
-		this.notifyUser = user;
-		
-	}
-
-	
+	}	
 
 	public void setStatusAccepted(DateTime statusAccepted) {
 		this.statusAccepted = statusAccepted;

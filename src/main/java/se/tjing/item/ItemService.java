@@ -117,7 +117,7 @@ public class ItemService {
 					"Item does not exist or is not available to you");
 		}
 		Interaction interaction = new Interaction(currentUser, item, DateTime.now());
-		interaction.setNotifyUser(item.getOwner());
+		//TODO interaction.setNotifyUser(item.getOwner());
 		return interactionRepo.save(interaction);
 	}
 

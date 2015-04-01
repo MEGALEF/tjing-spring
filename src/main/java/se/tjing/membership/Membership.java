@@ -9,14 +9,15 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import se.tjing.feed.FeedEvent;
+import se.tjing.common.BaseEntity;
+
 import se.tjing.pool.Pool;
 import se.tjing.pool.PrivacyMode;
 import se.tjing.user.Person;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = { "pool", "member" }))
-public class Membership extends FeedEvent {
+public class Membership extends BaseEntity<Integer> {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -81,26 +82,5 @@ public class Membership extends FeedEvent {
 
 	public void setApproved(Boolean approved) {
 		this.approved = approved;
-	}
-
-	@Override
-	public Person getNotifyUser() {
-		return notifyUser;
-	}
-
-	@Override
-	public Pool getNotifyPool() {
-		return notifyPool;
-	}
-
-	@Override
-	public void setNotifyUser(Person user) {
-		this.notifyUser = user;
-		
-	}
-
-	@Override
-	public void setNotifyPool(Pool pool) {
-		this.notifyPool = pool;
 	}
 }

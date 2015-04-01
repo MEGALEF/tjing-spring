@@ -43,7 +43,7 @@ public class MembershipService {
 		if (PrivacyMode.CLOSED.equals(pool.getPrivacy()) 
 				|| PrivacyMode.SECRET.equals(pool.getPrivacy())) {
 			membership.setApproved(false);
-			membership.setNotifyPool(pool);
+			//TODO membership.setNotifyPool(pool);
 		} else if (PrivacyMode.OPEN.equals(pool.getPrivacy())){
 			membership.approve();
 		}

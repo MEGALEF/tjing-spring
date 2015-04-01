@@ -71,19 +71,19 @@ var tjingServices = angular.module("tjingApp.services", ["ngResource"]);
       id:'@id'
     }, {
       accept: {
-        method:"PUT",
+        method:"PATCH",
         url: interactionURL +'/accept'
       },
       deny: {
-        method:"PUT",
+        method:"PATCH",
         url: interactionURL +'/deny'
       },
       handoverconfirm:{
-        method:"PUT",
+        method:"PATCH",
         url: interactionURL +'/handoverconfirm'
       },
       returnconfirm:{
-        method:"PUT",
+        method:"PATCH",
         url: interactionURL +'/returnconfirm'
       }
     })

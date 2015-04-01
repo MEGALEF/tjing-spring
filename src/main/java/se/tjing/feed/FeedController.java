@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import se.tjing.common.BaseEntity;
 import se.tjing.user.PersonService;
 
 @RestController
@@ -21,8 +22,10 @@ public class FeedController {
 	PersonService personService;
 	
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public ResponseEntity<List<? extends FeedEvent>> getFeed(){
-		List<? extends FeedEvent> result = feedService.getFeed(personService.getCurrentUser());
-		return new ResponseEntity<List<? extends FeedEvent>>(result, null, HttpStatus.OK);
+	public ResponseEntity<List<? extends Notification>> getFeed(){
+		List<? extends Notification> result = feedService.getFeed(personService.getCurrentUser());
+		return new ResponseEntity<List<? extends Notification>>(result, null, HttpStatus.OK);
 	}
+	
+	//TODO: Make endpoint for ticking off notifications as "dealt with"
 }
