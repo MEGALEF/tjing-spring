@@ -29,7 +29,7 @@ public class FeedService {
 	@Autowired
 	NotificationRepository notifRepo;
 
-	public List<? extends Notification<? extends BaseEntity<Integer>>> getFeed(Person currentUser) {
+	public List<? extends Notification<? extends BaseEntity>> getFeed(Person currentUser) {
 		JPAQuery query = new JPAQuery(em);
 		QNotification notification = QNotification.notification;
 		query.from(notification).where(notification.target.eq(currentUser));

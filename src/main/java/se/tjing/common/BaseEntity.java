@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * @author Petri Kainulainen
  */
 @MappedSuperclass
-public abstract class BaseEntity<ID> {
+public abstract class BaseEntity {
 
 	@Column(name = "creation_time", nullable = false)
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
@@ -40,11 +40,11 @@ public abstract class BaseEntity<ID> {
 	
 	@OneToMany(mappedBy="event")
 	@JsonIgnore
-	protected List<Notification<? extends BaseEntity<Integer>>> notifications;
+	protected List<Notification<? extends BaseEntity>> notifications;
 	
 	private Boolean needsAction = false;
 
-	public void addNotification(Notification<? extends BaseEntity<Integer>> notification){
+	public void addNotification(Notification<? extends BaseEntity> notification){
 		this.notifications.add(notification);
 	}
 
@@ -52,7 +52,7 @@ public abstract class BaseEntity<ID> {
 		return creationTime;
 	}
 
-	public abstract ID getId();
+	public abstract Integer getId();
 
 	public DateTime getModificationTime() {
 		return modificationTime;
@@ -62,7 +62,7 @@ public abstract class BaseEntity<ID> {
 		return needsAction;
 	}
 
-	public List<Notification<? extends BaseEntity<Integer>>> getNotifications() {
+	public List<Notification<? extends BaseEntity>> getNotifications() {
 		return notifications;
 	}
 
@@ -86,7 +86,7 @@ public abstract class BaseEntity<ID> {
 		this.needsAction = needsAction;
 	}
 
-	public void setNotifications(List<Notification<? extends BaseEntity<Integer>>> notifications) {
+	public void setNotifications(List<Notification<? extends BaseEntity>> notifications) {
 		this.notifications = notifications;
 	}
 }

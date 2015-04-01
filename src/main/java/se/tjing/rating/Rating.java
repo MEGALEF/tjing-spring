@@ -10,7 +10,7 @@ import se.tjing.common.BaseEntity;
 import se.tjing.interaction.Interaction;
 
 @Entity
-public class Rating extends BaseEntity<Integer> {
+public class Rating extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

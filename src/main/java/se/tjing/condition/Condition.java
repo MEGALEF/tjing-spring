@@ -10,7 +10,7 @@ import se.tjing.common.BaseEntity;
 import se.tjing.share.Share;
 
 @Entity
-public class Condition extends BaseEntity<Integer> {
+public class Condition extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

@@ -18,7 +18,7 @@ import se.tjing.pool.Pool;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = { "pool", "item" }))
-public class Share extends BaseEntity<Integer> {
+public class Share extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

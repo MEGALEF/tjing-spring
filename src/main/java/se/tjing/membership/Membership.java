@@ -17,7 +17,7 @@ import se.tjing.user.Person;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = { "pool", "member" }))
-public class Membership extends BaseEntity<Integer> {
+public class Membership extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

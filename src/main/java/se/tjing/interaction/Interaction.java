@@ -20,7 +20,7 @@ import se.tjing.user.Person;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-public class Interaction extends BaseEntity<Integer>{
+public class Interaction extends BaseEntity{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

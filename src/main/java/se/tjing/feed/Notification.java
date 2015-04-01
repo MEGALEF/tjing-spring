@@ -18,7 +18,7 @@ import se.tjing.user.Person;
 @Entity
 @Inheritance
 @DiscriminatorColumn(name=Notification.NOTIFICATION_TYPE)
-public abstract class Notification<T extends BaseEntity<Integer>> extends BaseEntity<Integer> {
+public abstract class Notification<T extends BaseEntity> extends BaseEntity {
 	
 	public static final String NOTIFICATION_TYPE = "notif_type";
 	

@@ -13,7 +13,7 @@ import se.tjing.user.Person;
 
 
 @Entity
-public class ItemRequest extends BaseEntity<Integer> {
+public class ItemRequest extends BaseEntity {
 
 	@ManyToOne
 	private Person user;
