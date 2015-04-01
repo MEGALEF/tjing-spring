@@ -8,7 +8,19 @@
     <h1>Welcome, {{currentUser.firstName}}!</h1>
     <img ng-src="{{profilePicUrl}}">
   </div>
-  
+  <div ng-controller="FeedController">
+    <h1>Notification feed</h1>
+    <ul>
+      <div ng-repeat="feed in feedItems"> 
+        <li ng-show="feed.notificationType==='INTERACTION'">
+          Hey, {{feed.target.firstName}}! Something happened with interaction #{{feed.event.id}} so check that out maybe..
+      </li>
+      <li ng-show="feed.notificationType==='MEMBERSHIP'">
+        <!--TODO --> 
+      </li>
+      </div>
+    </ul>
+  </div>
   <div ng-controller="ItemController">
     <h1>Available items</h1>
     <ul>
