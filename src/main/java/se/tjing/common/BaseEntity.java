@@ -38,15 +38,7 @@ public abstract class BaseEntity {
 	@JsonIgnore
 	private long version;
 	
-	@OneToMany(mappedBy="event")
-	@JsonIgnore
-	protected List<Notification<? extends BaseEntity>> notifications;
 	
-	private Boolean needsAction = false;
-
-	public void addNotification(Notification<? extends BaseEntity> notification){
-		this.notifications.add(notification);
-	}
 
 	public DateTime getCreationTime() {
 		return creationTime;
@@ -58,13 +50,7 @@ public abstract class BaseEntity {
 		return modificationTime;
 	}
 
-	public Boolean getNeedsAction() {
-		return needsAction;
-	}
-
-	public List<Notification<? extends BaseEntity>> getNotifications() {
-		return notifications;
-	}
+	
 
 	public long getVersion() {
 		return version;
@@ -82,11 +68,5 @@ public abstract class BaseEntity {
 		this.modificationTime = DateTime.now();
 	}
 
-	public void setNeedsAction(Boolean needsAction) {
-		this.needsAction = needsAction;
-	}
-
-	public void setNotifications(List<Notification<? extends BaseEntity>> notifications) {
-		this.notifications = notifications;
-	}
+	
 }

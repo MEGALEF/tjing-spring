@@ -7,10 +7,11 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 import se.tjing.common.BaseEntity;
+import se.tjing.common.TjingEntity;
 import se.tjing.share.Share;
 
 @Entity
-public class Condition extends BaseEntity {
+public class Condition extends TjingEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

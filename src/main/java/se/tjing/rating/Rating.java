@@ -7,10 +7,11 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 import se.tjing.common.BaseEntity;
+import se.tjing.common.TjingEntity;
 import se.tjing.interaction.Interaction;
 
 @Entity
-public class Rating extends BaseEntity {
+public class Rating extends TjingEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

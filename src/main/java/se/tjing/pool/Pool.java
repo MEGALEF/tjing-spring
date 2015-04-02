@@ -9,13 +9,14 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import se.tjing.common.BaseEntity;
+import se.tjing.common.TjingEntity;
 import se.tjing.membership.Membership;
 import se.tjing.share.Share;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class Pool extends BaseEntity {
+public class Pool extends TjingEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

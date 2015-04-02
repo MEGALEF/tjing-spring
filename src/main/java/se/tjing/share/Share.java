@@ -12,13 +12,14 @@ import javax.persistence.UniqueConstraint;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import se.tjing.common.BaseEntity;
+import se.tjing.common.TjingEntity;
 import se.tjing.condition.Condition;
 import se.tjing.item.Item;
 import se.tjing.pool.Pool;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = { "pool", "item" }))
-public class Share extends BaseEntity {
+public class Share extends TjingEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

@@ -10,14 +10,14 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import se.tjing.common.BaseEntity;
-
+import se.tjing.common.TjingEntity;
 import se.tjing.pool.Pool;
 import se.tjing.pool.PrivacyMode;
 import se.tjing.user.Person;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = { "pool", "member" }))
-public class Membership extends BaseEntity {
+public class Membership extends TjingEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

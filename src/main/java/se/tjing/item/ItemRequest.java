@@ -8,12 +8,13 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 import se.tjing.common.BaseEntity;
+import se.tjing.common.TjingEntity;
 import se.tjing.pool.Pool;
 import se.tjing.user.Person;
 
 
 @Entity
-public class ItemRequest extends BaseEntity {
+public class ItemRequest extends TjingEntity {
 
 	@ManyToOne
 	private Person user;

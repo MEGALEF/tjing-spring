@@ -11,6 +11,7 @@ import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import se.tjing.common.BaseEntity;
+import se.tjing.common.TjingEntity;
 import se.tjing.feed.InteractionNotification;
 import se.tjing.item.Item;
 import se.tjing.pool.Pool;
@@ -20,7 +21,7 @@ import se.tjing.user.Person;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-public class Interaction extends BaseEntity{
+public class Interaction extends TjingEntity{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import se.tjing.common.BaseEntity;
+import se.tjing.common.TjingEntity;
 import se.tjing.interaction.Interaction;
 import se.tjing.item.Item;
 import se.tjing.membership.Membership;
@@ -18,7 +19,7 @@ import se.tjing.membership.Membership;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class Person extends BaseEntity implements Serializable {
+public class Person extends TjingEntity implements Serializable {
 
 	// private String facebookId;
 

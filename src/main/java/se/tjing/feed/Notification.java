@@ -12,13 +12,14 @@ import javax.persistence.MappedSuperclass;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import se.tjing.common.BaseEntity;
+import se.tjing.common.TjingEntity;
 import se.tjing.user.Person;
 
 
 @Entity
 @Inheritance
 @DiscriminatorColumn(name=Notification.NOTIFICATION_TYPE)
-public abstract class Notification<T extends BaseEntity> extends BaseEntity {
+public abstract class Notification<T extends TjingEntity> extends BaseEntity {
 	
 	public static final String NOTIFICATION_TYPE = "notif_type";
 	

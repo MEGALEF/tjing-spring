@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.mysema.query.jpa.impl.JPAQuery;
 
 import se.tjing.common.BaseEntity;
+import se.tjing.common.TjingEntity;
 import se.tjing.interaction.QInteraction;
 import se.tjing.membership.QMembership;
 import se.tjing.pool.PoolService;
@@ -29,7 +30,7 @@ public class NotificationService {
 	@Autowired
 	NotificationRepository notifRepo;
 
-	public List<? extends Notification<? extends BaseEntity>> getFeed(Person currentUser) {
+	public List<? extends Notification<? extends TjingEntity>> getFeed(Person currentUser) {
 		JPAQuery query = new JPAQuery(em);
 		QNotification notification = QNotification.notification;
 		query.from(notification).where(notification.target.eq(currentUser));
