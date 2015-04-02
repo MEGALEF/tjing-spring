@@ -18,7 +18,7 @@ import se.tjing.pool.QPool;
 import se.tjing.user.Person;
 
 @Service
-public class FeedService {
+public class NotificationService {
 	
 	@Autowired
 	EntityManager em;
@@ -39,5 +39,11 @@ public class FeedService {
 	
 	public void killNotification(Integer notifId){
 		notifRepo.delete(notifId);
+		
+	}
+	
+	public void sendNotification(Notification<?> notif){
+		//TODO maybe more biznizlogic?
+		notifRepo.save(notif);		
 	}
 }

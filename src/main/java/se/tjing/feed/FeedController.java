@@ -17,7 +17,7 @@ import se.tjing.user.PersonService;
 @RequestMapping("/feed")
 public class FeedController {
 	@Autowired
-	FeedService feedService;
+	NotificationService feedService;
 	
 	@Autowired
 	PersonService personService;
