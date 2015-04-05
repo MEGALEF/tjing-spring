@@ -9,11 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import se.tjing.exception.TjingException;
-import se.tjing.feed.InteractionNotification;
+import se.tjing.feed.NInteractionRepository;
+import se.tjing.feed.NotificationInteraction;
 import se.tjing.feed.Notification;
 import se.tjing.feed.NotificationRepository;
 import se.tjing.item.Item;
 import se.tjing.item.ItemRepository;
+import se.tjing.item.ItemService;
 import se.tjing.item.QItem;
 import se.tjing.user.Person;
 
@@ -27,12 +29,15 @@ public class InteractionService {
 
 	@Autowired
 	InteractionRepository interactionRepo;
+	
+	@Autowired
+	ItemService itemService;
 
 	@Autowired
 	ItemRepository itemRepo;
 	
 	@Autowired
-	NotificationRepository notifRepo;
+	NInteractionRepository notifRepo;
 
 	public Interaction accept(Integer interactionId, Person person) {
 		Interaction interaction = interactionRepo.findOne(interactionId);
@@ -41,23 +46,12 @@ public class InteractionService {
 		}
 		interaction.setStatusAccepted(DateTime.now());
 		
-		InteractionNotification notification = makeInteractionNotification(interaction, interaction.getBorrower());
-		
 		Item item = interaction.getItem();
 		item.setActiveInteraction(interaction);
 		itemRepo.save(item);
 		interactionRepo.save(interaction);
-		notifRepo.save(notification);
+		notifRepo.save(new NotificationInteraction(interaction, interaction.getBorrower(), "Request was accepted!"));
 		return interaction;
-	}
-
-	private InteractionNotification makeInteractionNotification(
-			Interaction interaction, Person target) {
-		InteractionNotification notification = new InteractionNotification();
-		notification.setEvent(interaction);
-		notification.setTarget(target);
-		interaction.addNotification(notification);
-		return notification;
 	}
 
 	public Interaction confirmHandover(Integer interactionId, Person person) {
@@ -68,7 +62,7 @@ public class InteractionService {
 		}
 		//TODO interaction.setNotifyUser(interaction.getItem().getOwner());
 		interaction.setStatusHandedOver(DateTime.now());
-		notifRepo.save(makeInteractionNotification(interaction, interaction.getItem().getOwner()));
+		
 		return interactionRepo.save(interaction);
 	}
 
@@ -78,8 +72,8 @@ public class InteractionService {
 			throw new TjingException("Only the item owner may do this");
 		}
 		interaction.setStatusReturned(DateTime.now());
-		//TODO interaction.setNotifyUser(interaction.getBorrower());
-		notifRepo.save(makeInteractionNotification(interaction, interaction.getBorrower()));
+
+		notifRepo.save(new NotificationInteraction(interaction, interaction.getBorrower(), "Return was confirmed"));
 		interaction.getItem().setActiveInteraction(null);
 		interaction.setActive(false);
 		return interactionRepo.save(interaction);
@@ -133,6 +127,7 @@ public class InteractionService {
 					"The interaction has already been accepted.");
 		}
 		interaction.setActive(false);
+		
 		return interactionRepo.save(interaction);
 	}
 
@@ -153,9 +148,21 @@ public class InteractionService {
 		} else {
 			interaction.setStatusCancelled(DateTime.now());
 			interaction.setActive(false);
+			notifRepo.save(new NotificationInteraction(interaction, interaction.getBorrower(), "Interaction was cancelled. Bummer!"));
 			return interaction;
 		}
 		//TODO Cancel interactions even when item is handed over? Ok or not?
-		
 	}
+	
+	// TODO: Move to InteractionService? //TODO yes most definitely
+		public Interaction initiateRequest(Person currentUser, NewInteraction createInteraction) {
+			Item item = itemRepo.findOne(createInteraction.getItemId());
+			if (item == null || !itemService.isItemAvailableToUser(currentUser, item)) {
+				throw new TjingException(
+						"Item does not exist or is not available to you");
+			}
+			Interaction interaction = new Interaction(currentUser, item, DateTime.now());
+			//TODO interaction.setNotifyUser(item.getOwner());
+			return interactionRepo.save(interaction);
+		}
 }

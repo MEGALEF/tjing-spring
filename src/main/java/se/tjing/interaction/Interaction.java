@@ -1,20 +1,21 @@
 package se.tjing.interaction;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
-import se.tjing.common.BaseEntity;
 import se.tjing.common.TjingEntity;
-import se.tjing.feed.InteractionNotification;
+import se.tjing.feed.NotificationInteraction;
 import se.tjing.item.Item;
-import se.tjing.pool.Pool;
 import se.tjing.rating.Rating;
 import se.tjing.user.Person;
 
@@ -32,10 +33,10 @@ public class Interaction extends TjingEntity{
 	private Item item;
 
 	@ManyToOne
-	// @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
-	// property = "id")
-	// @JsonIdentityReference(alwaysAsId = true)
 	private Person borrower;
+	
+	@OneToMany(mappedBy="event")
+	private List<NotificationInteraction> notifications;
 
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	private DateTime statusRequested;
@@ -98,8 +99,6 @@ public class Interaction extends TjingEntity{
 	public Item getItem() {
 		return item;
 	}
-
-	
 
 
 	public DateTime getStatusAccepted() {

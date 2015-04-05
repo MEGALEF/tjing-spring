@@ -18,7 +18,6 @@ import se.tjing.share.Share;
 import se.tjing.share.ShareRepository;
 import se.tjing.user.Person;
 
-import com.mysema.query.jpa.JPASubQuery;
 import com.mysema.query.jpa.impl.JPAQuery;
 
 @Service

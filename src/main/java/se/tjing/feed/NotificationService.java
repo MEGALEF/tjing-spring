@@ -1,5 +1,6 @@
 package se.tjing.feed;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -29,13 +30,26 @@ public class NotificationService {
 	
 	@Autowired
 	NotificationRepository notifRepo;
+	
 
-	public List<? extends Notification<? extends TjingEntity>> getFeed(Person currentUser) {
+	public List<Notification<? extends TjingEntity>> getFeed(Person currentUser) {
 		JPAQuery query = new JPAQuery(em);
-		QNotification notification = QNotification.notification;
-		query.from(notification).where(notification.target.eq(currentUser));
+		List<Notification<? extends TjingEntity>> result = new ArrayList<Notification<? extends TjingEntity>>();
 		
-		return query.list(notification);
+		QNotificationMembership membnot = QNotificationMembership.notificationMembership;
+				
+		query.from(membnot).where(membnot.target.eq(currentUser));
+		
+		result.addAll(query.list(membnot));
+		
+		QNotificationInteraction internot = QNotificationInteraction.notificationInteraction;
+		
+		query.from(internot).where(internot.target.eq(currentUser));
+		
+//		return query.list(internot);
+		result.addAll(query.list(internot));
+		
+		return result;
 	}
 	
 	public void killNotification(Integer notifId){

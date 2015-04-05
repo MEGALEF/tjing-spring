@@ -65,7 +65,7 @@ public class ItemService {
 
 	}
 
-	private Boolean isItemAvailableToUser(Person person, Item item) {
+	public Boolean isItemAvailableToUser(Person person, Item item) {
 		if (item.getOwner().equals(person)) {
 			return true;
 		}
@@ -109,17 +109,7 @@ public class ItemService {
 		return query.list(item);
 	}
 
-	// TODO: Move to InteractionService? //TODO yes most definitely
-	public Interaction initiateRequest(Person currentUser, Integer itemId) {
-		Item item = itemRepo.findOne(itemId);
-		if (item == null || !isItemAvailableToUser(currentUser, item)) {
-			throw new TjingException(
-					"Item does not exist or is not available to you");
-		}
-		Interaction interaction = new Interaction(currentUser, item, DateTime.now());
-		//TODO interaction.setNotifyUser(item.getOwner());
-		return interactionRepo.save(interaction);
-	}
+	
 
 	public List<Item> getUsersItems(Person user) {
 		QItem item = QItem.item;

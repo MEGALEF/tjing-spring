@@ -12,11 +12,11 @@
     <h1>Notification feed</h1>
     <ul>
       <div ng-repeat="feed in feedItems"> 
-        <li ng-show="feed.notificationType==='INTERACTION'">
+        <li ng-show="feed.notificationType==='interaction'">
           Hey, {{feed.target.firstName}}, you have a new {{feed.notificationType}} notification. It reads: "{{feed.message}}". Do something about that maybe?
           <button ng-click="delete(feed)">I get it!</button>
       </li>
-      <li ng-show="feed.notificationType==='MEMBERSHIP'">
+      <li ng-show="feed.notificationType==='membership'">
         <!--TODO --> 
       </li>
       </div>

@@ -28,6 +28,7 @@ public class ItemController {
 	@Autowired
 	PersonService personService;
 
+	//TODO Refactor to REST
 	@RequestMapping(value = "/borrowed", method = RequestMethod.GET)
 	public ResponseEntity<List<Item>> getBorrowedItems() {
 		List<Item> result = itemService.getUsersBorrowedItems(personService
@@ -41,6 +42,7 @@ public class ItemController {
 		return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
 	}
 
+	//TODO Refactor to REST
 	@RequestMapping(value = "/owned", method = RequestMethod.GET)
 	public ResponseEntity<List<Item>> getOwnItems() {
 		Person currentUser = personService.getCurrentUser();
@@ -76,6 +78,8 @@ public class ItemController {
 				itemService.getItem(currentUser, itemId), null, HttpStatus.OK);
 	}
 
+	//TODO Delete this
+	@Deprecated
 	@RequestMapping(value = "/{itemId}/sharetopool/{poolId}", method = RequestMethod.POST)
 	public ResponseEntity<Share> shareItemToGroup(@PathVariable Integer itemId,
 			@PathVariable Integer poolId) {
@@ -83,19 +87,12 @@ public class ItemController {
 				poolId), null, HttpStatus.CREATED); //TODO: Only item owner should be allowed to do this
 	}
 	
+	//TODO Delete this
+	@Deprecated
 	@RequestMapping(value="/{itemId}/unsharefrompool/{poolId}", method = RequestMethod.DELETE)
 	public ResponseEntity<List<Share>> unshareItemFromPool(@PathVariable Integer itemId, @PathVariable Integer poolId){
 		List<Share> result = itemService.unshareItemFromPool(personService.getCurrentUser(), itemId, poolId);
 		return new ResponseEntity<List<Share>>(result, null, HttpStatus.ACCEPTED);
-	}
-
-	@RequestMapping(value = "/{itemId}/request", method = RequestMethod.POST)
-	public ResponseEntity<Interaction> requestItem(@PathVariable Integer itemId) {
-		Person currentUser = personService.getCurrentUser();
-		Interaction newInteraction = itemService.initiateRequest(currentUser,
-				itemId);
-		return new ResponseEntity<Interaction>(newInteraction, null,
-				HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/search/{searchString}", method = RequestMethod.GET)

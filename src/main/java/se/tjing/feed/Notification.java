@@ -6,8 +6,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -16,12 +18,12 @@ import se.tjing.common.TjingEntity;
 import se.tjing.user.Person;
 
 
-@Entity
-@Inheritance
-@DiscriminatorColumn(name=Notification.NOTIFICATION_TYPE)
+
+@MappedSuperclass
 public abstract class Notification<T extends TjingEntity> extends BaseEntity {
+	//This class could be better, but unfortunately Hibernate doesn't seem to allow inheritance and generics at the same time like that. Fuck you Hibernate!
 	
-	public static final String NOTIFICATION_TYPE = "notif_type";
+	//public static final String NOTIFICATION_TYPE = "notif_type";
 	
 	@JsonProperty
 	public abstract String getNotificationType();
@@ -31,21 +33,16 @@ public abstract class Notification<T extends TjingEntity> extends BaseEntity {
 	Integer id;
 	
 	@ManyToOne
-	private Person target;
+	protected Person target;
 	
-	@ManyToOne
-	private T event;
-	
-	private String message;
-	
-	public Notification(Person target, T event){
-		this.target = target;
-		this.event = event;
-	}
+	protected String message;
 	
 	public Notification(){
 		
 	}
+	
+	@JsonProperty
+	public abstract T getEvent();
 
 	public Person getTarget() {
 		return target;
@@ -53,14 +50,6 @@ public abstract class Notification<T extends TjingEntity> extends BaseEntity {
 
 	public void setTarget(Person target) {
 		this.target = target;
-	}
-
-	public T getEvent() {
-		return event;
-	}
-
-	public void setEvent(T event) {
-		this.event = event;
 	}
 
 	public void setId(Integer id) {

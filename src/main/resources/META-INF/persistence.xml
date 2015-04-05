@@ -12,7 +12,8 @@
    	<class>se.tjing.condition.Condition</class>
    	<class>se.tjing.rating.Rating</class>
    	<class>se.tjing.feed.Notification</class>
-   	<class>se.tjing.common.BaseEntity</class>
+   	<class>se.tjing.feed.InteractionNotification</class>
+   	<class>se.tjing.feed.MembershipNotification</class>
         <properties>
 <!--             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/> -->
             <!-- value="create" to build a new database on each run; value="update" to modify an existing database; value="create-drop" means the same as "create" but also drops tables when Hibernate closes; value="validate" makes no changes to the database -->
