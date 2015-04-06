@@ -1,21 +1,16 @@
-package se.tjing.feed;
+package se.tjing.feed.notification;
 
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Transient;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import se.tjing.common.BaseEntity;
 import se.tjing.common.TjingEntity;
 import se.tjing.user.Person;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 

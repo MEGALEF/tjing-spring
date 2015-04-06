@@ -12,12 +12,8 @@
     <h1>Notification feed</h1>
     <ul>
       <div ng-repeat="feed in feedItems"> 
-        <li ng-show="feed.notificationType==='interaction'">
-          Hey, {{feed.target.firstName}}, you have a new {{feed.notificationType}} notification. It reads: "{{feed.message}}". Do something about that maybe?
-          <button ng-click="delete(feed)">I get it!</button>
-      </li>
-      <li ng-show="feed.notificationType==='membership'">
-        <!--TODO --> 
+        <li>
+          {{feed.message}}
       </li>
       </div>
     </ul>
@@ -86,11 +82,11 @@
 
   <div ng-controller="PoolController">
     <h1>All pools</h1>
-    <div ng-hide="allpools && allpools.length > 0">
+    <div ng-hide="allpools && allPools.length > 0">
       No pools exist yet. Add a pool!
     </div>
     <ul>
-      <li ng-repeat="pool in allpools">
+      <li ng-repeat="pool in allPools">
         {{pool.title}} ({{pool.privacy}}<div ng-hide="pool.privacy == 'OPEN'">, requires approval from {{pool.approval}}</div>)
         <button type="button" ng-click="joinPool(pool)">Join</button>
       </li>
@@ -101,9 +97,9 @@
       You are not a member of any pools. Join a pool!
     </div>
     <ul>
-      <li ng-repeat="pool in mypools">
-        {{pool.title}}
-        <button type="button" ng-click="leavePool(pool)">Leave</button>
+      <li ng-repeat="membership in myMemberships">
+        {{membership.pool.title}}
+        <button type="button" ng-click="leavePool(membership)">Leave</button>
       </li>
     </ul>
     <hr/>

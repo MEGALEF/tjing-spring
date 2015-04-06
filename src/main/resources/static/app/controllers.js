@@ -46,8 +46,8 @@
 
   }]);
   
-  angular.module("tjingApp.controllers").controller("ItemController", ["$scope", "Item", "Pool",
-    function($scope, Item, Pool) {
+  angular.module("tjingApp.controllers").controller("ItemController", ["$scope", "Item", "Pool", "Interaction",
+    function($scope, Item, Pool, Interaction) {
     // Scope variable initialization
     $scope.owneditems = Item.query({param:'owned'});
     $scope.borroweditems = Item.query({param:'borrowed'});
@@ -71,7 +71,7 @@
     };
     
     $scope.requestItem = function(item){
-      Item.request(item);
+      Interaction.save({itemId:item.id})
     };
 
     $scope.shareItem = function(item, pool){
@@ -92,27 +92,42 @@
   }]);
 
   angular.module("tjingApp.controllers").controller("PoolController", ["$scope", "Pool", "Item", "Membership", function($scope, Pool, Item, Membership) {
-    $scope.allpools = Pool.query();
+    $scope.allPools = [];
     $scope.myPools = [];
-    $scope.myMemberships = Membership.query({}, function(){
-      for (membership in $scope.myMemberships){
-      $scope.myPools.push(membership.pool);
-    }
-    });
-    
+    $scope.myMemberships = [];
 
+    refreshMyPools();
+    refreshAllPools();
+
+    function refreshMyPools(){
+      Membership.query({}, function (response){
+        $scope.myMemberships = response;
+        $scope.myPools = [];
+        for (membership in $scope.myMemberships){
+          $scope.myPools.push(membership.pool);
+        }
+      });
+    };
+
+    function refreshAllPools(){
+      Pool.query({}, function(response){
+        $scope.allPools = response;
+      });
+    };
 
     $scope.searchPools = function(searchStr){
       return Pool.query({q: searchStr});
     };
 
     $scope.joinPool = function(pool){
-      Membership.save({poolId:pool.id});
+      Membership.save({poolId:pool.id},function(){
+        refreshMyPools();
+      });
     };
 
-    $scope.leavePool = function(pool){
-      Membership.delete({membershipId:'0'}, function(){ //TODO äuuuuuäuäuuähh
-        //$scope.mypools = ; //Refresh pools
+    $scope.leavePool = function(membership){
+      Membership.delete({membershipId:membership.id}, function(){ //TODO äuuuuuäuäuuähh
+        refreshMyPools();
       })
     };
 
@@ -122,8 +137,8 @@
         //description: "", //TODO: add description
         privacy: "OPEN" //TODO: enable other privacy modes
       }, function() { //TODO:Does save return anything? In that case use that data instead of sending a new request
-        $scope.mypools = Pool.query({param:'mine'});
-      $scope.allpools = Pool.query();
+        refreshAllPools();
+        refreshMyPools();
       });
     };
   }]);

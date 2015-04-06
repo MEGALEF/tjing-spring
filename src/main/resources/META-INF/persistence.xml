@@ -11,7 +11,7 @@
    	<class>se.tjing.interaction.Interaction</class>
    	<class>se.tjing.condition.Condition</class>
    	<class>se.tjing.rating.Rating</class>
-   	<class>se.tjing.feed.Notification</class>
+   	<class>se.tjing.feed.notification.Notification</class>
    	<class>se.tjing.feed.InteractionNotification</class>
    	<class>se.tjing.feed.MembershipNotification</class>
         <properties>

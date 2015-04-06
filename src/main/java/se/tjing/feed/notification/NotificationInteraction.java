@@ -1,4 +1,4 @@
-package se.tjing.feed;
+package se.tjing.feed.notification;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;

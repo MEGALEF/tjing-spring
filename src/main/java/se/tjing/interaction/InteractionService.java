@@ -9,10 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import se.tjing.exception.TjingException;
-import se.tjing.feed.NInteractionRepository;
-import se.tjing.feed.NotificationInteraction;
-import se.tjing.feed.Notification;
 import se.tjing.feed.NotificationRepository;
+import se.tjing.feed.notification.Notification;
+import se.tjing.feed.notification.NotificationInteraction;
+import se.tjing.feed.repositories.NInteractionRepository;
 import se.tjing.item.Item;
 import se.tjing.item.ItemRepository;
 import se.tjing.item.ItemService;
@@ -155,7 +155,7 @@ public class InteractionService {
 	}
 	
 	// TODO: Move to InteractionService? //TODO yes most definitely
-		public Interaction initiateRequest(Person currentUser, NewInteraction createInteraction) {
+		public Interaction initiateRequest(Person currentUser, AddInteraction createInteraction) {
 			Item item = itemRepo.findOne(createInteraction.getItemId());
 			if (item == null || !itemService.isItemAvailableToUser(currentUser, item)) {
 				throw new TjingException(

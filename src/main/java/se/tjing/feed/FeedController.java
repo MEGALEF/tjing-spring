@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import se.tjing.common.BaseEntity;
+import se.tjing.feed.notification.Notification;
 import se.tjing.user.PersonService;
 
 @RestController
@@ -28,9 +29,9 @@ public class FeedController {
 		return new ResponseEntity<List<? extends Notification>>(result, null, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value="{notifId}", method = RequestMethod.DELETE)
-	public ResponseEntity<Object> deleteNotification(@PathVariable Integer notifId){
-		feedService.killNotification(notifId);
+	@RequestMapping(value="{notificationType}/{notifId}", method = RequestMethod.DELETE)
+	public ResponseEntity<Object> deleteNotification(@PathVariable String notificationType, @PathVariable Integer notifId){
+		//TODO Kill notification by type
 		return new ResponseEntity<Object>(HttpStatus.ACCEPTED);
 	}
 }

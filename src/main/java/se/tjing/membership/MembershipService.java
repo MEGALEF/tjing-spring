@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import se.tjing.exception.TjingException;
+import se.tjing.feed.NotificationService;
+import se.tjing.feed.notification.NotificationMembership;
+import se.tjing.feed.repositories.NMembershipRepository;
 import se.tjing.pool.Pool;
 import se.tjing.pool.PoolRepository;
 import se.tjing.pool.PrivacyMode;
@@ -22,6 +25,9 @@ public class MembershipService {
 	
 	@Autowired
 	PersonRepository personRepo;	
+	
+	@Autowired
+	NMembershipRepository notifRepo;
 
 	/**
 	 * Attempts to join a Pool by adding a new membership.
@@ -43,11 +49,18 @@ public class MembershipService {
 		if (PrivacyMode.CLOSED.equals(pool.getPrivacy()) 
 				|| PrivacyMode.SECRET.equals(pool.getPrivacy())) {
 			membership.setApproved(false);
-			//TODO membership.setNotifyPool(pool);
+			
+						
+
 		} else if (PrivacyMode.OPEN.equals(pool.getPrivacy())){
 			membership.approve();
 		}
-		return membershipRepo.save(membership);
+		membershipRepo.save(membership);
+		//Notify all pool members
+		for (Membership member : pool.getAprovedMemberships()){
+			notifRepo.save(new NotificationMembership(member.getMember(), membership, "Someone applied for membership in a pool"));
+		}
+		return membership;
 	}
 
 }

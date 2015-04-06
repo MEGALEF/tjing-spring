@@ -30,6 +30,14 @@ public class InteractionController {
 
 	@Autowired
 	PersonService personService;
+	
+	@RequestMapping(value="", method=RequestMethod.POST)
+	public ResponseEntity<Interaction> initiateRequest(@RequestBody AddInteraction interaction){
+		Interaction newInteraction = interactionService.initiateRequest(personService.getCurrentUser(),
+				interaction);
+		return new ResponseEntity<Interaction>(newInteraction, null,
+				HttpStatus.CREATED);
+	}
 
 	/**
 	 * Accept an incoming request
@@ -43,14 +51,6 @@ public class InteractionController {
 		Interaction result = interactionService.accept(interactionId,
 				personService.getCurrentUser());
 		return new ResponseEntity<Interaction>(result, null, HttpStatus.OK);
-	}
-	
-	@RequestMapping(value="", method=RequestMethod.POST)
-	public ResponseEntity<Interaction> initiateRequest(@RequestBody NewInteraction interaction){
-		Interaction newInteraction = interactionService.initiateRequest(personService.getCurrentUser(),
-				interaction);
-		return new ResponseEntity<Interaction>(newInteraction, null,
-				HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/{interactionId}/deny", method = RequestMethod.DELETE)
@@ -140,5 +140,4 @@ public class InteractionController {
 			return new ResponseEntity<List<Interaction>>(result, null, HttpStatus.OK);
 		}
 	}
-
 }

@@ -44,7 +44,6 @@ public class MembershipController {
 	public ResponseEntity<Membership> join(@RequestBody AddMembership membership){
 		Membership newMembership = membershipService.addMembership(personService.getCurrentUser(), membership);
 		return new ResponseEntity<Membership>(newMembership, null, HttpStatus.OK);
-		
 	}
 
 	@RequestMapping(value = "{requestId}", method = RequestMethod.PATCH)
@@ -59,7 +58,7 @@ public class MembershipController {
 	public ResponseEntity<Object> deleteMembership(@PathVariable Integer requestId) {
 		poolService.removeMembership(personService.getCurrentUser(),
 				requestId);
-		return new ResponseEntity<Object>(null, null, HttpStatus.CREATED);
+		return new ResponseEntity<Object>(null, null, HttpStatus.OK);
 	}
 
 }

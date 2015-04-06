@@ -9,6 +9,11 @@ var tjingServices = angular.module("tjingApp.services", ["ngResource"]);
     return $resource(membershipUrl);
   }]);
 
+  tjingServices.factory("Share", ['$resource', function($resource){
+    var shareUrl = "/share/:shareId";
+    return $resource(shareUrl);
+  }]);
+
   //Item factory
   tjingServices.factory("Item", ['$resource', function($resource) {
     var itemlURL = "/item/:id";

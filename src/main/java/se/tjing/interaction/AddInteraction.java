@@ -1,13 +1,13 @@
 package se.tjing.interaction;
 
-public class NewInteraction {
+public class AddInteraction {
 	private Integer itemId;
 	
-	public NewInteraction(Integer itemId){
+	public AddInteraction(Integer itemId){
 		this.itemId = itemId;
 	}
 	
-	public NewInteraction(){
+	public AddInteraction(){
 		
 	}
 

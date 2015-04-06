@@ -13,6 +13,9 @@ import com.mysema.query.jpa.impl.JPAQuery;
 
 import se.tjing.common.BaseEntity;
 import se.tjing.common.TjingEntity;
+import se.tjing.feed.notification.Notification;
+import se.tjing.feed.notification.QNotificationInteraction;
+import se.tjing.feed.notification.QNotificationMembership;
 import se.tjing.interaction.QInteraction;
 import se.tjing.membership.QMembership;
 import se.tjing.pool.PoolService;
@@ -27,9 +30,6 @@ public class NotificationService {
 	
 	@Autowired
 	PoolService poolService;
-	
-	@Autowired
-	NotificationRepository notifRepo;
 	
 
 	public List<Notification<? extends TjingEntity>> getFeed(Person currentUser) {
@@ -46,19 +46,9 @@ public class NotificationService {
 		
 		query.from(internot).where(internot.target.eq(currentUser));
 		
-//		return query.list(internot);
 		result.addAll(query.list(internot));
 		
 		return result;
 	}
 	
-	public void killNotification(Integer notifId){
-		notifRepo.delete(notifId);
-		
-	}
-	
-	public void sendNotification(Notification<?> notif){
-		//TODO maybe more biznizlogic?
-		notifRepo.save(notif);		
-	}
 }

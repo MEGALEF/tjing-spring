@@ -1,5 +1,7 @@
 package se.tjing.pool;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -54,6 +56,17 @@ public class Pool extends TjingEntity {
 
 	public Set<Membership> getMemberships() {
 		return memberships;
+	}
+	
+	@JsonIgnore
+	public List<Membership> getAprovedMemberships(){
+		List<Membership> activemembers = new ArrayList<Membership>();
+		for (Membership membership : this.memberships){
+			if (membership.getApproved()==true){
+				activemembers.add(membership);
+			}
+		}
+		return activemembers;
 	}
 
 	public void setMemberships(Set<Membership> memberships) {
