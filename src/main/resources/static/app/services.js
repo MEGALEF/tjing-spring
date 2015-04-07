@@ -80,7 +80,7 @@ var tjingServices = angular.module("tjingApp.services", ["ngResource"]);
         url: interactionURL +'/accept'
       },
       deny: {
-        method:"PATCH",
+        method:"DELETE",
         url: interactionURL +'/deny'
       },
       handoverconfirm:{
