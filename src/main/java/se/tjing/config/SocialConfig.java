@@ -37,6 +37,7 @@ public class SocialConfig implements SocialConfigurer {
 			ConnectionFactoryConfigurer connectionFactoryConfigurer,
 			Environment environment) {
 		// TODO Auto-generated method stub
+		//This seems to take care of itself. Probably due to the values in the properties file. A bit spooky though.
 
 	}
 
