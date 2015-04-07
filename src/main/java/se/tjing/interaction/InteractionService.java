@@ -154,7 +154,6 @@ public class InteractionService {
 		//TODO Cancel interactions even when item is handed over? Ok or not?
 	}
 	
-	// TODO: Move to InteractionService? //TODO yes most definitely
 		public Interaction initiateRequest(Person currentUser, AddInteraction createInteraction) {
 			Item item = itemRepo.findOne(createInteraction.getItemId());
 			if (item == null || !itemService.isItemAvailableToUser(currentUser, item)) {
@@ -162,7 +161,8 @@ public class InteractionService {
 						"Item does not exist or is not available to you");
 			}
 			Interaction interaction = new Interaction(currentUser, item, DateTime.now());
-			//TODO interaction.setNotifyUser(item.getOwner());
-			return interactionRepo.save(interaction);
+			interactionRepo.save(interaction);
+			notifRepo.save(new NotificationInteraction(interaction, interaction.getItem().getOwner(), "Someone wants to borrow your thing"));
+			return interaction;
 		}
 }
