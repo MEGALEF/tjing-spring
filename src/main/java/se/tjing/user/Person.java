@@ -9,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 import se.tjing.common.BaseEntity;
 import se.tjing.common.TjingEntity;
@@ -21,13 +23,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 public class Person extends TjingEntity implements Serializable {
 
-	// private String facebookId;
-
 	// TODO sort out the fullname business. Plenty of opportunity for stuff to
 	// go wrong here. Sorry
 	private String firstName;
 	private String fullName;
-	private String facebookId;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -42,6 +41,7 @@ public class Person extends TjingEntity implements Serializable {
 	private Set<Item> items;
 
 	private String lastName;
+	
 
 	@OneToMany(mappedBy = "member")
 	@JsonIgnore
@@ -50,7 +50,10 @@ public class Person extends TjingEntity implements Serializable {
 	@JsonIgnore
 	private String password;
 
-	private String username; // probably going to be email
+	private String username;
+	
+	@Transient
+	private UserConnection connection;
 
 	public Person() {
 		super();
@@ -61,7 +64,7 @@ public class Person extends TjingEntity implements Serializable {
 		this.username = email;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.setPassword(password);
+		this.password=password;
 	}
 
 	public String getFirstName() {
@@ -136,13 +139,5 @@ public class Person extends TjingEntity implements Serializable {
 
 	public void setUsername(String email) {
 		this.username = email;
-	}
-
-	public String getFacebookId() {
-		return facebookId;
-	}
-
-	public void setFacebookId(String facebookId) {
-		this.facebookId = facebookId;
 	}
 }

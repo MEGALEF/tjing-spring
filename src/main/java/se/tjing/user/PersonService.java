@@ -75,7 +75,6 @@ public class PersonService {
 
 	public void setPersonFacebookId(User userObj, String id) {
 		Person person = personRepo.findByUsername(userObj.getUsername());
-		person.setFacebookId(id);
 		personRepo.save(person);
 
 	}

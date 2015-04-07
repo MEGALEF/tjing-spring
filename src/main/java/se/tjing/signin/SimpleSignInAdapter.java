@@ -59,10 +59,7 @@ public class SimpleSignInAdapter implements SignInAdapter {
 		// location.
 
 		SignInUtils.signin(userObj);
-		if (facebook.isAuthorized()) {
-			personService.setPersonFacebookId(userObj, facebook
-					.userOperations().getUserProfile().getId());
-		}
+		
 		return extractOriginalUrl(request);
 	}
 
