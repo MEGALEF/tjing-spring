@@ -93,6 +93,7 @@ public class SignupController {
 					account.getPassword(), authorities);
 			SignInUtils.signin(userObj); // TODO: This probably isn't right
 			providerSignInUtils.doPostSignUp(account.getUsername(), request);
+			personService.connectUser(account.getUsername());
 			return "redirect:/";
 		}
 		return null;

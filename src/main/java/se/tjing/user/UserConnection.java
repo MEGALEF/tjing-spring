@@ -4,15 +4,21 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="userconnection")
 @IdClass(value=UserConnectionId.class)
 public class UserConnection {
+	//Achtung: Instances of this entity are created via JDBC via Spring Social. Currently it is being sort of jerry-rigged
 	@Id
 	@Column(name="userid")
+	@JsonIgnore
 	private String userId;
 	
 	@Id
@@ -22,7 +28,8 @@ public class UserConnection {
 	@Id
 	@Column(name="provideruserid")
 	private String providerUserId;
-	
+
+@JsonIgnore
 	private Integer rank;
 	
 	private String displayname;
@@ -31,13 +38,21 @@ public class UserConnection {
 	
 	private String imageurl;
 	
+	@JsonIgnore
+	@ManyToOne
+	private Person person;
+	
 	@NotNull
+	@JsonIgnore
 	private String accesstoken;
 	
+	@JsonIgnore
 	private String secret;
 	
+	@JsonIgnore
 	private String refreshtoken;
 	
+	@JsonIgnore
 	private Long expiretime;
 
 	public String getUserId() {
@@ -127,6 +142,12 @@ public class UserConnection {
 	public void setExpiretime(Long expiretime) {
 		this.expiretime = expiretime;
 	}
-	
 
+	public Person getPerson() {
+		return person;
+	}
+
+	public void setPerson(Person person) {
+		this.person = person;
+	}
 }

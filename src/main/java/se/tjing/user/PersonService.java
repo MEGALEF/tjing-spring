@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.stereotype.Service;
 
 import se.tjing.exception.TjingException;
@@ -23,15 +24,16 @@ public class PersonService {
 	@Autowired
 	private PersonRepository personRepo;
 
+	@Autowired
+	UserConnectionRepository userConnRepo;
+
 	public Person addPerson(Person person) {
 		if (personRepo.findByUsername(person.getUsername()) != null) {
 			throw new TjingException("User with that email already exists");
 		}
-		// if (personRepo.findByFacebookId(person.getFacebookId()) != null) {
-		// throw new TjingException(
-		// "A user connected to that facebook account already exists");
-		// }
+
 		personRepo.save(person);
+
 		return person;
 	}
 
@@ -67,16 +69,24 @@ public class PersonService {
 		QPerson person = QPerson.person;
 		JPAQuery query = new JPAQuery(em);
 		query.from(person)
-				.where(person.fullName.containsIgnoreCase(searchStr).or(
-						person.firstName.containsIgnoreCase(searchStr).or(
-								person.lastName.containsIgnoreCase(searchStr))));
+		.where(person.fullName.containsIgnoreCase(searchStr).or(
+				person.firstName.containsIgnoreCase(searchStr).or(
+						person.lastName.containsIgnoreCase(searchStr))));
 		return query.list(person);
 	}
 
-	public void setPersonFacebookId(User userObj, String id) {
-		Person person = personRepo.findByUsername(userObj.getUsername());
-		personRepo.save(person);
+	public void connectUser(String username) {
+		//If there are connections for this username, hook them up to the Person object. This would be nicer with Spring Social JPA (TODO)
+		Person person = personRepo.findByUsername(username);		
 
+		QUserConnection userconn = QUserConnection.userConnection;
+		JPAQuery query = new JPAQuery(em);
+		query.from(userconn).where(userconn.userId.eq(username));
+		if (query.exists()){
+			for(UserConnection conn : query.list(userconn)){
+				conn.setPerson(person);
+				userConnRepo.save(conn);
+			}
+		}
 	}
-
 }

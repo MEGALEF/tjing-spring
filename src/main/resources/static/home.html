@@ -6,7 +6,7 @@
 <body ng-app="tjingApp">
   <div ng-controller="UserController">
     <h1>Welcome, {{currentUser.firstName}}!</h1>
-    <img ng-src="{{profilePicUrl}}">
+    <img ng-src="{{currentUser.connection[0].imageurl}}">
   </div>
   <div ng-controller="FeedController">
     <h1>Notification feed</h1>
@@ -116,7 +116,7 @@
     <h1>All interactions</h1>
     <div ng-repeat="interaction in allinteractions">
       <label>
-        {{interaction.borrower.firstName}} wants to borrow {{interaction.item.owner.firstName}} {{interaction.item.title}}
+        <img ng-src={{interaction.borrower.connection[0].imageurl}}> {{interaction.borrower.firstName}} wants to borrow {{interaction.item.owner.firstName}} {{interaction.item.title}}
       </label>
     </div>
     <hr />
