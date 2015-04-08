@@ -27,7 +27,7 @@ public class MembershipService {
 	PersonRepository personRepo;	
 	
 	@Autowired
-	NMembershipRepository notifRepo;
+	NotificationService notifService;
 
 	/**
 	 * Attempts to join a Pool by adding a new membership.
@@ -50,15 +50,13 @@ public class MembershipService {
 				|| PrivacyMode.SECRET.equals(pool.getPrivacy())) {
 			membership.setApproved(false);
 			
-						
-
 		} else if (PrivacyMode.OPEN.equals(pool.getPrivacy())){
 			membership.approve();
 		}
 		membershipRepo.save(membership);
 		//Notify all pool members
 		for (Membership member : pool.getAprovedMemberships()){
-			notifRepo.save(new NotificationMembership(member.getMember(), membership, "Someone applied for membership in a pool"));
+			notifService.sendNotification(new NotificationMembership(member.getMember(), membership, "Someone applied for membership in a pool"), true);
 		}
 		return membership;
 	}

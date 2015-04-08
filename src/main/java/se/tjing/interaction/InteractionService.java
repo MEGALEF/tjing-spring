@@ -2,6 +2,8 @@ package se.tjing.interaction;
 
 import java.util.List;
 
+import javassist.compiler.NoFieldException;
+
 import javax.persistence.EntityManager;
 
 import org.joda.time.DateTime;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import se.tjing.exception.TjingException;
 import se.tjing.feed.NotificationRepository;
+import se.tjing.feed.NotificationService;
 import se.tjing.feed.notification.Notification;
 import se.tjing.feed.notification.NotificationInteraction;
 import se.tjing.feed.repositories.NInteractionRepository;
@@ -37,7 +40,7 @@ public class InteractionService {
 	ItemRepository itemRepo;
 	
 	@Autowired
-	NInteractionRepository notifRepo;
+	NotificationService notifService;
 
 	public Interaction accept(Integer interactionId, Person person) {
 		Interaction interaction = interactionRepo.findOne(interactionId);
@@ -50,7 +53,7 @@ public class InteractionService {
 		item.setActiveInteraction(interaction);
 		itemRepo.save(item);
 		interactionRepo.save(interaction);
-		notifRepo.save(new NotificationInteraction(interaction, interaction.getBorrower(), "Request was accepted!"));
+		notifService.sendNotification(new NotificationInteraction(interaction, interaction.getBorrower(), "Request was accepted!"), true);
 		return interaction;
 	}
 
@@ -73,7 +76,7 @@ public class InteractionService {
 		}
 		interaction.setStatusReturned(DateTime.now());
 
-		notifRepo.save(new NotificationInteraction(interaction, interaction.getBorrower(), "Return was confirmed"));
+		notifService.sendNotification(new NotificationInteraction(interaction, interaction.getBorrower(), "Return was confirmed"), true);
 		interaction.getItem().setActiveInteraction(null);
 		interaction.setActive(false);
 		return interactionRepo.save(interaction);
@@ -148,7 +151,7 @@ public class InteractionService {
 		} else {
 			interaction.setStatusCancelled(DateTime.now());
 			interaction.setActive(false);
-			notifRepo.save(new NotificationInteraction(interaction, interaction.getBorrower(), "Interaction was cancelled. Bummer!"));
+			notifService.sendNotification(new NotificationInteraction(interaction, interaction.getBorrower(), "Interaction was cancelled. Bummer!"), true);
 			return interaction;
 		}
 		//TODO Cancel interactions even when item is handed over? Ok or not?
@@ -162,7 +165,7 @@ public class InteractionService {
 			}
 			Interaction interaction = new Interaction(currentUser, item, DateTime.now());
 			interactionRepo.save(interaction);
-			notifRepo.save(new NotificationInteraction(interaction, interaction.getItem().getOwner(), "Someone wants to borrow your thing"));
+			notifService.sendNotification(new NotificationInteraction(interaction, interaction.getItem().getOwner(), "Someone wants to borrow your thing"), true);
 			return interaction;
 		}
 }
