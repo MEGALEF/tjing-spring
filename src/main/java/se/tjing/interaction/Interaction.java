@@ -2,6 +2,7 @@ package se.tjing.interaction;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -35,7 +36,7 @@ public class Interaction extends TjingEntity{
 	@ManyToOne
 	private Person borrower;
 	
-	@OneToMany(mappedBy="event")
+	@OneToMany(mappedBy="event", cascade=CascadeType.ALL)
 	private List<NotificationInteraction> notifications;
 
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")

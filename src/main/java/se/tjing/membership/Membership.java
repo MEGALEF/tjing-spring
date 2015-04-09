@@ -1,16 +1,21 @@
 package se.tjing.membership;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import se.tjing.common.BaseEntity;
 import se.tjing.common.TjingEntity;
+import se.tjing.feed.notification.NotificationMembership;
 import se.tjing.pool.Pool;
 import se.tjing.pool.PrivacyMode;
 import se.tjing.user.Person;
@@ -25,6 +30,9 @@ public class Membership extends TjingEntity {
 
 	@ManyToOne
 	private Person member;
+	
+	@OneToMany(mappedBy="event", cascade=CascadeType.ALL)
+	private List<NotificationMembership> notifications;
 	
 
 	@ManyToOne
