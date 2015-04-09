@@ -66,7 +66,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 						"/disconnect/facebook").permitAll().antMatchers("/**")
 				.authenticated().and()
 				.requiresChannel().anyRequest().requiresSecure()
-				.and()
+				.and().portMapper().http(8080).mapsTo(8443).and()
 				.rememberMe().and()
 				.apply(new SpringSocialConfigurer()).and().csrf().disable(); // Disable
 																				// CSRF.
