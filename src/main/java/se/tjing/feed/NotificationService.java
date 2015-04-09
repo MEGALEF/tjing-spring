@@ -16,12 +16,14 @@ import com.mysema.query.jpa.impl.JPAQuery;
 
 import se.tjing.common.BaseEntity;
 import se.tjing.common.TjingEntity;
+import se.tjing.feed.notification.NotificationItemRequest;
 import se.tjing.feed.notification.Notification;
 import se.tjing.feed.notification.NotificationInteraction;
 import se.tjing.feed.notification.NotificationMembership;
 import se.tjing.feed.notification.QNotificationInteraction;
 import se.tjing.feed.notification.QNotificationMembership;
 import se.tjing.feed.repositories.NInteractionRepository;
+import se.tjing.feed.repositories.NItemRequestRepository;
 import se.tjing.feed.repositories.NMembershipRepository;
 import se.tjing.interaction.QInteraction;
 import se.tjing.membership.QMembership;
@@ -47,6 +49,9 @@ public class NotificationService {
 	@Autowired
 	NMembershipRepository nMembershipRepo;
 	
+	@Autowired
+	NItemRequestRepository nItemReqRepo;
+	
 	public void sendNotification(NotificationMembership notif, boolean notifyFacebook){
 		nMembershipRepo.save(notif);
 		if (notifyFacebook){
@@ -66,7 +71,7 @@ public class NotificationService {
 		String objectId = target.getConnection().get(0).getProviderUserId();
 		MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
 		map.set("access_token", "549842908460582|ZQXpneLdsiXpC5hM8ZQxrPlMmEQ"); //TODO: Put this in .properties file
-		map.set("href", "https://pure-chamber-3304.herokuapp.com/"); //TODO: Replace this
+		//map.set("href", "https://pure-chamber-3304.herokuapp.com/"); //TODO: Replace this
 		map.set("template", notif.getMessage());
 		facebook.post(objectId, "notifications", map);
 	}
@@ -90,5 +95,11 @@ public class NotificationService {
 		
 		return result;
 	}
-	
+
+	public void sendNotification(NotificationItemRequest notif, boolean notifyFacebook) {
+		nItemReqRepo.save(notif);
+		if (notifyFacebook){
+			sendFacebookNotification(notif);
+		}
+	}
 }
