@@ -1,5 +1,6 @@
 package se.tjing.user;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -12,7 +13,11 @@ import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.stereotype.Service;
 
 import se.tjing.exception.TjingException;
+import se.tjing.membership.QMembership;
+import se.tjing.pool.Pool;
+import se.tjing.pool.QPool;
 
+import com.mysema.query.jpa.JPASubQuery;
 import com.mysema.query.jpa.impl.JPAQuery;
 
 @Service
@@ -88,5 +93,20 @@ public class PersonService {
 				userConnRepo.save(conn);
 			}
 		}
+	}
+
+	public List<Person> getVisibleUsers(Person current) {
+		QPerson person = QPerson.person;
+		QMembership membership = QMembership.membership;
+		QPool pool = QPool.pool;
+		
+		JPASubQuery poolsQ = new JPASubQuery();
+		poolsQ.from(pool).leftJoin(pool.memberships, membership)
+		.where(membership.member.eq(current).and(membership.approved.isTrue()));
+		
+		JPAQuery query = new JPAQuery(em);
+		query.from(person).leftJoin(person.memberships, membership).where(membership.pool.in(poolsQ.list(pool)));
+		
+		return query.list(person);
 	}
 }

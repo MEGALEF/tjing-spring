@@ -38,10 +38,17 @@ public class PersonController {
 	PoolService poolService;
 
 	@ApiOperation("Returns information on the current user")
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(value="/me", method = RequestMethod.GET)
 	public ResponseEntity<Person> getCurrentUser() {
 		Person person = pService.getCurrentUser();
 		return new ResponseEntity<Person>(person, null, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method=RequestMethod.GET)
+	public ResponseEntity<List<Person>> getVisibleUsers(){
+		Person current = pService.getCurrentUser();
+		List<Person> result = pService.getVisibleUsers(current);
+		return new ResponseEntity<List<Person>>(result, null, HttpStatus.OK);
 	}
 
 	@ApiOperation("Search for users based on the users names. Returns a list of matching users")
