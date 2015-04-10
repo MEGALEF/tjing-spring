@@ -1,6 +1,5 @@
 package se.tjing.item;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -12,19 +11,16 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-import se.tjing.common.BaseEntity;
+import se.tjing.common.TjingEntity;
 import se.tjing.interaction.Interaction;
 import se.tjing.share.Share;
 import se.tjing.user.Person;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
-public class Item extends BaseEntity implements Serializable {
+public class Item extends TjingEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

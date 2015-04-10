@@ -1,5 +1,7 @@
 package se.tjing.itemrequest;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,5 +25,12 @@ public class ItemRequestController {
 	public ResponseEntity<ItemRequest> postRequest(@RequestBody AddItemRequest request){
 		ItemRequest result = itemreqService.postRequest(personService.getCurrentUser(), request);
 		return new ResponseEntity<ItemRequest>(result, null, HttpStatus.CREATED);
+	}
+	
+	@RequestMapping(method=RequestMethod.GET)
+	public ResponseEntity<List<ItemRequest>> getRequests(){
+		List<ItemRequest> result = itemreqService.getUserRequests(personService.getCurrentUser());
+		
+		return new ResponseEntity<List<ItemRequest>>(result, null, HttpStatus.OK);
 	}
 }

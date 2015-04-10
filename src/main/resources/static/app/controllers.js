@@ -45,6 +45,26 @@
     }
 
   }]);
+
+  angular.module("tjingApp.controllers").controller("ItemRequestController", 
+    ["$scope", "ItemRequest",
+    function($scope, ItemRequest){
+      $scope.myRequests = [];
+      refreshMyRequests();
+
+      $scope.postRequest = function (request){
+        ItemRequest.save({text: request.text}, function(response){
+          $scope.myRequests.push(response);
+          refreshMyRequests();
+        });
+      };
+
+      function refreshMyRequests(){
+        ItemRequest.query({}, function(response){
+          $scope.myRequests = response;
+        });
+      };
+    }]);
   
   angular.module("tjingApp.controllers").controller("ItemController", ["$scope", "Item", "Pool", "Interaction",
     function($scope, Item, Pool, Interaction) {

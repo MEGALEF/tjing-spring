@@ -18,6 +18,21 @@
       </div>
     </ul>
   </div>
+  <div ng-controller="ItemRequestController">
+    <h1>My item requests</h1>
+    <ul>
+      <li ng-repeat="request in myRequests">
+        You asked your pools for a {{request.text}}
+      </li>
+    </ul>
+    <form role="form" ng-submit="postRequest(request)">
+      <input type="text" ng-model="request.text" placeholder="What do you need?" required/>
+      <button type="submit" ng-disabled="!request.text" title="Post request">
+        <span class="glyphicon glyphicon-plus"></span>
+      </button>
+    </form>
+  </div>
+
   <div ng-controller="ItemController">
     <h1>Available items</h1>
     <ul>

@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import se.tjing.common.BaseEntity;
 import se.tjing.common.TjingEntity;
 import se.tjing.feed.notification.NotificationItemRequest;
@@ -20,11 +22,12 @@ import se.tjing.user.Person;
 public class ItemRequest extends TjingEntity {
 
 	@ManyToOne
-	private Person user;
+	private Person member;
 	
 	private String text;
 
 	@OneToMany(mappedBy="event", cascade=CascadeType.ALL)
+	@JsonIgnore
 	private List<NotificationItemRequest> notifications;
 
 	@Id
@@ -32,8 +35,12 @@ public class ItemRequest extends TjingEntity {
 	private Integer id;
 
 	public ItemRequest(AddItemRequest request, Person currentUser) {
-		this.user = currentUser;
+		this.member = currentUser;
 		this.text = request.getText();
+	}
+	
+	public ItemRequest(){
+		
 	}
 
 	@Override
@@ -50,7 +57,7 @@ public class ItemRequest extends TjingEntity {
 	}
 
 	public Person getUser() {
-		return user;
+		return member;
 	}
 
 	public void setId(Integer id) {
@@ -66,6 +73,6 @@ public class ItemRequest extends TjingEntity {
 	}
 
 	public void setUser(Person user) {
-		this.user = user;
+		this.member = user;
 	}
 }

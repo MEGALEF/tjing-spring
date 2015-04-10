@@ -2,8 +2,12 @@ package se.tjing.itemrequest;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.mysema.query.jpa.impl.JPAQuery;
 
 import se.tjing.feed.NotificationService;
 import se.tjing.feed.notification.NotificationItemRequest;
@@ -14,6 +18,10 @@ import se.tjing.user.PersonService;
 
 @Service
 public class ItemRequestService {
+	
+	@Autowired
+	EntityManager em;
+	
 	@Autowired 
 	ItemRequestRepository itemreqRepo;
 	
@@ -46,5 +54,14 @@ public class ItemRequestService {
 		for (Person target:targets){
 			notifService.sendNotification(new NotificationItemRequest(target, fullRequest), true);
 		}
+	}
+
+	public List<ItemRequest> getUserRequests(Person currentUser) {
+		QItemRequest itemreq = QItemRequest.itemRequest;
+		JPAQuery query = new JPAQuery(em);
+		
+		query.from(itemreq).where(itemreq.member.eq(currentUser));
+		
+		return query.list(itemreq);
 	}
 }

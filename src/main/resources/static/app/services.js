@@ -14,6 +14,13 @@ var tjingServices = angular.module("tjingApp.services", ["ngResource"]);
     return $resource(shareUrl);
   }]);
 
+  tjingServices.factory("ItemRequest", ['$resource', function($resource) {
+    var itemRequestUrl = "/itemrequest/:id";
+    return $resource(itemRequestUrl, {
+
+    });
+  }]);
+
   //Item factory
   tjingServices.factory("Item", ['$resource', function($resource) {
     var itemlURL = "/item/:id";

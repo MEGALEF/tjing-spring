@@ -2,7 +2,6 @@ package se.tjing.pool;
 
 import java.util.List;
 
-import org.apache.xalan.lib.sql.QueryParameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import se.tjing.item.Item;
-import se.tjing.membership.Membership;
 import se.tjing.user.Person;
 import se.tjing.user.PersonService;
 
