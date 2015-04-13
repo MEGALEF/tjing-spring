@@ -80,4 +80,11 @@ public class PoolController {
 		List<Pool> result = poolService.search(searchString);
 		return new ResponseEntity<List<Pool>>(result, null, HttpStatus.OK);
 	}
+	
+	@RequestMapping(value="/import/facebook")
+	public ResponseEntity<List<Pool>> importFacebookGroups(){
+		List<Pool> result = poolService.importFacebookGroups(personService.getCurrentUser());
+		
+		return new ResponseEntity<List<Pool>>(result, null, HttpStatus.OK);
+	}
 }

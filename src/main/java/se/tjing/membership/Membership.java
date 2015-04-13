@@ -50,6 +50,12 @@ public class Membership extends TjingEntity {
 		this.member = member;
 		this.pool = pool;
 	}
+	
+	public Membership(Person member, Pool pool, boolean preapproved){
+		this.member = member;
+		this.pool = pool;
+		this.approved = preapproved;
+	}
 
 	public Membership() {
 		// TODO Auto-generated constructor stub

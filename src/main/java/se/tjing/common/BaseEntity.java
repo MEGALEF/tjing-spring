@@ -36,7 +36,7 @@ public abstract class BaseEntity {
 
 	@Version
 	@JsonIgnore
-	private long version;
+	private int version;
 	
 	
 

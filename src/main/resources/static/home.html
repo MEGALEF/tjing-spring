@@ -14,7 +14,7 @@
       <div ng-repeat="feed in feedItems"> 
         <li>
           {{feed.message}}
-      </li>
+        </li>
       </div>
     </ul>
   </div>
@@ -73,12 +73,12 @@
     <hr />
     <h1>Add item</h1>
     <form role="form" ng-submit="addItem(newItem)">
-        <input type="text" ng-model="newItem" placeholder="Enter item title.." required/>
-        <span>
-          <button type="submit" ng-disabled="!newItem" title="Add">
-            <span class="glyphicon glyphicon-plus"></span>
-          </button>
-        </span>
+      <input type="text" ng-model="newItem" placeholder="Enter item title.." required/>
+      <span>
+        <button type="submit" ng-disabled="!newItem" title="Add">
+          <span class="glyphicon glyphicon-plus"></span>
+        </button>
+      </span>
     </form>
     <hr />
     <h1>My borrowed items</h1>
@@ -96,16 +96,18 @@
   <hr />
 
   <div ng-controller="PoolController">
-    <h1>All pools</h1>
-    <div ng-hide="allpools && allPools.length > 0">
-      No pools exist yet. Add a pool!
+    <h1>All pools</h1><button ng-click="showPools=!showPools">show/hide</button>
+    <div ng-show="showPools">
+      <div ng-hide="allPools.length > 0">
+        No pools exist yet. Add a pool!
+      </div>
+      <ul>
+        <li ng-repeat="pool in allPools">
+          {{pool.title}} ({{pool.privacy}}<div ng-hide="pool.privacy == 'OPEN'">, requires approval from {{pool.approval}}</div>)
+          <button type="button" ng-click="joinPool(pool)">Join</button>
+        </li>
+      </ul>
     </div>
-    <ul>
-      <li ng-repeat="pool in allPools">
-        {{pool.title}} ({{pool.privacy}}<div ng-hide="pool.privacy == 'OPEN'">, requires approval from {{pool.approval}}</div>)
-        <button type="button" ng-click="joinPool(pool)">Join</button>
-      </li>
-    </ul>
     <hr />
     <h1>My pools</h1>
     <div ng-hide="mypools && mypools.length >0">
@@ -138,27 +140,27 @@
 
     <h1>Outgoing requests</h1>
     <ul>
-    <li ng-repeat="request in outgoingrequests">
+      <li ng-repeat="request in outgoingrequests">
         You asked {{request.item.owner.firstName}} for his {{request.item.title}} 
         <div ng-show="request.statusAccepted">(Accepted on {{request.statusAccepted | date}})
-        <button  ng-hide="request.statusHandedOver" ng-click="confirmHandover(request)">
-          Confirm handover
-        </button>
-        <div ng-show="request.statusHandedOver">(Handed over on {{request.statusHandedOver | date}})</div>
+          <button  ng-hide="request.statusHandedOver" ng-click="confirmHandover(request)">
+            Confirm handover
+          </button>
+          <div ng-show="request.statusHandedOver">(Handed over on {{request.statusHandedOver | date}})</div>
         </div>
-    </li>
+      </li>
     </ul>
     <hr />
     <h1>Incoming requests</h1>
     <ul>
-    <li ng-repeat="request in incomingrequests">
-      
+      <li ng-repeat="request in incomingrequests">
+
         {{request.borrower.firstName}}
         
-         wants to borrow your {{request.item.title}}
+        wants to borrow your {{request.item.title}}
         <div ng-hide="request.statusAccepted">
-        <button ng-disabled="request.statusAccepted" ng-click="acceptRequest(request)">Accept</button>
-        <button ng-disabled="request.statusAccepted" ng-click="denyRequest(request)">Deny</button>
+          <button ng-disabled="request.statusAccepted" ng-click="acceptRequest(request)">Accept</button>
+          <button ng-disabled="request.statusAccepted" ng-click="denyRequest(request)">Deny</button>
         </div>
         <div ng-show="request.statusAccepted">
           (Accepted on {{request.statusAccepted | date}})
@@ -167,8 +169,8 @@
           (Handed over on {{request.statusHandedOver | date}})
           <button ng-disabled="request.statusReturned" ng-click="confirmReturn(request)">Confirm return</button>
         </div>
-      
-    </li>
+
+      </li>
     </ul>
     <hr />
   </div>

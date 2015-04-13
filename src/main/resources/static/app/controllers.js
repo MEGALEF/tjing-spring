@@ -112,6 +112,8 @@
   }]);
 
   angular.module("tjingApp.controllers").controller("PoolController", ["$scope", "Pool", "Item", "Membership", function($scope, Pool, Item, Membership) {
+    $scope.showPools = false;
+
     $scope.allPools = [];
     $scope.myPools = [];
     $scope.myMemberships = [];

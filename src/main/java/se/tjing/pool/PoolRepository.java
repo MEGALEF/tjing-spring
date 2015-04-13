@@ -9,4 +9,7 @@ public interface PoolRepository extends CrudRepository<Pool, Integer> {
 
 	@Query
 	public List<Pool> findByTitle(String title);
+	
+	@Query
+	public List<Pool> findByFacebookId(Long id);
 }

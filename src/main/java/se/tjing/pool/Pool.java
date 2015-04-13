@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import org.springframework.social.facebook.api.GroupMembership;
+
 import se.tjing.common.BaseEntity;
 import se.tjing.common.TjingEntity;
 import se.tjing.membership.Membership;
@@ -19,6 +21,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Pool extends TjingEntity {
+	
+	public Pool(GroupMembership gm){
+		this.title = gm.getName();
+		this.privacy = PrivacyMode.FACEBOOK;
+		this.setFacebookId(Long.valueOf(gm.getId()));
+	}
+	
+	public Pool(){
+		
+	}
+	
+	private Long facebookId;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -87,5 +101,13 @@ public class Pool extends TjingEntity {
 
 	public void setApproval(PoolRole approval) {
 		this.approval = approval;
+	}
+
+	public Long getFacebookId() {
+		return facebookId;
+	}
+
+	public void setFacebookId(Long facebookId) {
+		this.facebookId = facebookId;
 	}
 }

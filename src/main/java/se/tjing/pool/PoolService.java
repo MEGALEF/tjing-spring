@@ -1,10 +1,13 @@
 package se.tjing.pool;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.social.facebook.api.Facebook;
+import org.springframework.social.facebook.api.GroupMembership;
 import org.springframework.stereotype.Service;
 
 import se.tjing.exception.TjingException;
@@ -33,6 +36,9 @@ public class PoolService {
 
 	@Autowired
 	EntityManager em;
+	
+	@Autowired
+	Facebook facebook;
 
 	public Pool addPool(Person creator, Pool pool) {
 		if (pool.getTitle().trim().isEmpty()) {
@@ -199,5 +205,37 @@ public class PoolService {
 		QMembership membership = QMembership.membership;
 		query.from(membership).where(membership.member.eq(user).and(membership.approved.isTrue()));
 		return query.list(membership);
+	}
+
+
+
+	public List<Pool> importFacebookGroups(Person currentUser) {
+		if (!facebook.isAuthorized()){
+			throw new TjingException("You must use login via facebook to access this feature");
+		}else {
+			List<Pool> result = new ArrayList<Pool>();
+			
+			List<GroupMembership> fbmemberships = facebook.groupOperations().getMemberships();
+			
+			for (GroupMembership gm : fbmemberships){
+				Pool pool = new Pool(gm);
+				
+				result.add(pool);
+				
+				Long id = pool.getFacebookId();
+				List<Pool> existing = poolRepo.findByFacebookId(id);
+				
+				if (existing.isEmpty()){
+					Pool savedPool = poolRepo.save(pool);
+					membershipRepo.save(new Membership(currentUser, savedPool, true));
+				} else {
+					Pool existingpool = existing.get(0);
+					if (!isUserMemberOfPool(currentUser, existingpool)){
+						membershipRepo.save(new Membership(currentUser, existingpool));
+					}
+				}
+			}
+			return result;
+		}
 	}
 }
