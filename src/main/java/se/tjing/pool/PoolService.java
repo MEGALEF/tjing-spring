@@ -182,23 +182,50 @@ public class PoolService {
 
 	public void removeMembership(Person user, Integer requestId) {
 		Membership membership = membershipRepo.findOne(requestId);
+		Pool pool = membership.getPool();
 		if (membership.getApproved()){ //Member is an approved member of the pool
 			if (!user.equals(membership.getMember())){
 				throw new TjingException("Only admins may remove other users");
 				//TODO: Implement admin kicking
 			} else {
-				membershipRepo.delete(membership);
+				deleteMembershipAndShares(membership);
 			}
 		} else {
 			if (!isUserMemberOfPool(user, membership.getPool())) {
 				//TODO Here is for implementation of pool role approval
 				throw new TjingException("Only pool members may deny join requests");
 			} else {
-				membershipRepo.delete(membership);
+				deleteMembershipAndShares(membership);
 			}
 		}
+		// Delete empty pools
+		if (pool.getMemberships().isEmpty()){
+			poolRepo.delete(pool);
+		}
 	}
-	// TODO: create private getPool(poolId) method
+	// TODO: create private getPool(poolId) method.
+	// ^ Why?
+
+
+
+	private void deleteMembershipAndShares(Membership membership) {
+		membershipRepo.delete(membership);
+		removeShares(membership.getMember(), membership.getPool());
+	}
+
+	private void removeShares(Person member, Pool pool) {
+		QShare share = QShare.share;
+		QItem item = QItem.item;
+		JPAQuery query = new JPAQuery(em);
+		
+		query.from(share).leftJoin(share.item, item).where(share.pool.eq(pool).and(item.owner.eq(member)));
+		
+		for (Share s : query.list(share)){
+			shareRepo.delete(s);
+		}
+	}
+
+
 
 	public List<Membership> getUserMemberships(Person user) {
 		JPAQuery query = new JPAQuery(em);
