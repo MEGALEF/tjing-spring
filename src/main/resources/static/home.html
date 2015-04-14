@@ -129,6 +129,9 @@
     </form>
   </div>
   <hr />
+  <div ng-controller="FacebookImportController">
+    <button ng-click="importFacebook()">Import from facebook</button>
+  </div>
   <div ng-controller="InteractionController">
     <h1>All interactions</h1>
     <div ng-repeat="interaction in allinteractions">

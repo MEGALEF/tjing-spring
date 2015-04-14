@@ -1,7 +1,20 @@
 /**
  * 
  */
-(function(angular) {
+ (function(angular) {
+  var controllersModule = angular.module('tjingApp.controllers');
+
+  controllersModule.controller("FacebookImportController", ["$scope", "$http", function($scope, $http){
+    $scope.importedPools = [];
+
+    $scope.importFacebook = function(){
+      $http.get('pool/import/facebook').success(function(data){
+        $scope.importedPools = data;
+      });
+    };
+  }]);
+
+
    //InteractionController
   angular.module('tjingApp.controllers').controller("InteractionController", ["$scope", "Interaction", function($scope, Interaction){
     $scope.allinteractions = Interaction.query();
