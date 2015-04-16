@@ -37,11 +37,6 @@ public class MembershipService {
 	public Membership addMembership(Person currentUser, AddMembership addMembership) {
 		// TODO: Moar business logic.
 		Pool pool = poolRepo.findOne(addMembership.poolId);
-		//Person user = personRepo.findOne(addMembership.userId);
-		
-//		if (!currentUser.equals(user)){
-//			throw new TjingException("Can't add memberships for other users");
-//		}
 		
 		Membership membership = new Membership(currentUser, pool);
 		
@@ -49,15 +44,16 @@ public class MembershipService {
 		if (PrivacyMode.CLOSED.equals(pool.getPrivacy()) 
 				|| PrivacyMode.SECRET.equals(pool.getPrivacy())) {
 			membership.setApproved(false);
+			membershipRepo.save(membership);
+			for (Membership member : pool.getAprovedMemberships()){
+				notifService.sendNotification(new NotificationMembership(member.getMember(), membership, "Someone applied for membership in a pool"), true);
+			}
 			
 		} else if (PrivacyMode.OPEN.equals(pool.getPrivacy())){
 			membership.approve();
+			membershipRepo.save(membership);
 		}
-		membershipRepo.save(membership);
-		//Notify all pool members
-		for (Membership member : pool.getAprovedMemberships()){
-			notifService.sendNotification(new NotificationMembership(member.getMember(), membership, "Someone applied for membership in a pool"), true);
-		}
+		
 		return membership;
 	}
 
