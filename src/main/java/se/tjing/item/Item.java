@@ -38,6 +38,9 @@ public class Item extends TjingEntity {
 	@OneToMany(mappedBy = "item")
 	@JsonIgnoreProperties("item")
 	private List<Share> shares;
+	
+	@JsonIgnore
+	private Boolean fbAvailable = false;
 
 	public List<Share> getShares() {
 		return shares;
@@ -109,6 +112,14 @@ public class Item extends TjingEntity {
 
 	public void setActiveInteraction(Interaction activeInteraction) {
 		this.activeInteraction = activeInteraction;
+	}
+
+	public Boolean getFbAvailable() {
+		return fbAvailable;
+	}
+
+	public void setFbAvailable(Boolean fbAvailable) {
+		this.fbAvailable = fbAvailable;
 	}
 
 }

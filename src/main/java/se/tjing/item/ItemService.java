@@ -20,6 +20,7 @@ import se.tjing.share.QShare;
 import se.tjing.share.Share;
 import se.tjing.share.ShareRepository;
 import se.tjing.user.Person;
+import se.tjing.user.PersonService;
 
 import com.mysema.query.jpa.impl.JPAQuery;
 
@@ -40,6 +41,9 @@ public class ItemService {
 
 	@Autowired
 	InteractionRepository interactionRepo;
+	
+	@Autowired
+	PersonService personService;
 
 	public Item addItem(Item item) {
 		// TODO: Business logic. Check for existing items
@@ -62,12 +66,14 @@ public class ItemService {
 		} else {
 			return result;
 		}
-
 	}
 
 	public Boolean isItemAvailableToUser(Person person, Item item) {
 		if (item.getOwner().equals(person)) {
-			return true;
+			throw new TjingException("It's your own thing, dummy!");
+		}
+		if (item.getFbAvailable()){
+			return personService.areFacebookFriends(person, item.getOwner());
 		}
 		QShare share = QShare.share;
 		QPool pool = QPool.pool;
@@ -89,8 +95,14 @@ public class ItemService {
 				.leftJoin(item.shares, share).leftJoin(share.pool, pool)
 				.leftJoin(pool.memberships, membership)
 				.where(membership.member.eq(p));
-
-		return query.list(item);
+		List<Item> result = query.list(item);
+		
+		List<Person> fbFriends = personService.getFacebookFriends(p);
+		JPAQuery fbquery = new JPAQuery(em);
+		fbquery.from(item).where(item.owner.in(fbFriends).and(item.fbAvailable.isTrue()));
+		result.addAll(fbquery.list(item));
+		
+		return result;
 	}
 
 	public List<Item> searchAvailableItems(Person person, String searchStr) {
@@ -105,11 +117,10 @@ public class ItemService {
 				.leftJoin(pool.memberships, membership)
 				.where(membership.member.eq(person).and(
 						item.title.containsIgnoreCase(searchStr)));
-
+		//TODO add facebook items
+		
 		return query.list(item);
 	}
-
-	
 
 	public List<Item> getUsersItems(Person user) {
 		QItem item = QItem.item;
