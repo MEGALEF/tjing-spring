@@ -64,7 +64,7 @@ public class PoolService {
 		// TODO: Limit to user visible pools. Business Logic
 		QPool pool = QPool.pool;
 		JPAQuery query = new JPAQuery(em);
-		query.from(pool);
+		query.from(pool).where(pool.privacy.ne(PrivacyMode.FACEBOOK).and(pool.privacy.ne(PrivacyMode.SECRET)));
 		return query.list(pool);
 	}
 

@@ -49,23 +49,25 @@ public class NotificationService {
 	NItemRequestRepository nItemReqRepo;
 	
 	public List<Notification<? extends TjingEntity>> getFeed(Person currentUser) {
-		JPAQuery query = new JPAQuery(em);
+		JPAQuery interquery = new JPAQuery(em);
+		JPAQuery memberquery = new JPAQuery(em);
+		JPAQuery requestquery = new JPAQuery(em);
 		List<Notification<? extends TjingEntity>> result = new ArrayList<Notification<? extends TjingEntity>>();
 		
 		//Membership requests
 		QNotificationMembership membnot = QNotificationMembership.notificationMembership;
-		query.from(membnot).where(membnot.target.eq(currentUser));
-		result.addAll(query.list(membnot));
+		memberquery.from(membnot).where(membnot.target.eq(currentUser));
+		result.addAll(memberquery.list(membnot));
 		
 		//Interaction change notifications & requests to borrow stuff
 		QNotificationInteraction internot = QNotificationInteraction.notificationInteraction;
-		query.from(internot).where(internot.target.eq(currentUser));
-		result.addAll(query.list(internot));
+		interquery.from(internot).where(internot.target.eq(currentUser));
+		result.addAll(interquery.list(internot));
 		
 		//Item requests
 		QNotificationItemRequest reqnot = QNotificationItemRequest.notificationItemRequest;
-		query.from(reqnot).where(reqnot.target.eq(currentUser));
-		result.addAll(query.list(reqnot));
+		requestquery.from(reqnot).where(reqnot.target.eq(currentUser));
+		result.addAll(requestquery.list(reqnot));
 		
 		return result;
 	}

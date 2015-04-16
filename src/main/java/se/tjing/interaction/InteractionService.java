@@ -65,8 +65,9 @@ public class InteractionService {
 		}
 		//TODO interaction.setNotifyUser(interaction.getItem().getOwner());
 		interaction.setStatusHandedOver(DateTime.now());
-		
-		return interactionRepo.save(interaction);
+		interactionRepo.save(interaction);
+		notifService.sendNotification(new NotificationInteraction(interaction, interaction.getItem().getOwner(), "Handover was confirmed!"), true);
+		return interaction;
 	}
 
 	public Interaction confirmReturn(Integer interactionId, Person person) {
