@@ -71,13 +71,14 @@ public class NotificationService {
 	}
 	
 	private void sendFacebookNotification(Notification<?> notif) {
-		Person target = notif.getTarget();
-		String objectId = target.getConnection().get(0).getProviderUserId();
-		MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
-		map.set("access_token", "549842908460582|ZQXpneLdsiXpC5hM8ZQxrPlMmEQ"); //TODO: Put this in .properties file
-		//map.set("href", "https://pure-chamber-3304.herokuapp.com/"); //TODO: Replace this
-		map.set("template", notif.getMessage());
-		facebook.post(objectId, "notifications", map);
+		//Deactivated after update to Spring Social Facebook 2.0
+//		Person target = notif.getTarget();
+//		String objectId = target.getConnection().get(0).getProviderUserId();
+//		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+//		map.set("access_token", "549842908460582|ZQXpneLdsiXpC5hM8ZQxrPlMmEQ"); //TODO: Put this in .properties file
+//		//map.set("href", "https://pure-chamber-3304.herokuapp.com/"); //TODO: Replace this
+//		map.set("template", notif.getMessage());
+//		facebook. post(objectId, "notifications", map);
 	}
 
 	public void sendNotification(NotificationInteraction notif, boolean notifyFacebook){
