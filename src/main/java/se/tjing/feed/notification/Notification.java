@@ -1,5 +1,6 @@
 package se.tjing.feed.notification;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -8,36 +9,95 @@ import javax.persistence.MappedSuperclass;
 
 import se.tjing.common.BaseEntity;
 import se.tjing.common.TjingEntity;
+import se.tjing.interaction.Interaction;
+import se.tjing.itemrequest.ItemRequest;
+import se.tjing.membership.Membership;
 import se.tjing.user.Person;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 
-@MappedSuperclass
-public abstract class Notification<T extends TjingEntity> extends BaseEntity {
-	//This class could be better, but unfortunately Hibernate doesn't seem to allow inheritance and generics at the same time like that. Fuck you Hibernate!
+@Entity
+@JsonInclude(Include.NON_NULL)
+public class Notification extends BaseEntity {
 	
-	//public static final String NOTIFICATION_TYPE = "notif_type";
-	
-	@JsonProperty
-	public abstract String getNotificationType();
+	private String type = "generic";
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	Integer id;
 	
 	@ManyToOne
-	protected Person target;
+	private Person target;
 	
-	protected String message;
+	private String message;
 	
 	public Notification(){
 		
 	}
 	
-	@JsonProperty
-	public abstract T getEvent();
+	public Notification(Membership membership, Person target, String message){
+		this.setMembership(membership);
+		this.message = message;
+		this.target = target;
+	}
+	
+	public Notification(Interaction interaction, Person target, String message){
+		this.setInteraction(interaction);
+		this.message = message;
+		this.target = target;
+	}
+	
+	public Notification(ItemRequest itemrequest, Person target, String message){
+		this.setItemrequest(itemrequest);
+		this.message = message;
+		this.target = target;
+	}
+	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public Membership getMembership() {
+		return membership;
+	}
+
+	public void setMembership(Membership membership) {
+		this.membership = membership;
+		this.type = Membership.class.getTypeName();
+	}
+
+	public Interaction getInteraction() {
+		return interaction;
+	}
+
+	public void setInteraction(Interaction interaction) {
+		this.interaction = interaction;
+		this.type = Interaction.class.getTypeName();
+	}
+
+	public ItemRequest getItemrequest() {
+		return itemrequest;
+	}
+
+	public void setItemrequest(ItemRequest itemrequest) {
+		this.itemrequest = itemrequest;
+		this.type = ItemRequest.class.getTypeName();
+	}
+
+	@ManyToOne
+	private Membership membership;
+	@ManyToOne
+	private Interaction interaction;
+	@ManyToOne
+	private ItemRequest itemrequest;
 
 	public Person getTarget() {
 		return target;

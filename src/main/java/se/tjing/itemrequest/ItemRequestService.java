@@ -7,14 +7,13 @@ import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.mysema.query.jpa.impl.JPAQuery;
-
 import se.tjing.feed.NotificationService;
-import se.tjing.feed.notification.NotificationItemRequest;
-import se.tjing.pool.Pool;
+import se.tjing.feed.notification.Notification;
 import se.tjing.pool.PoolService;
 import se.tjing.user.Person;
 import se.tjing.user.PersonService;
+
+import com.mysema.query.jpa.impl.JPAQuery;
 
 @Service
 public class ItemRequestService {
@@ -52,7 +51,7 @@ public class ItemRequestService {
 		List<Person> targets = personService.getVisibleUsers(fullRequest.getUser());
 		
 		for (Person target:targets){
-			notifService.sendNotification(new NotificationItemRequest(target, fullRequest), true);
+			notifService.sendNotification(new Notification(fullRequest, target, "Someone needs a thing"), true);
 		}
 	}
 

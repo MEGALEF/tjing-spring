@@ -8,20 +8,9 @@ import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
-import se.tjing.common.TjingEntity;
 import se.tjing.feed.notification.Notification;
-import se.tjing.feed.notification.NotificationInteraction;
-import se.tjing.feed.notification.NotificationItemRequest;
-import se.tjing.feed.notification.NotificationMembership;
-import se.tjing.feed.notification.QNotificationInteraction;
-import se.tjing.feed.notification.QNotificationItemRequest;
-import se.tjing.feed.notification.QNotificationMembership;
-import se.tjing.feed.repositories.NInteractionRepository;
-import se.tjing.feed.repositories.NItemRequestRepository;
-import se.tjing.feed.repositories.NMembershipRepository;
+import se.tjing.feed.notification.QNotification;
 import se.tjing.pool.PoolService;
 import se.tjing.user.Person;
 
@@ -40,39 +29,20 @@ public class NotificationService {
 	Facebook facebook;
 	
 	@Autowired
-	NInteractionRepository nInteractionRepo;
+	NotificationRepository notifRepo;
 	
-	@Autowired
-	NMembershipRepository nMembershipRepo;
+	public List<Notification> getFeed(Person currentUser) {
+		JPAQuery query = new JPAQuery(em);
+		List<Notification> result = new ArrayList<Notification>();
 	
-	@Autowired
-	NItemRequestRepository nItemReqRepo;
-	
-	public List<Notification<? extends TjingEntity>> getFeed(Person currentUser) {
-		JPAQuery interquery = new JPAQuery(em);
-		JPAQuery memberquery = new JPAQuery(em);
-		JPAQuery requestquery = new JPAQuery(em);
-		List<Notification<? extends TjingEntity>> result = new ArrayList<Notification<? extends TjingEntity>>();
-		
-		//Membership requests
-		QNotificationMembership membnot = QNotificationMembership.notificationMembership;
-		memberquery.from(membnot).where(membnot.target.eq(currentUser));
-		result.addAll(memberquery.list(membnot));
-		
-		//Interaction change notifications & requests to borrow stuff
-		QNotificationInteraction internot = QNotificationInteraction.notificationInteraction;
-		interquery.from(internot).where(internot.target.eq(currentUser));
-		result.addAll(interquery.list(internot));
-		
-		//Item requests
-		QNotificationItemRequest reqnot = QNotificationItemRequest.notificationItemRequest;
-		requestquery.from(reqnot).where(reqnot.target.eq(currentUser));
-		result.addAll(requestquery.list(reqnot));
+		QNotification notification = QNotification.notification;
+		query.from(notification).where(notification.target.eq(currentUser));
+		result.addAll(query.list(notification));
 		
 		return result;
 	}
 	
-	private void sendFacebookNotification(Notification<?> notif) {
+	private void sendFacebookNotification(Notification notif) {
 		//Deactivated after update to Spring Social Facebook 2.0
 //		Person target = notif.getTarget();
 //		String objectId = target.getConnection().get(0).getProviderUserId();
@@ -83,23 +53,8 @@ public class NotificationService {
 //		facebook. post(objectId, "notifications", map);
 	}
 
-	public void sendNotification(NotificationInteraction notif, boolean notifyFacebook){
-		nInteractionRepo.save(notif);
-		if (notifyFacebook){
-			sendFacebookNotification(notif);
-		}
-	}
-	
-
-	public void sendNotification(NotificationItemRequest notif, boolean notifyFacebook) {
-		nItemReqRepo.save(notif);
-		if (notifyFacebook){
-			sendFacebookNotification(notif);
-		}
-	}
-
-	public void sendNotification(NotificationMembership notif, boolean notifyFacebook){
-		nMembershipRepo.save(notif);
+	public void sendNotification(Notification notif, boolean notifyFacebook){
+		notifRepo.save(notif);
 		if (notifyFacebook){
 			sendFacebookNotification(notif);
 		}

@@ -9,13 +9,11 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import se.tjing.common.BaseEntity;
 import se.tjing.common.TjingEntity;
-import se.tjing.feed.notification.NotificationItemRequest;
-import se.tjing.pool.Pool;
+import se.tjing.feed.notification.Notification;
 import se.tjing.user.Person;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -26,9 +24,9 @@ public class ItemRequest extends TjingEntity {
 	
 	private String text;
 
-	@OneToMany(mappedBy="event", cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="itemrequest", cascade=CascadeType.ALL)
 	@JsonIgnore
-	private List<NotificationItemRequest> notifications;
+	private List<Notification> notifications;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -48,7 +46,7 @@ public class ItemRequest extends TjingEntity {
 		return id;
 	}
 
-	public List<NotificationItemRequest> getNotifications() {
+	public List<Notification> getNotifications() {
 		return notifications;
 	}
 
@@ -64,7 +62,7 @@ public class ItemRequest extends TjingEntity {
 		this.id = id;
 	}
 	
-	public void setNotifications(List<NotificationItemRequest> notifications) {
+	public void setNotifications(List<Notification> notifications) {
 		this.notifications = notifications;
 	}
 	

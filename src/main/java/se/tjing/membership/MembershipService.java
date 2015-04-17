@@ -3,16 +3,13 @@ package se.tjing.membership;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import se.tjing.exception.TjingException;
 import se.tjing.feed.NotificationService;
-import se.tjing.feed.notification.NotificationMembership;
-import se.tjing.feed.repositories.NMembershipRepository;
+import se.tjing.feed.notification.Notification;
 import se.tjing.pool.Pool;
 import se.tjing.pool.PoolRepository;
 import se.tjing.pool.PrivacyMode;
 import se.tjing.user.Person;
 import se.tjing.user.PersonRepository;
-import se.tjing.user.PersonService;
 
 @Service
 public class MembershipService {
@@ -46,7 +43,7 @@ public class MembershipService {
 			membership.setApproved(false);
 			membershipRepo.save(membership);
 			for (Membership member : pool.getAprovedMemberships()){
-				notifService.sendNotification(new NotificationMembership(member.getMember(), membership, "Someone applied for membership in a pool"), true);
+				notifService.sendNotification(new Notification(membership, member.getMember(), "Someone applied for membership in a pool"), true);
 			}
 			
 		} else if (PrivacyMode.OPEN.equals(pool.getPrivacy())){

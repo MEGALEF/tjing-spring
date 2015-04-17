@@ -15,7 +15,7 @@ import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import se.tjing.common.TjingEntity;
-import se.tjing.feed.notification.NotificationInteraction;
+import se.tjing.feed.notification.Notification;
 import se.tjing.item.Item;
 import se.tjing.rating.Rating;
 import se.tjing.user.Person;
@@ -36,8 +36,8 @@ public class Interaction extends TjingEntity{
 	@ManyToOne
 	private Person borrower;
 	
-	@OneToMany(mappedBy="event", cascade=CascadeType.ALL)
-	private List<NotificationInteraction> notifications;
+	@OneToMany(mappedBy="interaction", cascade=CascadeType.ALL)
+	private List<Notification> notifications;
 
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	private DateTime statusRequested;
