@@ -111,7 +111,9 @@ public class PersonService {
 		JPAQuery query = new JPAQuery(em);
 		query.from(person).leftJoin(person.memberships, membership).where(membership.pool.in(poolsQ.list(pool)));
 		
-		return query.list(person);
+		List<Person> result = query.distinct().list(person);
+		
+		return result;
 	}
 	
 	public boolean areFacebookFriends(Person a, Person b){
