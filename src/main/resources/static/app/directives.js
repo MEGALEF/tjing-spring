@@ -23,4 +23,14 @@
 			template: "<tjing-user user='interaction.borrower'></tjing-user> asked to borrow your {{interaction.item.title}}"
 		};
 	});
+
+	myApp.directive("tjingItemrequest", function(){
+		return {
+			scope: {
+				itemrequest : '='
+			},
+			restrict : "E",
+			templateUrl: "/app/templates/itemrequest.tpl.html"
+		}
+	});
 }(angular));
