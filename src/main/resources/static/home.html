@@ -9,14 +9,16 @@
     <img ng-src="{{currentUser.connection[0].imageurl}}">
     <button ng-click="signout()">Sign out</button>
   </div>
-
   <div ng-controller="FeedController">
     <h1>Notification feed</h1>
     <ul>
       <div ng-repeat="feed in feedItems"> 
         <li ng-switch="feed.type">
-          <div ng-switch-when="interaction">
+          <div ng-switch-when="INTERACTION">
             <tjing-interaction interaction="feed.interaction"></tjing-interaction>
+          </div>
+          <div ng-switch-when="ITEMREQUEST">
+            <tjing-itemrequest itemrequest="feed.itemrequest"></tjing-itemrequest>
           </div>
           <div ng-switch-default>
             {{feed.message}}

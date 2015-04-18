@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonInclude(Include.NON_NULL)
 public class Notification extends BaseEntity {
 	
-	private String type = "generic";
+	private NotificationType type = NotificationType.GENERIC;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -57,11 +57,11 @@ public class Notification extends BaseEntity {
 		this.target = target;
 	}
 	
-	public String getType() {
+	public NotificationType getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(NotificationType type) {
 		this.type = type;
 	}
 
@@ -71,7 +71,7 @@ public class Notification extends BaseEntity {
 
 	public void setMembership(Membership membership) {
 		this.membership = membership;
-		this.type = "membership";
+		this.type = NotificationType.MEMBERSHIP;
 	}
 
 	public Interaction getInteraction() {
@@ -80,7 +80,7 @@ public class Notification extends BaseEntity {
 
 	public void setInteraction(Interaction interaction) {
 		this.interaction = interaction;
-		this.type = "interaction";
+		this.type = NotificationType.INTERACTION;
 	}
 
 	public ItemRequest getItemrequest() {
@@ -89,7 +89,7 @@ public class Notification extends BaseEntity {
 
 	public void setItemrequest(ItemRequest itemrequest) {
 		this.itemrequest = itemrequest;
-		this.type = "itemrequest";
+		this.type = NotificationType.ITEMREQUEST;
 	}
 
 	@ManyToOne
