@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import se.tjing.exception.TjingException;
+import se.tjing.feed.Notification;
 import se.tjing.feed.NotificationService;
-import se.tjing.feed.notification.Notification;
 import se.tjing.item.Item;
 import se.tjing.item.ItemRepository;
 import se.tjing.item.ItemService;

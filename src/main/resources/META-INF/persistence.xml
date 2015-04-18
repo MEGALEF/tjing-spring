@@ -13,7 +13,7 @@
    	<class>se.tjing.rating.Rating</class>
    	<class>se.tjing.itemrequest.ItemRequest</class>
    	
-   	<class>se.tjing.feed.notification.Notification</class>
+   	<class>se.tjing.feed.Notification</class>
    	<class>se.tjing.feed.InteractionNotification</class>
    	<class>se.tjing.feed.MembershipNotification</class>
    	<class>se.tjing.feed.ItemRequestNotification</class>

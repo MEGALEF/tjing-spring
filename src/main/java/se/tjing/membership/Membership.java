@@ -14,7 +14,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import se.tjing.common.TjingEntity;
-import se.tjing.feed.notification.Notification;
+import se.tjing.feed.Notification;
 import se.tjing.pool.Pool;
 import se.tjing.user.Person;
 

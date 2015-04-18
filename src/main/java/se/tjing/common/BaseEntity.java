@@ -12,7 +12,7 @@ import javax.persistence.Version;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
-import se.tjing.feed.notification.Notification;
+import se.tjing.feed.Notification;
 import se.tjing.user.Person;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

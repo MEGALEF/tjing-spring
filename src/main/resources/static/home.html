@@ -5,21 +5,27 @@
 </head>
 <body ng-app="tjingApp">
   <div ng-controller="UserController">
-    <h1>Welcome, {{currentUser.firstName}}!</h1>
+    <h1>Welcome, <tjing-user user="currentUser"/>!</h1>
     <img ng-src="{{currentUser.connection[0].imageurl}}">
   </div>
   <div ng-controller="FeedController">
     <h1>Notification feed</h1>
     <ul>
       <div ng-repeat="feed in feedItems"> 
-        <li>
-          {{feed.message}}
+        <li ng-switch="feed.type">
+          <div ng-switch-when="interaction">
+            <tjing-interaction interaction="feed.interaction"></tjing-interaction>
+          </div>
+          <div ng-switch-default>
+            {{feed.message}}
+          </div>
         </li>
       </div>
     </ul>
   </div>
   <div ng-controller="ItemRequestController">
     <h1>My item requests</h1>
+    <div ng-hide="myRequests && myRequests.length>0">You haven't made any requests</div>
     <ul>
       <li ng-repeat="request in myRequests">
         You asked your pools for a {{request.text}}
@@ -37,7 +43,7 @@
     <h1>Available items</h1>
     <ul>
       <li ng-repeat="item in items">
-        {{item.owner.firstName}} {{item.title}}
+        <tjing-user user="item.owner"></tjing-user>'s {{item.title}}
         <button type="button" title="Request" ng-click="requestItem(item)">Request
         </button>
       </li>
@@ -61,7 +67,7 @@
             <button ng-click="unshareItem(share)">Unshare</button>
           </li>
         </ul>
-        <div ng-show="item.activeInteraction">Borrowed by {{item.activeInteraction.borrower.firstName}} on {{item.activeInteraction.statusHandedOver | date}}</div>
+        <div ng-show="item.activeInteraction">Borrowed by <tjing-user user="item.activeInteraction.borrower"/> on {{item.activeInteraction.statusHandedOver | date}}</div>
         <form role="form" ng-submit="shareItem(item, poolToShareTo)">
           <button type="submit" ng-disabled="!poolToShareTo">share to</button> 
           <select ng-options="pool.title for pool in mypools" ng-model ="poolToShareTo" >
@@ -88,7 +94,7 @@
     <ul>
       <li ng-repeat="item in borroweditems">
         <div>
-          {{item.title}}, borrowed from {{item.owner.firstName}} on {{item.activeInteraction.statusHandedOver | date}}
+          {{item.title}}, borrowed from <tjing-user user="item.owner"/> on {{item.activeInteraction.statusHandedOver | date}}
         </div>
       </li>
     </li>
@@ -137,7 +143,7 @@
     <h1>Outgoing requests</h1>
     <ul>
       <li ng-repeat="request in outgoingrequests">
-        You asked {{request.item.owner.firstName}} for his {{request.item.title}} 
+        You asked <tjing-user user="request.item.owner"></tjing-user> for his {{request.item.title}} 
         <div ng-show="request.statusAccepted">(Accepted on {{request.statusAccepted | date}})
           <button  ng-hide="request.statusHandedOver" ng-click="confirmHandover(request)">
             Confirm handover
@@ -151,9 +157,7 @@
     <ul>
       <li ng-repeat="request in incomingrequests">
 
-        {{request.borrower.firstName}}
-        
-        wants to borrow your {{request.item.title}}
+        <tjing-interaction interaction="request"></tjing-interaction>
         <div ng-hide="request.statusAccepted">
           <button ng-disabled="request.statusAccepted" ng-click="acceptRequest(request)">Accept</button>
           <button ng-disabled="request.statusAccepted" ng-click="denyRequest(request)">Deny</button>
@@ -176,5 +180,6 @@
   <script type="text/javascript" src="./app/app.js"></script>
   <script type="text/javascript" src="./app/controllers.js"></script>
   <script type="text/javascript" src="./app/services.js"></script>
+  <script type="text/javascript" src="./app/directives.js"></script>
 </body>
 </html>

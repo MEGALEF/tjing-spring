@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import se.tjing.common.BaseEntity;
-import se.tjing.feed.notification.Notification;
 import se.tjing.user.PersonService;
 
 @RestController

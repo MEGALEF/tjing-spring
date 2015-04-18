@@ -11,7 +11,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 
-import se.tjing.feed.notification.Notification;
+import se.tjing.feed.Notification;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

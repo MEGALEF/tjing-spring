@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.stereotype.Service;
 
-import se.tjing.feed.notification.Notification;
-import se.tjing.feed.notification.QNotification;
 import se.tjing.pool.PoolService;
 import se.tjing.user.Person;
 

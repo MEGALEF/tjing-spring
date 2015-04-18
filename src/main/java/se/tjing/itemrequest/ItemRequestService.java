@@ -7,8 +7,8 @@ import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import se.tjing.feed.Notification;
 import se.tjing.feed.NotificationService;
-import se.tjing.feed.notification.Notification;
 import se.tjing.pool.PoolService;
 import se.tjing.user.Person;
 import se.tjing.user.PersonService;

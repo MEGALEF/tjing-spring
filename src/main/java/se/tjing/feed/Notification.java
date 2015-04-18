@@ -1,4 +1,4 @@
-package se.tjing.feed.notification;
+package se.tjing.feed;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -71,7 +71,7 @@ public class Notification extends BaseEntity {
 
 	public void setMembership(Membership membership) {
 		this.membership = membership;
-		this.type = Membership.class.getTypeName();
+		this.type = "membership";
 	}
 
 	public Interaction getInteraction() {
@@ -80,7 +80,7 @@ public class Notification extends BaseEntity {
 
 	public void setInteraction(Interaction interaction) {
 		this.interaction = interaction;
-		this.type = Interaction.class.getTypeName();
+		this.type = "interaction";
 	}
 
 	public ItemRequest getItemrequest() {
@@ -89,7 +89,7 @@ public class Notification extends BaseEntity {
 
 	public void setItemrequest(ItemRequest itemrequest) {
 		this.itemrequest = itemrequest;
-		this.type = ItemRequest.class.getTypeName();
+		this.type = "itemrequest";
 	}
 
 	@ManyToOne

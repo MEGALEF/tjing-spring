@@ -3,8 +3,8 @@ package se.tjing.membership;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import se.tjing.feed.Notification;
 import se.tjing.feed.NotificationService;
-import se.tjing.feed.notification.Notification;
 import se.tjing.pool.Pool;
 import se.tjing.pool.PoolRepository;
 import se.tjing.pool.PrivacyMode;
