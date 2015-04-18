@@ -7,7 +7,9 @@
   <div ng-controller="UserController">
     <h1>Welcome, <tjing-user user="currentUser"/>!</h1>
     <img ng-src="{{currentUser.connection[0].imageurl}}">
+    <button ng-click="signout()">Sign out</button>
   </div>
+
   <div ng-controller="FeedController">
     <h1>Notification feed</h1>
     <ul>

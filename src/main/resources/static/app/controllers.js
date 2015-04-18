@@ -184,7 +184,11 @@
         $scope.profilePicUrl = "http://graph.facebook.com/" +data.facebookId + "/picture?type=small"
       }
     });
-    $scope.profilePicUrl = "/messages/error.png"
+    $scope.profilePicUrl = "/messages/error.png";
+
+    $scope.signout = function(){
+      location.href="/signout";
+    }
   }]);
 
 
