@@ -12,6 +12,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import se.tjing.common.TjingEntity;
+import se.tjing.image.ItemPicture;
 import se.tjing.interaction.Interaction;
 import se.tjing.share.Share;
 import se.tjing.user.Person;
@@ -29,6 +30,9 @@ public class Item extends TjingEntity {
 	private String description;
 
 	private String title;
+	
+	@OneToMany(mappedBy="item")
+	private List<ItemPicture> images;
 
 	@ManyToOne
 //	@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")

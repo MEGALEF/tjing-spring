@@ -1,7 +1,14 @@
 package se.tjing.item;
 
+import java.awt.Color;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.persistence.EntityManager;
 
 import org.joda.time.DateTime;
@@ -9,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import se.tjing.exception.TjingException;
+import se.tjing.image.ItemPicture;
+import se.tjing.image.PictureRepository;
 import se.tjing.interaction.Interaction;
 import se.tjing.interaction.InteractionRepository;
 import se.tjing.interaction.QInteraction;
@@ -34,6 +43,9 @@ public class ItemService {
 	ItemRepository itemRepo;
 
 	@Autowired
+	PictureRepository picRepo;
+
+	@Autowired
 	PoolRepository poolRepo;
 
 	@Autowired
@@ -41,7 +53,7 @@ public class ItemService {
 
 	@Autowired
 	InteractionRepository interactionRepo;
-	
+
 	@Autowired
 	PersonService personService;
 
@@ -96,12 +108,12 @@ public class ItemService {
 				.leftJoin(pool.memberships, membership)
 				.where(membership.member.eq(p));
 		List<Item> result = query.list(item);
-		
+
 		List<Person> fbFriends = personService.getFacebookFriends(p);
 		JPAQuery fbquery = new JPAQuery(em);
 		fbquery.from(item).where(item.owner.in(fbFriends).and(item.fbAvailable.isTrue()));
 		result.addAll(fbquery.list(item));
-		
+
 		return result;
 	}
 
@@ -111,14 +123,14 @@ public class ItemService {
 		QPool pool = QPool.pool;
 		QMembership membership = QMembership.membership;
 		JPAQuery query = new JPAQuery(em)
-				.from(item)
-				.leftJoin(item.shares, share)
-				.leftJoin(share.pool, pool)
-				.leftJoin(pool.memberships, membership)
-				.where(membership.member.eq(person).and(
-						item.title.containsIgnoreCase(searchStr)));
+		.from(item)
+		.leftJoin(item.shares, share)
+		.leftJoin(share.pool, pool)
+		.leftJoin(pool.memberships, membership)
+		.where(membership.member.eq(person).and(
+				item.title.containsIgnoreCase(searchStr)));
 		//TODO add facebook items
-		
+
 		return query.list(item);
 	}
 
@@ -134,10 +146,10 @@ public class ItemService {
 		QItem item = QItem.item;
 		JPAQuery query = new JPAQuery(em);
 		query.from(item)
-				.leftJoin(item.interactions, interaction)
-				.where(interaction.borrower.eq(person)
-						.and(interaction.statusHandedOver.isNotNull())
-						.and(interaction.statusReturned.isNull()));
+		.leftJoin(item.interactions, interaction)
+		.where(interaction.borrower.eq(person)
+				.and(interaction.statusHandedOver.isNotNull())
+				.and(interaction.statusReturned.isNull()));
 		return query.list(item);
 	}
 
@@ -158,7 +170,7 @@ public class ItemService {
 			Integer poolId) {
 		Item item = itemRepo.findOne(itemId);
 		Pool pool = poolRepo.findOne(poolId);
-		
+
 		if (!item.getOwner().equals(currentUser)){
 			throw new TjingException("Only the item owner may do this");
 		} else {
@@ -169,9 +181,8 @@ public class ItemService {
 			for (Share res : queryresult){
 				shareRepo.delete(res);
 			}
-			
+
 			return item.getShares();
 		}
 	}
-
 }

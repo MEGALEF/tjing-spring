@@ -37,8 +37,6 @@ public abstract class BaseEntity {
 	@Version
 	@JsonIgnore
 	private int version;
-	
-	
 
 	public DateTime getCreationTime() {
 		return creationTime;
@@ -49,8 +47,6 @@ public abstract class BaseEntity {
 	public DateTime getModificationTime() {
 		return modificationTime;
 	}
-
-	
 
 	public long getVersion() {
 		return version;

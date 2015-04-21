@@ -1,9 +1,14 @@
 package se.tjing.item;
 
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,7 +17,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import se.tjing.exception.TjingException;
+import se.tjing.image.ImageService;
+import se.tjing.image.ItemPicture;
 import se.tjing.interaction.Interaction;
 import se.tjing.share.Share;
 import se.tjing.user.Person;
@@ -27,6 +36,9 @@ public class ItemController {
 
 	@Autowired
 	PersonService personService;
+	
+	@Autowired
+	ImageService imageService;
 
 	//TODO Refactor to REST
 	@RequestMapping(value = "/borrowed", method = RequestMethod.GET)
@@ -100,5 +112,23 @@ public class ItemController {
 		List<Item> result = itemService.searchAvailableItems(
 				personService.getCurrentUser(), searchString);
 		return new ResponseEntity<List<Item>>(result, null, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/{itemId}/image" ,method=RequestMethod.POST)
+	public ResponseEntity<ItemPicture> handleFileUpload(@PathVariable Integer itemId, @RequestParam("file") MultipartFile file){
+		Integer MAX_SIZE = 512000;
+		if (file.isEmpty() || file.getSize()>MAX_SIZE){
+			throw new TjingException("Image error");
+		} else {
+			byte[] bytes;
+			try {
+				bytes = file.getBytes();
+			} catch (IOException e) {
+				throw new TjingException(e.getMessage());
+			}
+			ItemPicture image = imageService.saveImage(itemId, bytes, personService.getCurrentUser());
+			return new ResponseEntity<ItemPicture>(image, null, HttpStatus.CREATED);
+		}
+		
 	}
 }
