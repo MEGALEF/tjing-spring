@@ -29,6 +29,16 @@ public class Membership extends TjingEntity {
 	@ManyToOne
 	private Person member;
 	
+	private Boolean hidden;
+	
+	public Boolean getHidden() {
+		return hidden;
+	}
+
+	public void setHidden(Boolean hidden) {
+		this.hidden = hidden;
+	}
+
 	@OneToMany(mappedBy="membership", cascade=CascadeType.ALL)
 	private List<Notification> notifications;
 	
