@@ -29,7 +29,9 @@ public class Membership extends TjingEntity {
 	@ManyToOne
 	private Person member;
 	
-	private Boolean hidden;
+	private Boolean hidden = false;
+	
+	private Boolean administrator = false;
 	
 	public Boolean getHidden() {
 		return hidden;
@@ -104,5 +106,13 @@ public class Membership extends TjingEntity {
 
 	public void setApproved(Boolean approved) {
 		this.approved = approved;
+	}
+
+	public Boolean getAdministrator() {
+		return administrator;
+	}
+
+	public void setAdministrator(Boolean administrator) {
+		this.administrator = administrator;
 	}
 }
