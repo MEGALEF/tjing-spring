@@ -1,8 +1,13 @@
 package se.tjing.membership;
 
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.mysema.query.jpa.impl.JPAQuery;
+
+import se.tjing.exception.TjingException;
 import se.tjing.feed.Notification;
 import se.tjing.feed.NotificationService;
 import se.tjing.pool.Pool;
@@ -25,6 +30,9 @@ public class MembershipService {
 	
 	@Autowired
 	NotificationService notifService;
+	
+	@Autowired 
+	EntityManager em;
 
 	/**
 	 * Attempts to join a Pool by adding a new membership.
@@ -32,8 +40,11 @@ public class MembershipService {
 	 * @return
 	 */
 	public Membership addMembership(Person currentUser, AddMembership addMembership) {
-		// TODO: Moar business logic.
 		Pool pool = poolRepo.findOne(addMembership.poolId);
+		
+		if (findMembership(currentUser, pool) != null){
+			throw new TjingException("User is already a member of that pool");
+		}
 		
 		Membership membership = new Membership(currentUser, pool);
 		
@@ -52,6 +63,15 @@ public class MembershipService {
 		}
 		
 		return membership;
+	}
+
+	private Membership findMembership(Person currentUser, Pool pool) {
+		JPAQuery query = new JPAQuery(em);
+		QMembership membership = QMembership.membership;
+		
+		query.from(membership).where(membership.member.eq(currentUser).and(membership.pool.eq(pool)));
+		
+		return query.singleResult(membership);
 	}
 
 }
