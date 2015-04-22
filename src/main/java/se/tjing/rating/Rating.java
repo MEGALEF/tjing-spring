@@ -9,6 +9,7 @@ import javax.persistence.OneToOne;
 import se.tjing.common.BaseEntity;
 import se.tjing.common.TjingEntity;
 import se.tjing.interaction.Interaction;
+import se.tjing.user.Person;
 
 @Entity
 public class Rating extends TjingEntity {
@@ -19,6 +20,9 @@ public class Rating extends TjingEntity {
 
 	@OneToOne
 	private Interaction interaction;
+	
+	private RatingGrade grade;
+	
 	private String text;
 
 	public Rating(AddRating newRating) {
@@ -33,7 +37,7 @@ public class Rating extends TjingEntity {
 	public Integer getId() {
 		return id;
 	}
-
+	
 	public void setInteraction(Interaction interaction) {
 		this.interaction = interaction;
 	}
@@ -53,5 +57,13 @@ public class Rating extends TjingEntity {
 
 	public String getText() {
 		return text;
+	}
+
+	public RatingGrade getGrade() {
+		return grade;
+	}
+
+	public void setGrade(RatingGrade grade) {
+		this.grade = grade;
 	}
 }
