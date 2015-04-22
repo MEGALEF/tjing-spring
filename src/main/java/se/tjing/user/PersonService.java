@@ -109,7 +109,10 @@ public class PersonService {
 		.where(membership.member.eq(current).and(membership.approved.isTrue()));
 		
 		JPAQuery query = new JPAQuery(em);
-		query.from(person).leftJoin(person.memberships, membership).where(membership.pool.in(poolsQ.list(pool)));
+		
+		// Get all users visible to the current user. Not including the current user.
+		query.from(person).leftJoin(person.memberships, membership)
+		.where(membership.pool.in(poolsQ.list(pool)).and(membership.member.ne(current)));
 		
 		List<Person> result = query.distinct().list(person);
 		

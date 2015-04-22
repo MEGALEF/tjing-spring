@@ -41,12 +41,12 @@ public class ItemRequestService {
 		ItemRequest fullRequest = new ItemRequest(request, currentUser);
 		itemreqRepo.save(fullRequest);
 		
-		notifyUserPools(fullRequest);
+		notifyUserPools(fullRequest, currentUser);
 		
 		return fullRequest;
 	}
 
-	private void notifyUserPools(ItemRequest fullRequest) {
+	private void notifyUserPools(ItemRequest fullRequest, Person user) {
 		//TODO: Target to users pools instead once #20 is done
 		List<Person> targets = personService.getVisibleUsers(fullRequest.getUser());
 		
