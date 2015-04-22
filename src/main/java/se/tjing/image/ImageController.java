@@ -28,13 +28,10 @@ public class ImageController {
 	
 	@Autowired
 	PersonService personService;
-
-	
 	
 	@RequestMapping(value ="{imgId}", method=RequestMethod.GET, produces=MediaType.IMAGE_JPEG_VALUE)
 	public ResponseEntity<byte[]> getImage(@PathVariable Integer imgId){
 		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.IMAGE_JPEG);
 		byte[] imageData = imageService.getImage(imgId);
 		return new ResponseEntity<byte[]>(imageData, headers, HttpStatus.OK);
 	}
