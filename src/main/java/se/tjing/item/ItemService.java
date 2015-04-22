@@ -124,12 +124,15 @@ public class ItemService {
 		}
 		QShare share = QShare.share;
 		QPool pool = QPool.pool;
+		QItem itemtable = QItem.item;
+		
 		QMembership membership = QMembership.membership;
 		
 		// "Is there a group in which the user is a member to which the item is shared?"
 		JPAQuery query = new JPAQuery(em).from(share)
 				.leftJoin(share.pool, pool)
 				.leftJoin(pool.memberships, membership)
+				.leftJoin(share.item, itemtable)
 				.where(itemIsAvailableViaPools(user));
 		return query.exists();
 	}
