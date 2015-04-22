@@ -132,7 +132,7 @@ public class PersonService {
 		return false;
 	}
 
-	public List<Person> getFacebookFriends(Person p) {	
+	public List<Person> getUsersFacebookFriends(Person p) {	
 		List<UserConnection> connections = p.getConnection();
 		
 		if (connections!=null && !connections.isEmpty()){

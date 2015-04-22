@@ -32,6 +32,7 @@ import se.tjing.user.Person;
 import se.tjing.user.PersonService;
 
 import com.mysema.query.jpa.impl.JPAQuery;
+import com.mysema.query.types.expr.BooleanExpression;
 
 @Service
 public class ItemService {
@@ -63,12 +64,27 @@ public class ItemService {
 		return item;
 	}
 
-	public Share shareToGroup(Integer itemId, Integer poolId) {
-		Pool pool = poolRepo.findOne(poolId);
-		Item item = itemRepo.findOne(itemId);
-		// TODO: Business logic. Look for already existing shares
-		Share share = new Share(item, pool);
-		return shareRepo.save(share);
+	public List<Item> getAvailableItemsToUser(Person user) {
+		QItem item = QItem.item;
+		QShare share = QShare.share;
+		QPool pool = QPool.pool;
+		QMembership membership = QMembership.membership;
+		
+		//"Get all items shared with groups I am a member of and are not owned by me"
+		JPAQuery query = new JPAQuery(em).from(item)
+				.leftJoin(item.shares, share).leftJoin(share.pool, pool)
+				.leftJoin(pool.memberships, membership)
+				.where(itemIsAvailableViaPools(user));
+		List<Item> result = query.distinct().list(item);
+
+		//Get facebook shared items
+		List<Person> fbFriends = personService.getUsersFacebookFriends(user);
+		JPAQuery fbquery = new JPAQuery(em);
+		fbquery.from(item).where(item.owner.in(fbFriends).and(item.fbAvailable.isTrue()));
+		
+		result.addAll(fbquery.list(item));
+
+		return result;
 	}
 
 	public Item getItem(Person person, Integer itemId) {
@@ -78,67 +94,6 @@ public class ItemService {
 		} else {
 			return result;
 		}
-	}
-
-	public Boolean isItemAvailableToUser(Person person, Item item) {
-		if (item.getOwner().equals(person)) {
-			throw new TjingException("It's your own thing, dummy!");
-		}
-		if (item.getFbAvailable()){
-			return personService.areFacebookFriends(person, item.getOwner());
-		}
-		QShare share = QShare.share;
-		QPool pool = QPool.pool;
-		QMembership membership = QMembership.membership;
-		// "Is there a group in which the user is a member to which the item is shared?"
-		JPAQuery query = new JPAQuery(em).from(share)
-				.leftJoin(share.pool, pool)
-				.leftJoin(pool.memberships, membership)
-				.where(membership.member.eq(person).and(share.item.eq(item)));
-		return query.exists();
-	}
-
-	public List<Item> getAvailableItemsToUser(Person p) {
-		QItem item = QItem.item;
-		QShare share = QShare.share;
-		QPool pool = QPool.pool;
-		QMembership membership = QMembership.membership;
-		JPAQuery query = new JPAQuery(em).from(item)
-				.leftJoin(item.shares, share).leftJoin(share.pool, pool)
-				.leftJoin(pool.memberships, membership)
-				.where(membership.member.eq(p));
-		List<Item> result = query.list(item);
-
-		List<Person> fbFriends = personService.getFacebookFriends(p);
-		JPAQuery fbquery = new JPAQuery(em);
-		fbquery.from(item).where(item.owner.in(fbFriends).and(item.fbAvailable.isTrue()));
-		result.addAll(fbquery.list(item));
-
-		return result;
-	}
-
-	public List<Item> searchAvailableItems(Person person, String searchStr) {
-		QItem item = QItem.item;
-		QShare share = QShare.share;
-		QPool pool = QPool.pool;
-		QMembership membership = QMembership.membership;
-		JPAQuery query = new JPAQuery(em)
-		.from(item)
-		.leftJoin(item.shares, share)
-		.leftJoin(share.pool, pool)
-		.leftJoin(pool.memberships, membership)
-		.where(membership.member.eq(person).and(
-				item.title.containsIgnoreCase(searchStr)));
-		//TODO add facebook items
-
-		return query.list(item);
-	}
-
-	public List<Item> getUsersItems(Person user) {
-		QItem item = QItem.item;
-		JPAQuery query = new JPAQuery(em);
-		query.from(item).where(item.owner.eq(user));
-		return query.list(item);
 	}
 
 	public List<Item> getUsersBorrowedItems(Person person) {
@@ -153,6 +108,39 @@ public class ItemService {
 		return query.list(item);
 	}
 
+	public List<Item> getUsersItems(Person user) {
+		QItem item = QItem.item;
+		JPAQuery query = new JPAQuery(em);
+		query.from(item).where(item.owner.eq(user));
+		return query.list(item);
+	}
+	
+	public Boolean isItemAvailableToUser(Person user, Item item) {
+		if (item.getOwner().equals(user)) {
+			throw new TjingException("It's your own thing, dummy!");
+		}
+		if (item.getFbAvailable()){
+			return personService.areFacebookFriends(user, item.getOwner());
+		}
+		QShare share = QShare.share;
+		QPool pool = QPool.pool;
+		QMembership membership = QMembership.membership;
+		
+		// "Is there a group in which the user is a member to which the item is shared?"
+		JPAQuery query = new JPAQuery(em).from(share)
+				.leftJoin(share.pool, pool)
+				.leftJoin(pool.memberships, membership)
+				.where(itemIsAvailableViaPools(user));
+		return query.exists();
+	}
+
+	private BooleanExpression itemIsAvailableViaPools(Person user){
+		QMembership membership = QMembership.membership;
+		QItem item = QItem.item;
+		
+		return membership.member.eq(user).and(membership.approved.isTrue()).and(item.owner.ne(user));
+	}
+
 	public void removeItem(Person user, Integer itemId) {
 		Item item = itemRepo.findOne(itemId);
 		if (!item.getOwner().equals(user)){
@@ -164,6 +152,31 @@ public class ItemService {
 			interactionRepo.delete(item.getInteractions());
 			itemRepo.delete(item);
 		}
+	}
+
+	public List<Item> searchAvailableItems(Person person, String searchStr) {
+		QItem item = QItem.item;
+		QShare share = QShare.share;
+		QPool pool = QPool.pool;
+		QMembership membership = QMembership.membership;
+		JPAQuery query = new JPAQuery(em)
+		.from(item)
+		.leftJoin(item.shares, share)
+		.leftJoin(share.pool, pool)
+		.leftJoin(pool.memberships, membership)
+		.where(itemIsAvailableViaPools(person)
+				.and(item.title.containsIgnoreCase(searchStr)));
+		//TODO add facebook items
+
+		return query.list(item);
+	}
+
+	public Share shareToGroup(Integer itemId, Integer poolId) {
+		Pool pool = poolRepo.findOne(poolId);
+		Item item = itemRepo.findOne(itemId);
+		// TODO: Business logic. Look for already existing shares
+		Share share = new Share(item, pool);
+		return shareRepo.save(share);
 	}
 
 	public List<Share> unshareItemFromPool(Person currentUser, Integer itemId,
