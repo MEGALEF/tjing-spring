@@ -53,7 +53,7 @@ public class MembershipService {
 				|| PrivacyMode.SECRET.equals(pool.getPrivacy())) {
 			membership.setApproved(false);
 			membershipRepo.save(membership);
-			for (Membership member : pool.getAprovedMemberships()){
+			for (Membership member : pool.getApprovedMemberships()){
 				notifService.sendNotification(new Notification(membership, member.getMember(), "Someone applied for membership in a pool"), true);
 			}
 			

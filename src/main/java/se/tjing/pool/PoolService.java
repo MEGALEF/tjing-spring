@@ -21,7 +21,10 @@ import se.tjing.share.Share;
 import se.tjing.share.ShareRepository;
 import se.tjing.user.Person;
 
+import com.mysema.query.jpa.JPASubQuery;
 import com.mysema.query.jpa.impl.JPAQuery;
+import com.mysema.query.types.Order;
+import com.mysema.query.types.OrderSpecifier;
 
 @Service
 public class PoolService {
@@ -225,16 +228,18 @@ public class PoolService {
 		}
 	}
 
-
-
 	public List<Membership> getUserMemberships(Person user) {
 		JPAQuery query = new JPAQuery(em);
 		QMembership membership = QMembership.membership;
-		query.from(membership).where(membership.member.eq(user).and(membership.approved.isTrue()));
+		QPool pool = QPool.pool;
+		
+		OrderSpecifier<Integer> order = new OrderSpecifier<Integer>(Order.DESC, pool.memberships.size());
+		
+		query.from(membership).leftJoin(membership.pool, pool)
+		.where(membership.member.eq(user).and(membership.approved.isTrue())).orderBy(order);
+		
 		return query.list(membership);
 	}
-
-
 
 	public List<Pool> importFacebookGroups(Person currentUser) {
 		if (!facebook.isAuthorized()){

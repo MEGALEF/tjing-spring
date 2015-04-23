@@ -26,7 +26,6 @@ public class PoolController {
 	@Autowired
 	PersonService personService;
 
-	
 	private ResponseEntity<List<Pool>> getOwnPools() {
 		List<Pool> result = poolService.getUsersPools(personService
 				.getCurrentUser());
@@ -48,7 +47,7 @@ public class PoolController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<List<Pool>> listPools(@RequestParam(value="q", required=false) String searchStr, @RequestParam(value="param", required=false) String param) {
+	public ResponseEntity<List<Pool>> getPools(@RequestParam(value="q", required=false) String searchStr, @RequestParam(value="param", required=false) String param) {
 		if ("mine".equals(param)){
 			return this.getOwnPools();
 		} else if (searchStr!= null && !searchStr.isEmpty()){

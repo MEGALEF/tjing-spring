@@ -29,7 +29,7 @@ public class MembershipController {
 	MembershipService membershipService;
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public ResponseEntity<List<Membership>> getPoolRequests(@RequestParam(value="pending", defaultValue="false") Boolean pending) {
+	public ResponseEntity<List<Membership>> getMemberships(@RequestParam(value="pending", defaultValue="false") Boolean pending) {
 		List<Membership> result; 
 		if (pending) {
 			result = poolService.getPendingMemberships(personService.getCurrentUser());

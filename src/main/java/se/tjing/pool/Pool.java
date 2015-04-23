@@ -73,7 +73,7 @@ public class Pool extends TjingEntity {
 	}
 	
 	@JsonIgnore
-	public List<Membership> getAprovedMemberships(){
+	public List<Membership> getApprovedMemberships(){
 		List<Membership> activemembers = new ArrayList<Membership>();
 		for (Membership membership : this.memberships){
 			if (membership.getApproved()==true){
