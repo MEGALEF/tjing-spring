@@ -39,27 +39,11 @@ public class ItemController {
 	
 	@Autowired
 	ImageService imageService;
-
-	//TODO Refactor to REST
-	@RequestMapping(value = "/borrowed", method = RequestMethod.GET)
-	public ResponseEntity<List<Item>> getBorrowedItems() {
-		List<Item> result = itemService.getUsersBorrowedItems(personService
-				.getCurrentUser());
-		return new ResponseEntity<List<Item>>(result, null, HttpStatus.OK);
-	}
 	
 	@RequestMapping(value="{itemId}", method = RequestMethod.DELETE)
 	public ResponseEntity<Object> deleteItem(@PathVariable Integer itemId){
 		itemService.removeItem(personService.getCurrentUser(), itemId);
 		return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
-	}
-
-	//TODO Refactor to REST
-	@RequestMapping(value = "/owned", method = RequestMethod.GET)
-	public ResponseEntity<List<Item>> getOwnItems() {
-		Person currentUser = personService.getCurrentUser();
-		List<Item> result = itemService.getUsersItems(currentUser);
-		return new ResponseEntity<List<Item>>(result, null, HttpStatus.OK);
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
@@ -73,14 +57,17 @@ public class ItemController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<Item>> getItems(@RequestParam(value = "param", required=false) String param) {
+		List<Item> result;
+		Person currentUser = personService.getCurrentUser();
 		if ("owned".equals(param)){
-			return this.getOwnItems();
+			result = itemService.getUsersItems(currentUser);
 		} else if ("borrowed".equals(param)){
-			return this.getBorrowedItems();
+			result = itemService.getUsersBorrowedItems(currentUser);
+		} else {
+			result = itemService.getAvailableItemsToUser(currentUser);
 		}
 		return new ResponseEntity<List<Item>>(
-				itemService.getAvailableItemsToUser(personService
-						.getCurrentUser()), null, HttpStatus.OK);
+				result, null, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{itemId}", method = RequestMethod.GET)
@@ -90,25 +77,8 @@ public class ItemController {
 				itemService.getItem(currentUser, itemId), null, HttpStatus.OK);
 	}
 
-	//TODO Delete this
-	@Deprecated
-	@RequestMapping(value = "/{itemId}/sharetopool/{poolId}", method = RequestMethod.POST)
-	public ResponseEntity<Share> shareItemToGroup(@PathVariable Integer itemId,
-			@PathVariable Integer poolId) {
-		return new ResponseEntity<Share>(itemService.shareToGroup(itemId,
-				poolId), null, HttpStatus.CREATED); //TODO: Only item owner should be allowed to do this
-	}
-	
-	//TODO Delete this
-	@Deprecated
-	@RequestMapping(value="/{itemId}/unsharefrompool/{poolId}", method = RequestMethod.DELETE)
-	public ResponseEntity<List<Share>> unshareItemFromPool(@PathVariable Integer itemId, @PathVariable Integer poolId){
-		List<Share> result = itemService.unshareItemFromPool(personService.getCurrentUser(), itemId, poolId);
-		return new ResponseEntity<List<Share>>(result, null, HttpStatus.ACCEPTED);
-	}
-
 	@RequestMapping(value = "/search/{searchString}", method = RequestMethod.GET)
-	public ResponseEntity<List<Item>> search(@PathVariable String searchString) {
+	public ResponseEntity<List<Item>> searchItems(@PathVariable String searchString) {
 		List<Item> result = itemService.searchAvailableItems(
 				personService.getCurrentUser(), searchString);
 		return new ResponseEntity<List<Item>>(result, null, HttpStatus.OK);
