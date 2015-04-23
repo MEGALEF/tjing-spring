@@ -31,6 +31,7 @@ import org.springframework.social.connect.web.SignInAdapter;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.web.context.request.NativeWebRequest;
 
+import se.tjing.pool.PoolService;
 import se.tjing.user.PersonService;
 
 public class SimpleSignInAdapter implements SignInAdapter {
@@ -42,6 +43,9 @@ public class SimpleSignInAdapter implements SignInAdapter {
 
 	@Autowired
 	PersonService personService;
+	
+	@Autowired
+	PoolService poolService;
 
 	@Inject
 	public SimpleSignInAdapter(RequestCache requestCache) {
@@ -59,6 +63,10 @@ public class SimpleSignInAdapter implements SignInAdapter {
 		// location.
 
 		SignInUtils.signin(userObj);
+		
+		if(facebook.isAuthorized()){
+			poolService.importFacebookGroups(personService.getCurrentUser());
+		} 
 		
 		return extractOriginalUrl(request);
 	}
