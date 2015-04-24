@@ -87,7 +87,7 @@ public class ItemService {
 		return result;
 	}
 
-	public Item getItem(Person person, Integer itemId) {
+	public Item getOtherUsersItem(Person person, Integer itemId) {
 		Item result = itemRepo.findOne(itemId);
 		if (result == null || !isItemAvailableToUser(person, result)) {
 			throw new TjingException("Item does not exist or is not available");
@@ -174,31 +174,13 @@ public class ItemService {
 		return query.list(item);
 	}
 
-	public Share shareToGroup(Integer itemId, Integer poolId) {
-		Pool pool = poolRepo.findOne(poolId);
-		Item item = itemRepo.findOne(itemId);
-		// TODO: Business logic. Look for already existing shares
-		Share share = new Share(item, pool);
-		return shareRepo.save(share);
-	}
-
-	public List<Share> unshareItemFromPool(Person currentUser, Integer itemId,
-			Integer poolId) {
-		Item item = itemRepo.findOne(itemId);
-		Pool pool = poolRepo.findOne(poolId);
-
-		if (!item.getOwner().equals(currentUser)){
-			throw new TjingException("Only the item owner may do this");
+	public Item setFbAvailable(Person currentUser, PartialFbAvailable partial) {
+		Item item = itemRepo.findOne(partial.getId());
+		if (item==null || !item.getOwner().equals(currentUser)){
+			throw new TjingException("Only the item owner is allowed to do this");
 		} else {
-			JPAQuery query = new JPAQuery(em);
-			QShare share = QShare.share;
-			query.from(share).where(share.item.eq(item).and(share.pool.eq(pool)));
-			List<Share> queryresult = query.list(share);
-			for (Share res : queryresult){
-				shareRepo.delete(res);
-			}
-
-			return item.getShares();
+			item.setFbAvailable(partial.getFbAvailable());
+			return itemRepo.save(item);
 		}
 	}
 }

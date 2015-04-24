@@ -43,7 +43,7 @@ public class Item extends TjingEntity {
 	@JsonIgnoreProperties("item")
 	private List<Share> shares;
 	
-	@JsonIgnore
+	//@JsonIgnore
 	private Boolean fbAvailable = false;
 
 	public List<Share> getShares() {
@@ -124,6 +124,10 @@ public class Item extends TjingEntity {
 
 	public void setFbAvailable(Boolean fbAvailable) {
 		this.fbAvailable = fbAvailable;
+	}
+	
+	public boolean isOwnedBy(Person user){
+		return this.owner.equals(user);
 	}
 
 }

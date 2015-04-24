@@ -74,9 +74,11 @@
         <div ng-show="item.activeInteraction">Borrowed by <tjing-user user="item.activeInteraction.borrower"/> on {{item.activeInteraction.statusHandedOver | date}}</div>
         <form role="form" ng-submit="shareItem(item, poolToShareTo)">
           <button type="submit" ng-disabled="!poolToShareTo">share to</button> 
+
           <select ng-options="pool.title for pool in mypools" ng-model ="poolToShareTo" >
             <option value="" selected>pool</option>
           </select>
+          Available to all facebook friends: <input type="checkbox" ng-model="item.fbAvailable" ng-change="setFbAvailable(item)"></input>
         </form> 
       </li>
     </ul>     

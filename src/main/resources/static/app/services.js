@@ -51,12 +51,22 @@ var tjingServices = angular.module("tjingApp.services", ["ngResource"]);
         params : {
           id: '@id'
         }
+      },
+      setFbAvailable: {
+        method: "POST",
+        url: itemlURL + "/fbavailable"
       }
+      
     });
   }]);
 
   tjingServices.factory('Feed', ['$resource', function($resource){
     return $resource('/feed/:id', {});
+  }]);
+
+  tjingServices.factory("Share", ["$resource", function($resource){
+    var shareUrl = "/share/:id"
+    return $resource(shareUrl, {});
   }]);
 
   //Pool factory

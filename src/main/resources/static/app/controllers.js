@@ -79,13 +79,19 @@
       };
     }]);
   
-  angular.module("tjingApp.controllers").controller("ItemController", ["$scope", "Item", "Pool", "Interaction",
-    function($scope, Item, Pool, Interaction) {
+  angular.module("tjingApp.controllers").controller("ItemController", ["$scope", "Item", "Pool", "Interaction", "Share",
+    function($scope, Item, Pool, Interaction, Share) {
     // Scope variable initialization
-    $scope.owneditems = Item.query({param:'owned'});
+    $scope.owneditems = [];
     $scope.borroweditems = Item.query({param:'borrowed'});
     $scope.items=Item.query();
     $scope.mypools = Pool.query({param:"mine"});
+
+    refreshMyItems();
+
+    function refreshMyItems(){
+      $scope.owneditems = Item.query({param:'owned'});
+    }
     
     $scope.addItem = function(title) {
       new Item({
@@ -95,7 +101,10 @@
       });
       $scope.newItem = "";
     };
-  
+
+    $scope.setFbAvailable = function(item){
+      Item.setFbAvailable({id: item.id, fbAvailable: item.fbAvailable});
+    };
     
     $scope.deleteItem = function(item) {
       Item.delete({id: item.id}, function(){
@@ -108,20 +117,20 @@
     };
 
     $scope.shareItem = function(item, pool){
-      Item.share(
+      Share.save(
       {
-        item: item, 
-        pool: pool
+        itemId: item.id, 
+        poolId : pool.id
       }, function(){
         $scope.owneditems = Item.query({param:'owned'});
       });
     };
 
-    $scope.unshareItem = function(share){ //TODO: It would be better to post a DELETE to the share resource
-      Item.unshare({id: share.id}, function(){
+    $scope.unshareItem = function(share){
+      Share.delete({id: share.id}, function(){
         $scope.owneditems = Item.query({param:'owned'});
       });
-    }
+    };
   }]);
 
   angular.module("tjingApp.controllers").controller("PoolController", ["$scope", "Pool", "Item", "Membership", function($scope, Pool, Item, Membership) {
