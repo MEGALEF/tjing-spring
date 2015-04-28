@@ -32,9 +32,12 @@ public class NotificationService {
 	public List<Notification> getFeed(Person currentUser) {
 		JPAQuery query = new JPAQuery(em);
 		List<Notification> result = new ArrayList<Notification>();
-	
+		
 		QNotification notification = QNotification.notification;
-		query.from(notification).where(notification.target.eq(currentUser));
+		
+		query.from(notification).where(notification.target.eq(currentUser))
+		.orderBy(notification.modificationTime.desc()).limit(20);
+		
 		result.addAll(query.list(notification));
 		
 		return result;
