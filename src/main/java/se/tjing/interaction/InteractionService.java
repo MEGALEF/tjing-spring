@@ -48,7 +48,7 @@ public class InteractionService {
 		item.setActiveInteraction(interaction);
 		itemRepo.save(item);
 		interactionRepo.save(interaction);
-		notifService.sendNotification(new Notification(interaction, interaction.getBorrower(), "Request was accepted!"), true);
+		notifService.sendNotification(new Notification(interaction, interaction.getBorrower(), "Request was accepted!"), true, true);
 		return interaction;
 	}
 
@@ -61,7 +61,7 @@ public class InteractionService {
 		//TODO interaction.setNotifyUser(interaction.getItem().getOwner());
 		interaction.setStatusHandedOver(DateTime.now());
 		interactionRepo.save(interaction);
-		notifService.sendNotification(new Notification(interaction, interaction.getItem().getOwner(), "Handover was confirmed!"), true);
+		notifService.sendNotification(new Notification(interaction, interaction.getItem().getOwner(), "Handover was confirmed!"), true, true);
 		return interaction;
 	}
 
@@ -72,7 +72,7 @@ public class InteractionService {
 		}
 		interaction.setStatusReturned(DateTime.now());
 
-		notifService.sendNotification(new Notification(interaction, interaction.getBorrower(), "Return was confirmed"), true);
+		notifService.sendNotification(new Notification(interaction, interaction.getBorrower(), "Return was confirmed"), true, true);
 		interaction.getItem().setActiveInteraction(null);
 		interaction.setActive(false);
 		return interactionRepo.save(interaction);
@@ -147,7 +147,7 @@ public class InteractionService {
 		} else {
 			interaction.setStatusCancelled(DateTime.now());
 			interaction.setActive(false);
-			notifService.sendNotification(new Notification(interaction, interaction.getBorrower(), "Interaction was cancelled. Bummer!"), true);
+			notifService.sendNotification(new Notification(interaction, interaction.getBorrower(), "Interaction was cancelled. Bummer!"), true, true);
 			return interaction;
 		}
 		//TODO Cancel interactions even when item is handed over? Ok or not?
@@ -161,7 +161,7 @@ public class InteractionService {
 			}
 			Interaction interaction = new Interaction(currentUser, item, DateTime.now());
 			interactionRepo.save(interaction);
-			notifService.sendNotification(new Notification(interaction, interaction.getItem().getOwner(), "Someone wants to borrow your thing"), true);
+			notifService.sendNotification(new Notification(interaction, interaction.getItem().getOwner(), "Someone wants to borrow your thing"), true, true);
 			return interaction;
 		}
 }

@@ -119,8 +119,8 @@ public class ItemService {
 		if (item.getOwner().equals(user)) {
 			throw new TjingException("It's your own thing, dummy!");
 		}
-		if (item.getFbAvailable()){
-			return personService.areFacebookFriends(user, item.getOwner());
+		if (item.getFbAvailable() && personService.areFacebookFriends(user, item.getOwner())){
+			return true;
 		}
 		QShare share = QShare.share;
 		QPool pool = QPool.pool;

@@ -51,7 +51,7 @@ public class ItemRequestService {
 		List<Person> targets = personService.getVisibleUsers(fullRequest.getUser());
 		
 		for (Person target:targets){
-			notifService.sendNotification(new Notification(fullRequest, target, "Someone needs a thing"), true);
+			notifService.sendNotification(new Notification(fullRequest, target, "Someone needs a thing"), true, true);
 		}
 	}
 

@@ -65,7 +65,7 @@ public class SimpleSignInAdapter implements SignInAdapter {
 		SignInUtils.signin(userObj);
 		
 		if(facebook.isAuthorized()){
-			poolService.importFacebookGroups(personService.getCurrentUser());
+			//poolService.importFacebookGroups(personService.getCurrentUser());
 		} 
 		
 		return extractOriginalUrl(request);

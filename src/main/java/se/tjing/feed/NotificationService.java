@@ -6,6 +6,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,9 @@ public class NotificationService {
 	
 	@Autowired
 	Facebook facebook;
+	
+	@Autowired 
+	MailService mailService;
 	
 	@Autowired
 	NotificationRepository notifRepo;
@@ -54,10 +59,24 @@ public class NotificationService {
 //		facebook. post(objectId, "notifications", map);
 	}
 
-	public void sendNotification(Notification notif, boolean notifyFacebook){
+	public void sendNotification(Notification notif, boolean notifyFacebook, boolean notifyEmail){
 		notifRepo.save(notif);
 		if (notifyFacebook){
 			sendFacebookNotification(notif);
 		}
+		if (notifyEmail){
+			sendMail(notif);
+		}
+	}
+	
+	@Autowired
+	JavaMailSender mailSender;
+	
+	public void sendMail(Notification notif){
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setTo(notif.getTarget().getUsername());
+		message.setSubject("[Tjing] " + notif.getMessage());
+		message.setText(notif.getMessage());
+		mailSender.send(message);
 	}
 }

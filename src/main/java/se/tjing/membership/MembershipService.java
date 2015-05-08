@@ -54,7 +54,7 @@ public class MembershipService {
 			membership.setApproved(false);
 			membershipRepo.save(membership);
 			for (Membership member : pool.getApprovedMemberships()){
-				notifService.sendNotification(new Notification(membership, member.getMember(), "Someone applied for membership in a pool"), true);
+				notifService.sendNotification(new Notification(membership, member.getMember(), "Someone applied for membership in a pool"), true, true);
 			}
 			
 		} else if (PrivacyMode.OPEN.equals(pool.getPrivacy())){
