@@ -28,8 +28,8 @@ public class NotificationService {
 	@Autowired
 	Facebook facebook;
 	
-	@Autowired 
-	MailService mailService;
+//	@Autowired 
+//	MailService mailService;
 	
 	@Autowired
 	NotificationRepository notifRepo;

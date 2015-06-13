@@ -4,11 +4,39 @@
   <link rel="stylesheet" href="./bower_components/bootstrap-css-only/css/bootstrap.min.css" />
 </head>
 <body ng-app="tjingApp">
-  <div ng-controller="UserController">
-    <h1>Welcome, <tjing-user user="currentUser"/>!</h1>
-    <img ng-src="{{currentUser.connection[0].imageurl}}">
-    <button ng-click="signout()">Sign out</button>
+  
+  <header>
+    <nav>
+      <div class="container" ng-controller="UserController">
+        <div class="navbar-header">
+          <a class ="navbar-brand" href="/">Tjing!</a>
+        </div>
+        <ul class="nav navbar-nav navbar-left">
+          <li><a href="#additem">Lägg upp ny pryl</a></li>
+          <li><a href="#items">Prylar</a></li>
+          <li><a href="#interactions">Interaktioner</a></li>
+          <li><a href="#pools">Grupper</a></li>
+          <li ng-show="false"><a href="#requests">Förfrågningar</a></li>
+          <li>
+            <a href="#profile">
+              {{currentUser.firstName}}
+              <img ng-src="{{currentUser.connection[0].imageurl}}">
+            </a>
+          </li>
+          <li>
+            <a href="/signout">Logga ut</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <div id="main">
+    <div ng-view>
+      <!-- Views go here -->
+    </div>
   </div>
+
   <div ng-controller="FeedController">
     <h1>Notification feed</h1>
     <ul>
@@ -27,161 +55,11 @@
       </div>
     </ul>
   </div>
-  <div ng-controller="ItemRequestController">
-    <h1>My item requests</h1>
-    <div ng-hide="myRequests && myRequests.length>0">You haven't made any requests</div>
-    <ul>
-      <li ng-repeat="request in myRequests">
-        You asked your pools for a {{request.text}}
-      </li>
-    </ul>
-    <form role="form" ng-submit="postRequest(request)">
-      <input type="text" ng-model="request.text" placeholder="What do you need?" required/>
-      <button type="submit" ng-disabled="!request.text" title="Post request">
-        <span class="glyphicon glyphicon-plus"></span>
-      </button>
-    </form>
-  </div>
-
-  <div ng-controller="ItemController">
-    <h1>Available items</h1>
-    <ul>
-      <li ng-repeat="item in items">
-        <tjing-user user="item.owner"></tjing-user>'s {{item.title}}
-        <button type="button" title="Request" ng-click="requestItem(item)">Request
-        </button>
-      </li>
-    </ul>
-    <hr/>
-    <h1>My items</h1> 
-    <div ng-hide="owneditems && owneditems.length >0">
-      You don't own any items. Add an item!
-    </div>
-    <ul>
-      <li ng-repeat="item in owneditems" >
-        {{item.title}} 
-        <button type="button" title="Delete" ng-click="deleteItem(item)">
-          <span class="glyphicon glyphicon-trash"></span>
-        </button>
-        <div ng-show="!item.shares[0]">This item isn't shared with anyone. Share it to a pool!</div>
-        <ul ng-show="item.shares[0]">
-          Shared with 
-          <li ng-repeat="share in item.shares">
-            {{share.pool.title}} 
-            <button ng-click="unshareItem(share)">Unshare</button>
-          </li>
-        </ul>
-        <div ng-show="item.activeInteraction">Borrowed by <tjing-user user="item.activeInteraction.borrower"/> on {{item.activeInteraction.statusHandedOver | date}}</div>
-        <form role="form" ng-submit="shareItem(item, poolToShareTo)">
-          <button type="submit" ng-disabled="!poolToShareTo">share to</button> 
-
-          <select ng-options="pool.title for pool in mypools" ng-model ="poolToShareTo" >
-            <option value="" selected>pool</option>
-          </select>
-          Available to all facebook friends: <input type="checkbox" ng-model="item.fbAvailable" ng-change="setFbAvailable(item)"></input>
-        </form> 
-      </li>
-    </ul>     
-    <hr />
-    <h1>Add item</h1>
-    <form role="form" ng-submit="addItem(newItem)">
-      <input type="text" ng-model="newItem" placeholder="Enter item title.." required/>
-      <span>
-        <button type="submit" ng-disabled="!newItem" title="Add">
-          <span class="glyphicon glyphicon-plus"></span>
-        </button>
-      </span>
-    </form>
-    <hr />
-    <h1>My borrowed items</h1>
-    <div ng-hide="borroweditems && borroweditems.length > 0">
-      You don't hold any borrowed items.
-    </div>
-    <ul>
-      <li ng-repeat="item in borroweditems">
-        <div>
-          {{item.title}}, borrowed from <tjing-user user="item.owner"/> on {{item.activeInteraction.statusHandedOver | date}}
-        </div>
-      </li>
-    </li>
-  </ul>
-  <hr />
-
-  <div ng-controller="PoolController">
-    <h1>All pools</h1><button ng-click="showPools=!showPools">show/hide</button>
-    <div ng-show="showPools">
-      <div ng-hide="allPools.length > 0">
-        No pools exist yet. Add a pool!
-      </div>
-      <ul>
-        <li ng-repeat="pool in allPools">
-          {{pool.title}} ({{pool.privacy}}<div ng-hide="pool.privacy == 'OPEN'">, requires approval from {{pool.approval}})</div>
-          <button type="button" ng-click="joinPool(pool)">Join</button>
-        </li>
-      </ul>
-    </div>
-    <hr />
-    <h1>My pools</h1>
-    <div ng-hide="myMemberships && myMemberships.length >0">
-      You are not a member of any pools. Join a pool!
-    </div>
-    <ul>
-      <li ng-repeat="membership in myMemberships">
-        {{membership.pool.title}}
-        <button type="button" ng-click="leavePool(membership)">Leave</button>
-      </li>
-    </ul>
-    <hr/>
-    <h1>Create pool</h1>
-    <form role="form" ng-submit="createPool(newPool)">
-      <input type="text" ng-model="newPool.title" placeholder="Enter pool name.." required/>
-      <button type="submit" ng-disabled="!newPool.title" title="Add">
-        <span class="glyphicon glyphicon-plus"></span>
-      </button>
-    </form>
-  </div>
-  <hr />
-  <div ng-controller="FacebookImportController">
-    <button ng-click="importFacebook()">Import facebook groups as Tjing pools</button>
-  </div>
-  <div ng-controller="InteractionController">
-
-    <h1>Outgoing requests</h1>
-    <ul>
-      <li ng-repeat="request in outgoingrequests">
-        You asked <tjing-user user="request.item.owner"></tjing-user> for his {{request.item.title}} 
-        <div ng-show="request.statusAccepted">(Accepted on {{request.statusAccepted | date}})
-          <button  ng-hide="request.statusHandedOver" ng-click="confirmHandover(request)">
-            Confirm handover
-          </button>
-          <div ng-show="request.statusHandedOver">(Handed over on {{request.statusHandedOver | date}})</div>
-        </div>
-      </li>
-    </ul>
-    <hr />
-    <h1>Incoming requests</h1>
-    <ul>
-      <li ng-repeat="request in incomingrequests">
-
-        <tjing-interaction interaction="request"></tjing-interaction>
-        <div ng-hide="request.statusAccepted">
-          <button ng-disabled="request.statusAccepted" ng-click="acceptRequest(request)">Accept</button>
-          <button ng-disabled="request.statusAccepted" ng-click="denyRequest(request)">Deny</button>
-        </div>
-        <div ng-show="request.statusAccepted">
-          (Accepted on {{request.statusAccepted | date}})
-        </div>
-        <div ng-show="request.statusHandedOver">
-          (Handed over on {{request.statusHandedOver | date}})
-          <button ng-disabled="request.statusReturned" ng-click="confirmReturn(request)">Confirm return</button>
-        </div>
-
-      </li>
-    </ul>
-    <hr />
-  </div>
+  
   <script type="text/javascript" src="./bower_components/angular/angular.min.js"></script>
   <script type="text/javascript" src="./bower_components/angular-resource/angular-resource.min.js"></script>
+  <script type="text/javascript" src="./bower_components/angular-route/angular-route.min.js"></script>
+
   <!--     <script type="text/javascript" src="./bower_components/lodash/dist/lodash.min.js"></script> -->
   <script type="text/javascript" src="./app/app.js"></script>
   <script type="text/javascript" src="./app/controllers.js"></script>

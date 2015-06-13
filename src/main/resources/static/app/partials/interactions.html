@@ -1,0 +1,35 @@
+<div>
+    <h1>Outgoing requests</h1>
+    <ul>
+      <li ng-repeat="request in outgoingrequests">
+        You asked <tjing-user user="request.item.owner"></tjing-user> for his {{request.item.title}} 
+        <div ng-show="request.statusAccepted">(Accepted on {{request.statusAccepted | date}})
+          <button  ng-hide="request.statusHandedOver" ng-click="confirmHandover(request)">
+            Confirm handover
+          </button>
+          <div ng-show="request.statusHandedOver">(Handed over on {{request.statusHandedOver | date}})</div>
+        </div>
+      </li>
+    </ul>
+    <hr />
+    <h1>Incoming requests</h1>
+    <ul>
+      <li ng-repeat="request in incomingrequests">
+
+        <tjing-interaction interaction="request"></tjing-interaction>
+        <div ng-hide="request.statusAccepted">
+          <button ng-disabled="request.statusAccepted" ng-click="acceptRequest(request)">Accept</button>
+          <button ng-disabled="request.statusAccepted" ng-click="denyRequest(request)">Deny</button>
+        </div>
+        <div ng-show="request.statusAccepted">
+          (Accepted on {{request.statusAccepted | date}})
+        </div>
+        <div ng-show="request.statusHandedOver">
+          (Handed over on {{request.statusHandedOver | date}})
+          <button ng-disabled="request.statusReturned" ng-click="confirmReturn(request)">Confirm return</button>
+        </div>
+
+      </li>
+    </ul>
+    <hr />
+  </div>

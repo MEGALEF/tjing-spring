@@ -15,6 +15,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.geo.Point;
 import org.springframework.social.connect.UsersConnectionRepository;
 
 import se.tjing.common.BaseEntity;
@@ -35,6 +36,8 @@ public class Person extends TjingEntity implements Serializable {
 	// go wrong here. Sorry
 	private String firstName;
 	private String fullName;
+	
+	//private Point location;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
