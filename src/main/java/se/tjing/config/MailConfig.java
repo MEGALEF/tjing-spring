@@ -15,12 +15,13 @@ public class MailConfig {
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 		//mailSender.setHost("smtp.gmail.com");
 		//mailSender.setPort(465);
-		mailSender.setUsername("tjingat@gmail.com");
-		mailSender.setPassword("hemligthemligt");
+		
+		mailSender.setUsername("nossredna.sennahoj@gmail.com");
+		mailSender.setPassword("qksy0ye4pJg6IPAg6ShxJQ");
 		
 		Properties props = new Properties();
 		props.setProperty("mail.smtp.auth", "true");
-		props.setProperty("mail.smtp.host", "smtp.gmail.com");
+		props.setProperty("mail.smtp.host", "smtp.mandrillapp.com");
 		props.setProperty("mail.smtp.port", "587");
 		props.setProperty("mail.smtp.starttls.enable", "true");
 		
@@ -29,7 +30,6 @@ public class MailConfig {
 		//props.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory"); //SSL Factory Class
 		
 		props.setProperty("mail.debug", "true");
-		
 		
 		mailSender.setJavaMailProperties(props);
 		

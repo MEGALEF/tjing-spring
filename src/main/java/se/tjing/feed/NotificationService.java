@@ -34,6 +34,9 @@ public class NotificationService {
 	@Autowired
 	NotificationRepository notifRepo;
 	
+	@Autowired
+	JavaMailSender mailSender;
+	
 	public List<Notification> getFeed(Person currentUser) {
 		JPAQuery query = new JPAQuery(em);
 		List<Notification> result = new ArrayList<Notification>();
@@ -47,7 +50,7 @@ public class NotificationService {
 		
 		return result;
 	}
-	
+
 	private void sendFacebookNotification(Notification notif) {
 		//Deactivated after update to Spring Social Facebook 2.0
 //		Person target = notif.getTarget();
@@ -58,7 +61,16 @@ public class NotificationService {
 //		map.set("template", notif.getMessage());
 //		facebook. post(objectId, "notifications", map);
 	}
-
+	
+	public void sendMail(Notification notif){
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setTo(notif.getTarget().getUsername());
+		message.setFrom("johannes@tribeofsales.com");
+		message.setSubject("[Tjing] " + notif.getMessage());
+		message.setText(notif.getMessage());
+		mailSender.send(message);
+	}
+	
 	public void sendNotification(Notification notif, boolean notifyFacebook, boolean notifyEmail){
 		notifRepo.save(notif);
 		if (notifyFacebook){
@@ -67,16 +79,5 @@ public class NotificationService {
 		if (notifyEmail){
 			sendMail(notif);
 		}
-	}
-	
-	@Autowired
-	JavaMailSender mailSender;
-	
-	public void sendMail(Notification notif){
-		SimpleMailMessage message = new SimpleMailMessage();
-		message.setTo(notif.getTarget().getUsername());
-		message.setSubject("[Tjing] " + notif.getMessage());
-		message.setText(notif.getMessage());
-		mailSender.send(message);
 	}
 }
