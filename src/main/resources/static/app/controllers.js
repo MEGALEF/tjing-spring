@@ -5,13 +5,25 @@
   var controllersModule = angular.module('tjingApp.controllers');
 
   controllersModule.controller("FacebookImportController", ["$scope", "$http", function($scope, $http){
-    $scope.importedPools = [];
+    var importUrl = 'pool/import/facebook/';
 
-    $scope.importFacebook = function(){
-      $http.get('pool/import/facebook').success(function(data){
-        $scope.importedPools = data;
+    $scope.facebookGroups = [];
+    $scope.importedGroupMembership = null;
+
+    getGroups();
+
+    function getGroups(){
+      $http.get(importUrl).success(function(data){
+        $scope.facebookGroups = data;
       });
     };
+
+    $scope.importGroup = function(group){
+      $http.post(importUrl, group).success(function(data){
+        $scope.importedGroupMembership = data;
+      });
+    };
+
   }]);
 
 

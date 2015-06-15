@@ -39,7 +39,7 @@ public class PoolService {
 
 	@Autowired
 	EntityManager em;
-	
+
 	@Autowired
 	Facebook facebook;
 
@@ -55,13 +55,13 @@ public class PoolService {
 		// Set pool creator as member in the pool
 		Membership creatorMembership = new Membership(creator, pool);
 		creatorMembership.approve();
-		
+
 		Pool savedPool = poolRepo.save(pool);
 		membershipRepo.save(creatorMembership);
 		return savedPool;
 	}
 
-	
+
 
 	public List<Pool> getPools() {
 		// TODO: Limit to user visible pools. Business Logic
@@ -81,7 +81,7 @@ public class PoolService {
 			QShare share = QShare.share;
 			JPAQuery query = new JPAQuery(em);
 			query.from(item).leftJoin(item.shares, share)
-					.where(share.pool.eq(pool));
+			.where(share.pool.eq(pool));
 			return query.list(item);
 		}
 	}
@@ -99,7 +99,7 @@ public class PoolService {
 		QPool pool = QPool.pool;
 		JPAQuery query = new JPAQuery(em);
 		query.from(pool).leftJoin(pool.memberships, membership)
-				.where(membership.member.eq(user).and(membership.approved.isTrue()));
+		.where(membership.member.eq(user).and(membership.approved.isTrue()));
 		return query.list(pool);
 	}
 
@@ -127,7 +127,7 @@ public class PoolService {
 		}
 		JPAQuery query = new JPAQuery(em);
 		query.from(item).leftJoin(item.shares, share)
-				.where(item.owner.eq(currentUser).and(share.pool.eq(pool)));
+		.where(item.owner.eq(currentUser).and(share.pool.eq(pool)));
 		return query.list(item);
 	}
 
@@ -139,7 +139,7 @@ public class PoolService {
 		QItem item = QItem.item;
 		JPAQuery sharesQuery = new JPAQuery(em);
 		sharesQuery.from(share).leftJoin(share.item, item)
-				.where(item.owner.eq(currentUser).and(share.pool.eq(pool)));
+		.where(item.owner.eq(currentUser).and(share.pool.eq(pool)));
 		List<Share> shares = sharesQuery.list(share);
 		for (Share shareToDelete : shares) {
 			shareRepo.delete(shareToDelete);
@@ -149,8 +149,8 @@ public class PoolService {
 		QMembership membership = QMembership.membership;
 		JPAQuery membershipQuery = new JPAQuery(em);
 		membershipQuery.from(membership)
-				.where(membership.member.eq(currentUser).and(
-						membership.pool.eq(pool)));
+		.where(membership.member.eq(currentUser).and(
+				membership.pool.eq(pool)));
 		Membership membershipToDelete = membershipQuery
 				.singleResult(membership);
 		membershipRepo.delete(membershipToDelete);
@@ -163,16 +163,16 @@ public class PoolService {
 		JPAQuery query = new JPAQuery(em);
 		QMembership membership = QMembership.membership;
 		// Get requests to groups in which the user is a member
-		
+
 		query.from(membership)
-				.where(membership.approved.isFalse().and(membership.pool.in(this.getUsersPools(currentUser))));
-		
+		.where(membership.approved.isFalse().and(membership.pool.in(this.getUsersPools(currentUser))));
+
 		return query.list(membership);
 	}
 
 	public Membership approveJoin(Person user, Integer requestId) {
 		Membership req = membershipRepo.findOne(requestId);
-		
+
 		//TODO: Make sure the user role in the pool is correct
 		if (!isUserMemberOfPool(user, req.getPool())) {
 			throw new TjingException("Only pool members may do this");
@@ -220,9 +220,9 @@ public class PoolService {
 		QShare share = QShare.share;
 		QItem item = QItem.item;
 		JPAQuery query = new JPAQuery(em);
-		
+
 		query.from(share).leftJoin(share.item, item).where(share.pool.eq(pool).and(item.owner.eq(member)));
-		
+
 		for (Share s : query.list(share)){
 			shareRepo.delete(s);
 		}
@@ -232,42 +232,69 @@ public class PoolService {
 		JPAQuery query = new JPAQuery(em);
 		QMembership membership = QMembership.membership;
 		QPool pool = QPool.pool;
-		
+
 		OrderSpecifier<Integer> order = new OrderSpecifier<Integer>(Order.DESC, pool.memberships.size());
-		
+
 		query.from(membership).leftJoin(membership.pool, pool)
 		.where(membership.member.eq(user).and(membership.approved.isTrue())).orderBy(order);
-		
+
 		return query.list(membership);
 	}
 
-	public List<Pool> importFacebookGroups(Person currentUser) {
+	public List<GroupMembership> getFacebookGroups(Person currentUser) {
+		List<GroupMembership> fbmemberships;
 		if (!facebook.isAuthorized()){
 			throw new TjingException("You must use login via facebook to access this feature");
 		}else {
-			List<Pool> result = new ArrayList<Pool>();
-			
-			List<GroupMembership> fbmemberships = facebook.groupOperations().getMemberships();
-			
-			for (GroupMembership gm : fbmemberships){
+			fbmemberships = facebook.groupOperations().getMemberships();
+
+			/*for (GroupMembership gm : fbmemberships){
 				Pool pool = new Pool(gm);
-				
+
 				result.add(pool);
-				
+
 				Long id = pool.getFacebookId();
 				List<Pool> existing = poolRepo.findByFacebookId(id);
-				
-				if (existing.isEmpty()){
-					Pool savedPool = poolRepo.save(pool);
-					membershipRepo.save(new Membership(currentUser, savedPool, true));
-				} else {
-					Pool existingpool = existing.get(0);
-					if (!isUserMemberOfPool(currentUser, existingpool)){
-						membershipRepo.save(new Membership(currentUser, existingpool));
-					}
-				}
-			}
-			return result;
+
+
+			}*/
 		}
+		return fbmemberships;
+	}
+
+
+
+	public Membership importFbGroup(Person currentUser, FacebookGroup gm) {
+		GroupMembership verified = getVerifiedFbGroup(currentUser, gm);
+		Pool newpool = new Pool(verified);
+
+		List<Pool> existing = poolRepo.findByFacebookId(newpool.getFacebookId());
+
+		if (existing.isEmpty()){
+			Pool savedPool = poolRepo.save(newpool);
+			return membershipRepo.save(new Membership(currentUser, savedPool, true));
+			
+		} else {
+			Pool existingpool = existing.get(0);
+			if (!isUserMemberOfPool(currentUser, existingpool)){
+				return membershipRepo.save(new Membership(currentUser, existingpool, true));
+			} else {
+				QMembership membership = QMembership.membership;
+				JPAQuery query = new JPAQuery(em);
+				query.from(membership).where(
+						membership.pool.eq(existingpool).and(membership.member.eq(currentUser).and(membership.approved.isTrue())));
+				return query.list(membership).get(0);
+			}
+		}
+	}
+
+	private GroupMembership getVerifiedFbGroup(Person user, FacebookGroup gm){
+		List<GroupMembership> usermemberships = getFacebookGroups(user);
+		for (GroupMembership m: usermemberships){
+			if (m.getId().equalsIgnoreCase(gm.getId())){
+				return m;
+			}
+		}
+		throw new TjingException("User is not a legit member of that group");
 	}
 }

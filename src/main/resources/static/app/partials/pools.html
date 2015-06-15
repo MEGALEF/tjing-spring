@@ -19,9 +19,12 @@
   <ul>
     <li ng-repeat="membership in myMemberships">
       {{membership.pool.title}}
-      <button type="button" ng-click="leavePool(membership)">Leave</button>
+      <button type="button" ng-click="leavePool(membership)">
+        Leave
+      </button>
     </li>
   </ul>
+  <a href="#groupimport">Importera grupper från facebook</a>
   <hr/>
   <h1>Create pool</h1>
   <form role="form" ng-submit="createPool(newPool)">
@@ -30,9 +33,4 @@
       <span class="glyphicon glyphicon-plus"></span>
     </button>
   </form>
-
-  <div ng-controller="FacebookImportController">
-    <button ng-click="importFacebook()">Import facebook groups as Tjing pools</button>
-  </div>
-
 </div>

@@ -7,10 +7,11 @@
         </button>
       </li>
     </ul>
+    <a href="#newitem">Lägg till en pryl</a>
     <hr/>
-    <h1>My items</h1> 
+    <h1>Mina prylar</h1> 
     <div ng-hide="owneditems && owneditems.length >0">
-      You don't own any items. Add an item!
+      Du har inga prylar inlagda än. <a href="#newitem">Lägg till en pryl!</a>
     </div>
     <ul>
       <li ng-repeat="item in owneditems" >
@@ -37,16 +38,6 @@
         </form> 
       </li>
     </ul>     
-    <hr />
-    <h1>Add item</h1>
-    <form role="form" ng-submit="addItem(newItem)">
-      <input type="text" ng-model="newItem" placeholder="Enter item title.." required/>
-      <span>
-        <button type="submit" ng-disabled="!newItem" title="Add">
-          <span class="glyphicon glyphicon-plus"></span>
-        </button>
-      </span>
-    </form>
     <hr />
     <h1>My borrowed items</h1>
     <div ng-hide="borroweditems && borroweditems.length > 0">

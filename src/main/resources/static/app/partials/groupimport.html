@@ -1,0 +1,8 @@
+<div>
+    <div class="alert alert-success fade in" ng-show="importedGroupMembership">
+      Nu är du medlem i {{importedGroupMembership.pool.title}} på Tjing!
+    </div>
+    <ul>
+      <li ng-repeat="group in facebookGroups">{{group.name}}<button type="button" ng-click="importGroup(group)">Importera</button></li>
+    </ul>
+  </div>

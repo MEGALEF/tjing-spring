@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.social.facebook.api.GroupMembership;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import se.tjing.item.Item;
+import se.tjing.membership.Membership;
 import se.tjing.user.Person;
 import se.tjing.user.PersonService;
 
@@ -81,9 +83,15 @@ public class PoolController {
 	}
 	
 	@RequestMapping(value="/import/facebook")
-	public ResponseEntity<List<Pool>> importFacebookGroups(){
-		List<Pool> result = poolService.importFacebookGroups(personService.getCurrentUser());
+	public ResponseEntity<List<GroupMembership>> getFacebookGroups(){
+		List<GroupMembership> result = poolService.getFacebookGroups(personService.getCurrentUser());
 		
-		return new ResponseEntity<List<Pool>>(result, null, HttpStatus.OK);
+		return new ResponseEntity<List<GroupMembership>>(result, null, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/import/facebook", method=RequestMethod.POST)
+	public ResponseEntity<Membership> importFacebookGroup(@RequestBody FacebookGroup gm){
+		Membership result = poolService.importFbGroup(personService.getCurrentUser(), gm);
+		return new ResponseEntity<Membership>(result, null, HttpStatus.CREATED);
 	}
 }

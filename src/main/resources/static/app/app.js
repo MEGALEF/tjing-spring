@@ -22,5 +22,15 @@
             	controller : 'InteractionController'
             })
 
+            .when('/groupimport', {
+                templateUrl : 'app/partials/groupimport.html',
+                controller : "FacebookImportController"
+            })
+
+            .when('/newitem', {
+                templateUrl : 'app/partials/newitem.html',
+                controller : "ItemController"
+            })
+
     });
 }(angular));
