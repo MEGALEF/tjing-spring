@@ -87,9 +87,9 @@ public class ItemService {
 		return result;
 	}
 
-	public Item getOtherUsersItem(Person person, Integer itemId) {
+	public Item getItem(Person person, Integer itemId) {
 		Item result = itemRepo.findOne(itemId);
-		if (result == null || !isItemAvailableToUser(person, result)) {
+		if (result == null || !isItemVisibleToUser(person, result)) {
 			throw new TjingException("Item does not exist or is not available");
 		} else {
 			return result;
@@ -115,9 +115,9 @@ public class ItemService {
 		return query.list(item);
 	}
 	
-	public Boolean isItemAvailableToUser(Person user, Item item) {
+	public Boolean isItemVisibleToUser(Person user, Item item) {
 		if (item.getOwner().equals(user)) {
-			throw new TjingException("It's your own thing, dummy!");
+			return true;
 		}
 		if (item.getFbAvailable() && personService.areFacebookFriends(user, item.getOwner())){
 			return true;
@@ -125,7 +125,6 @@ public class ItemService {
 		QShare share = QShare.share;
 		QPool pool = QPool.pool;
 		QItem itemtable = QItem.item;
-		
 		QMembership membership = QMembership.membership;
 		
 		// "Is there a group in which the user is a member to which the item is shared?"

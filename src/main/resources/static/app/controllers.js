@@ -28,7 +28,7 @@
 
 
    //InteractionController
-  angular.module('tjingApp.controllers').controller("InteractionController", ["$scope", "Interaction", function($scope, Interaction){
+  angular.module('tjingApp.controllers').controller("MyInteractionsController", ["$scope", "Interaction", function($scope, Interaction){
     $scope.allinteractions = Interaction.query();
     $scope.incomingrequests = Interaction.query({param:'incoming'});
     $scope.outgoingrequests = Interaction.query({param:'outgoing'});
@@ -68,7 +68,6 @@
         $scope.feedItems = Feed.query();
       });
     }
-
   }]);
 
   angular.module("tjingApp.controllers").controller("ItemRequestController", 
@@ -91,7 +90,7 @@
       };
     }]);
   
-  angular.module("tjingApp.controllers").controller("ItemController", ["$scope", "$location", "Item", "Pool", "Interaction", "Share",
+  angular.module("tjingApp.controllers").controller("MyItemsController", ["$scope", "$location", "Item", "Pool", "Interaction", "Share",
     function($scope, $location, Item, Pool, Interaction, Share) {
     // Scope variable initialization
     $scope.owneditems = [];
@@ -146,7 +145,7 @@
     };
   }]);
 
-  angular.module("tjingApp.controllers").controller("PoolController", ["$scope", "Pool", "Item", "Membership", function($scope, Pool, Item, Membership) {
+  angular.module("tjingApp.controllers").controller("MyPoolsController", ["$scope", "Pool", "Item", "Membership", function($scope, Pool, Item, Membership) {
     $scope.showPools = false;
 
     $scope.allPools = [];
@@ -227,7 +226,21 @@
     $http.get("/item/search/"+$routeParams.searchStr).success(function(data){
       $scope.searchResults = data;
     });
+  }]);
 
+  angular.module("tjingApp.controllers").controller("ItemController", 
+    ["$scope", "$routeParams", "Item", "Pool", "Membership", 
+    function($scope, $routeParams, Item, Pool, Membership){
+      $scope.currentItem = {}; 
+      $scope.myMemberships = [];
+
+      Membership.query({}, function(data){
+        $scope.myMemberships = data;
+      });
+
+      Item.get({id: $routeParams.itemId}, function(data){
+        $scope.currentItem = data;
+      });
   }]);
 
 

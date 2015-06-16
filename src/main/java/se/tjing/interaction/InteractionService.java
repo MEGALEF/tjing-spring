@@ -155,7 +155,7 @@ public class InteractionService {
 	
 		public Interaction initiateRequest(Person currentUser, AddInteraction createInteraction) {
 			Item item = itemRepo.findOne(createInteraction.getItemId());
-			if (item == null || !itemService.isItemAvailableToUser(currentUser, item)) {
+			if (item == null || !itemService.isItemVisibleToUser(currentUser, item)) {
 				throw new TjingException(
 						"Item does not exist or is not available to you");
 			}

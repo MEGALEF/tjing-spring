@@ -74,7 +74,7 @@ public class ItemController {
 	public ResponseEntity<Item> getItem(@PathVariable Integer itemId) {
 		Person currentUser = personService.getCurrentUser();
 		return new ResponseEntity<Item>(
-				itemService.getOtherUsersItem(currentUser, itemId), null, HttpStatus.OK);
+				itemService.getItem(currentUser, itemId), null, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/{itemId}/fbavailable", method=RequestMethod.POST)

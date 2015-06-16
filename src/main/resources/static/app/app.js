@@ -8,18 +8,18 @@
         $routeProvider
 
             .when('/items', {
-                templateUrl : 'app/partials/items.html',
-                controller  : 'ItemController'
+                templateUrl : 'app/partials/myitems.html',
+                controller  : 'MyItemsController'
             })
 
             .when('/pools', {
-            	templateUrl : 'app/partials/pools.html',
-            	controller : 'PoolController'
+            	templateUrl : 'app/partials/mypools.html',
+            	controller : 'MyPoolsController'
             })
 
             .when('/interactions', {
-            	templateUrl : 'app/partials/interactions.html',
-            	controller : 'InteractionController'
+            	templateUrl : 'app/partials/myinteractions.html',
+            	controller : 'MyInteractionsController'
             })
 
             .when('/groupimport', {
@@ -29,12 +29,17 @@
 
             .when('/newitem', {
                 templateUrl : 'app/partials/newitem.html',
-                controller : "ItemController"
+                controller : "MyItemsController"
             })
 
             .when('/searchresult/:searchStr', {
                 templateUrl : 'app/partials/searchresult.html',
                 controller : "SearchResultController"
+            })
+
+            .when('/item/:itemId', {
+                templateUrl : 'app/partials/item.html',
+                controller : "ItemController"
             })
 
     });
