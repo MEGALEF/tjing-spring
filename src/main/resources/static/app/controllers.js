@@ -91,8 +91,8 @@
       };
     }]);
   
-  angular.module("tjingApp.controllers").controller("ItemController", ["$scope", "Item", "Pool", "Interaction", "Share",
-    function($scope, Item, Pool, Interaction, Share) {
+  angular.module("tjingApp.controllers").controller("ItemController", ["$scope", "$location", "Item", "Pool", "Interaction", "Share",
+    function($scope, $location, Item, Pool, Interaction, Share) {
     // Scope variable initialization
     $scope.owneditems = [];
     $scope.borroweditems = Item.query({param:'borrowed'});
@@ -110,6 +110,7 @@
         title: title
       }).$save(function (data){
         $scope.owneditems.push(data); //$save returns created item. Success callback adds the item to the scope array
+        $location.url('/items');
       });
       $scope.newItem = "";
     };
@@ -199,7 +200,9 @@
     };
   }]);
 
-  angular.module("tjingApp.controllers").controller("UserController", ["$scope", "User", function($scope, User){
+  angular.module("tjingApp.controllers").controller("NavbarController", ["$scope", "$location", "$http", "User", function($scope, $location, $http, User){
+    $scope.searchResult = [];
+
     $scope.currentUser = User.current(function(data){
       if (data.facebookId!=null){ //If the User object contains a facebookId, use it to get the profile picture from facebook
         $scope.profilePicUrl = "http://graph.facebook.com/" +data.facebookId + "/picture?type=small"
@@ -207,9 +210,24 @@
     });
     $scope.profilePicUrl = "/messages/error.png";
 
+    $scope.search = function(){
+      $location.url("/searchresult/"+$scope.searchStr);
+    };
+
     $scope.signout = function(){
       location.href="/signout";
     }
+  }]);
+
+  angular.module("tjingApp.controllers").controller("SearchResultController", 
+    ["$scope", "$routeParams", "$http", 
+    function($scope, $routeParams, $http){
+    $scope.searchResults = [];
+
+    $http.get("/item/search/"+$routeParams.searchStr).success(function(data){
+      $scope.searchResults = data;
+    });
+
   }]);
 
 

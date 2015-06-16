@@ -1,15 +1,6 @@
 <div>
-    <h1>Available items</h1>
-    <ul>
-      <li ng-repeat="item in items">
-        <tjing-user user="item.owner"></tjing-user>'s {{item.title}}
-        <button type="button" title="Request" ng-click="requestItem(item)">Request
-        </button>
-      </li>
-    </ul>
-    <a href="#newitem">Lägg till en pryl</a>
-    <hr/>
     <h1>Mina prylar</h1> 
+    <a href="#newitem">Lägg till en pryl</a>
     <div ng-hide="owneditems && owneditems.length >0">
       Du har inga prylar inlagda än. <a href="#newitem">Lägg till en pryl!</a>
     </div>
@@ -21,34 +12,38 @@
         </button>
         <div ng-show="!item.shares[0]">This item isn't shared with anyone. Share it to a pool!</div>
         <ul ng-show="item.shares[0]">
-          Shared with 
+          Delad med 
           <li ng-repeat="share in item.shares">
             {{share.pool.title}} 
-            <button ng-click="unshareItem(share)">Unshare</button>
+            <button ng-click="unshareItem(share)">Stoppa delning</button>
           </li>
         </ul>
-        <div ng-show="item.activeInteraction">Borrowed by <tjing-user user="item.activeInteraction.borrower"/> on {{item.activeInteraction.statusHandedOver | date}}</div>
+        <div ng-show="item.activeInteraction"> utlånad till <tjing-user user="item.activeInteraction.borrower"/> on {{item.activeInteraction.statusHandedOver | date}}</div>
         <form role="form" ng-submit="shareItem(item, poolToShareTo)">
           <button type="submit" ng-disabled="!poolToShareTo">share to</button> 
 
           <select ng-options="pool.title for pool in mypools" ng-model ="poolToShareTo" >
             <option value="" selected>pool</option>
           </select>
-          Available to all facebook friends: <input type="checkbox" ng-model="item.fbAvailable" ng-change="setFbAvailable(item)"></input>
+          Vänner: <input type="checkbox" ng-model="item.fbAvailable" ng-change="setFbAvailable(item)"></input>
         </form> 
       </li>
     </ul>     
     <hr />
-    <h1>My borrowed items</h1>
-    <div ng-hide="borroweditems && borroweditems.length > 0">
-      You don't hold any borrowed items.
-    </div>
-    <ul>
       <li ng-repeat="item in borroweditems">
         <div>
-          {{item.title}}, borrowed from <tjing-user user="item.owner"/> on {{item.activeInteraction.statusHandedOver | date}}
+          {{item.title}}, lånad av <tjing-user user="item.owner"/> {{item.activeInteraction.statusHandedOver | date}}
         </div>
       </li>
     </li>
   </ul>
+
+  <h1>Tillgängliga prylar</h1>
+    <ul>
+      <li ng-repeat="item in items">
+        <tjing-user user="item.owner"></tjing-user>'s {{item.title}}
+        <button type="button" title="Request" ng-click="requestItem(item)">Request
+        </button>
+      </li>
+    </ul>
 </div>

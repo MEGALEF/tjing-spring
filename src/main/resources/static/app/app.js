@@ -32,5 +32,10 @@
                 controller : "ItemController"
             })
 
+            .when('/searchresult/:searchStr', {
+                templateUrl : 'app/partials/searchresult.html',
+                controller : "SearchResultController"
+            })
+
     });
 }(angular));
