@@ -2,7 +2,7 @@
   angular.module("tjingApp.controllers", []);
   
   var tjingApp = angular.module("tjingApp", ["tjingApp.controllers", "tjingApp.services", "ngRoute"]);
-
+  var partialsUrl = 'app/partials/';
 
    tjingApp.config(function($routeProvider) {
         $routeProvider
@@ -40,6 +40,16 @@
             .when('/item/:itemId', {
                 templateUrl : 'app/partials/item.html',
                 controller : "ItemController"
+            })
+
+            .when('/pool/:poolId', {
+                templateUrl : 'app/partials/pool.html',
+                controller: "PoolController"
+            })
+
+            .when('/user/:userId', {
+                templateUrl : partialsUrl + "user.html",
+                controller : "UserController"
             })
 
     });

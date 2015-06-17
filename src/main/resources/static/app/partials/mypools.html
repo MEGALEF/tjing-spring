@@ -18,7 +18,7 @@
   </div>
   <ul>
     <li ng-repeat="membership in myMemberships">
-      {{membership.pool.title}}
+      <tjing-pool pool="membership.pool"/>
       <button type="button" ng-click="leavePool(membership)">
         Leave
       </button>

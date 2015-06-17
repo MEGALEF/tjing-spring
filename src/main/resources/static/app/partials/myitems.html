@@ -6,7 +6,7 @@
     </div>
     <ul>
       <li ng-repeat="item in owneditems" >
-        {{item.title}} 
+        <tjing-item item="item"/>
         <button type="button" title="Delete" ng-click="deleteItem(item)">
           <span class="glyphicon glyphicon-trash"></span>
         </button>

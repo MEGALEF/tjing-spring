@@ -1,5 +1,6 @@
 (function(angular){
 	var myApp = angular.module("tjingApp");
+	var templatesDirectory = "app/templates/";
 
 	myApp.directive("tjingUser", function(){
 		return {
@@ -33,4 +34,24 @@
 			templateUrl: "/app/templates/itemrequest.tpl.html"
 		}
 	});
+
+	myApp.directive("tjingItem", function(){
+		return {
+			scope: {
+				item : '='
+			},
+			restrict : 'E',
+			templateUrl : "app/templates/item.tpl.html"
+		}
+	});
+
+	myApp.directive("tjingPool", function(){
+		return {
+			scope: {
+				pool: "="
+			},
+			restrict : "E",
+			templateUrl : "app/templates/pool.tpl.html"
+		}
+	})
 }(angular));

@@ -243,5 +243,23 @@
       });
   }]);
 
+  angular.module("tjingApp.controllers").controller("PoolController", 
+    ["$scope", "$routeParams", "Pool",
+    function($scope, $routeParams, Pool){
+      $scope.currentPool = {};
 
+      Pool.get({id: $routeParams.poolId}, function(data){
+        $scope.currentPool = data;
+      });
+    }]);
+
+    angular.module("tjingApp.controllers").controller("UserController",
+      ["$scope", "$routeParams", "User",
+      function($scope, $routeParams, User){
+        $scope.currentUser = {};
+
+        User.get({id: $routeParams.userId}, function(data){
+          $scope.currentUser = data;
+        });
+      }]);
 }(angular));
