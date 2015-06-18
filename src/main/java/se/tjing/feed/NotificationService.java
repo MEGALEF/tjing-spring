@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +37,9 @@ public class NotificationService {
 	
 	@Autowired
 	JavaMailSender mailSender;
+	
+	@Autowired
+	SimpMessagingTemplate simpTpl;
 	
 	public List<Notification> getFeed(Person currentUser) {
 		JPAQuery query = new JPAQuery(em);
@@ -79,5 +83,10 @@ public class NotificationService {
 		if (notifyEmail){
 			sendMail(notif);
 		}
+		sendWebNotification(notif);
+	}
+	
+	public void sendWebNotification(Notification notif){
+		simpTpl.convertAndSendToUser(notif.getTarget().getUsername(), "/queue/notifications/", notif);
 	}
 }

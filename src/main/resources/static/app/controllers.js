@@ -203,6 +203,8 @@
     $scope.searchResult = [];
 
     $scope.currentUser = User.current(function(data){
+       connect();
+
       if (data.facebookId!=null){ //If the User object contains a facebookId, use it to get the profile picture from facebook
         $scope.profilePicUrl = "http://graph.facebook.com/" +data.facebookId + "/picture?type=small"
       }
@@ -215,6 +217,27 @@
 
     $scope.signout = function(){
       location.href="/signout";
+    }
+
+    var stompClient = null;
+
+    function connect() {
+        var socket = new SockJS('/feed');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function(frame) {
+            console.log('Connected: ' + frame);
+            stompClient.subscribe('/user/queue/notifications/', function(notification){
+                alert(notification);
+            });
+        });
+    }
+
+    function disconnect() {
+        if (stompClient != null) {
+            stompClient.disconnect();
+        }
+        setConnected(false);
+        console.log("Disconnected");
     }
   }]);
 
