@@ -4,9 +4,9 @@
   <link rel="stylesheet" href="./bower_components/bootstrap-css-only/css/bootstrap.min.css" />
 </head>
 <body ng-app="tjingApp">
-  <header>
+  <header ng-controller="NavbarController">
     <nav>
-      <div class="container" ng-controller="NavbarController">
+      <div class="container">
         <div class="navbar-header">
           <a class ="navbar-brand" href="/">Tjing! [alpha]</a>
         </div>
@@ -15,14 +15,12 @@
           <li><a href="#interactions">Aktiva lån</a></li>
           <li><a href="#pools">Grupper</a></li>
           <li ng-show="false"><a href="#requests">Förfrågningar</a></li>
-          
             <li>
-                <a href="#profile">{{currentUser.firstName}}</a>
+                <a href="#myprofile">{{currentUser.firstName}}</a>
             </li>
             <li>
               <img ng-src="{{currentUser.connection[0].imageurl}}">
             </li>
-          
           <li>
             <a href="/signout">Logga ut</a>
           </li>
@@ -33,31 +31,28 @@
         </form>
       </div>
     </nav>
+    <h1>Notification feed</h1>
+    <ul>
+      <div ng-repeat="feedItem in feedItems"> 
+        <li ng-switch="feedItem.type">
+          <div ng-switch-when="INTERACTION">
+            <tjing-interaction interaction="feedItem.interaction" user="currentUser"></tjing-interaction>
+          </div>
+          <div ng-switch-when="ITEMREQUEST">
+            <tjing-itemrequest itemrequest="feedItem.itemrequest"></tjing-itemrequest>
+          </div>
+          <div ng-switch-default>
+            {{feedItem.message}}
+          </div>
+        </li>
+      </div>
+    </ul>
   </header>
 
   <div id="main">
     <div ng-view>
       <!-- Views go here -->
     </div>
-  </div>
-
-  <div ng-controller="FeedController">
-    <h1>Notification feed</h1>
-    <ul>
-      <div ng-repeat="feed in feedItems"> 
-        <li ng-switch="feed.type">
-          <div ng-switch-when="INTERACTION">
-            <tjing-interaction interaction="feed.interaction"></tjing-interaction>
-          </div>
-          <div ng-switch-when="ITEMREQUEST">
-            <tjing-itemrequest itemrequest="feed.itemrequest"></tjing-itemrequest>
-          </div>
-          <div ng-switch-default>
-            {{feed.message}}
-          </div>
-        </li>
-      </div>
-    </ul>
   </div>
   
   <script type="text/javascript" src="./bower_components/angular/angular.min.js"></script>

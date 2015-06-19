@@ -7,6 +7,11 @@
    tjingApp.config(function($routeProvider) {
         $routeProvider
 
+            .when('/myprofile', {
+                templateUrl : partialsUrl + "myprofile.html",
+                controller : "MyProfileController"
+            })
+
             .when('/items', {
                 templateUrl : 'app/partials/myitems.html',
                 controller  : 'MyItemsController'
@@ -50,6 +55,11 @@
             .when('/user/:userId', {
                 templateUrl : partialsUrl + "user.html",
                 controller : "UserController"
+            })
+
+            .when('/interaction/:interactionId', {
+                templateUrl : partialsUrl + "interaction.html",
+                controller : "InteractionController"
             })
 
     });

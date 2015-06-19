@@ -1,0 +1,12 @@
+	<DIV ng-show="interaction.item.owner.id==user.id">
+		<a href="#interaction/{{interaction.id}}">
+		{{interaction.borrower.firstName}} vill låna din {{interaction.item.title}}
+	</a>
+	</DIV>
+
+	<DIV ng-show="interaction.borrower.id==user.id">
+		<a href="#interaction/{{interaction.id}}">
+		Du skickade förfrågan att låna {{interaction.item.title}} av {{interaction.item.owner.firstName}}
+		</a>
+	</DIV>
+

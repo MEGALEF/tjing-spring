@@ -5,6 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +24,9 @@ import com.wordnik.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping("/interaction")
 public class InteractionController {
+	
+	@Autowired
+	SimpMessagingTemplate msgTpl;
 
 	@Autowired
 	InteractionService interactionService;
@@ -139,5 +145,18 @@ public class InteractionController {
 			List<Interaction> result = interactionService.getUserInteractions(personService.getCurrentUser());
 			return new ResponseEntity<List<Interaction>>(result, null, HttpStatus.OK);
 		}
+	}
+	
+	@RequestMapping(value="{interactionId}",method=RequestMethod.GET)
+	public ResponseEntity<Interaction> getInteraction(@PathVariable Integer interactionId){
+		Interaction result = interactionService.getInteraction(personService.getCurrentUser(), interactionId);
+		
+		return new ResponseEntity<Interaction>(result, null, HttpStatus.OK);
+	}
+	
+	@MessageMapping(value="/messaging/{interactionId}")
+	public void receiveMessage(IncomingMessage msg, @DestinationVariable Integer interactionId){
+		InteractionMessage message = interactionService.addMessage(interactionId, msg);
+		msgTpl.convertAndSend("/topic/messaging/" + interactionId, message);
 	}
 }

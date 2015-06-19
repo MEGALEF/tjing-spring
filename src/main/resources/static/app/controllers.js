@@ -26,12 +26,12 @@
 
   }]);
 
-
-   //InteractionController
-  angular.module('tjingApp.controllers').controller("MyInteractionsController", ["$scope", "Interaction", function($scope, Interaction){
+  angular.module('tjingApp.controllers').controller("MyInteractionsController", 
+    ["$scope", "Interaction", "User", function($scope, Interaction, User){
     $scope.allinteractions = Interaction.query();
     $scope.incomingrequests = Interaction.query({param:'incoming'});
     $scope.outgoingrequests = Interaction.query({param:'outgoing'});
+    $scope.currentUser = User.current();
 
     $scope.acceptRequest = function(interaction){
       Interaction.accept(interaction, function(response){
@@ -56,16 +56,6 @@
     $scope.confirmReturn = function(interaction){
       Interaction.returnconfirm(interaction, function(){
         $scope.incomingrequests = Interaction.query({param:"incoming"});
-      });
-    }
-  }]);
-
-  angular.module('tjingApp.controllers').controller('FeedController', ["$scope", "Feed", function($scope, Feed){
-    $scope.feedItems = Feed.query();
-
-    $scope.delete = function(item){
-      Feed.delete({id:item.id}, function (){
-        $scope.feedItems = Feed.query();
       });
     }
   }]);
@@ -199,12 +189,18 @@
     };
   }]);
 
-  angular.module("tjingApp.controllers").controller("NavbarController", ["$scope", "$location", "$http", "User", function($scope, $location, $http, User){
-    $scope.searchResult = [];
+  angular.module("tjingApp.controllers").controller("MyProfileController", function(){});
+  //TODO ^^
 
+  angular.module("tjingApp.controllers").controller("NavbarController", 
+    ["$scope", "$location", "$http", "User", "Feed", 
+    function($scope, $location, $http, User, Feed){
+    
+    var stompClient = null;
+    $scope.searchResult = [];
+    $scope.feedItems = Feed.query();
     $scope.currentUser = User.current(function(data){
        connect();
-
       if (data.facebookId!=null){ //If the User object contains a facebookId, use it to get the profile picture from facebook
         $scope.profilePicUrl = "http://graph.facebook.com/" +data.facebookId + "/picture?type=small"
       }
@@ -219,15 +215,16 @@
       location.href="/signout";
     }
 
-    var stompClient = null;
-
     function connect() {
         var socket = new SockJS('/feed');
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function(frame) {
             console.log('Connected: ' + frame);
             stompClient.subscribe('/user/queue/notifications/', function(notification){
-                alert(notification);
+              $scope.$apply(function(){
+                $scope.feedItems.unshift(JSON.parse(notification.body));
+                //TODO: set some kind of flag for unread notifications
+              });
             });
         });
     }
@@ -252,18 +249,90 @@
   }]);
 
   angular.module("tjingApp.controllers").controller("ItemController", 
-    ["$scope", "$routeParams", "Item", "Pool", "Membership", 
-    function($scope, $routeParams, Item, Pool, Membership){
+    ["$scope", "$routeParams", "Item", "Pool", "Membership", "Share", 
+    function($scope, $routeParams, Item, Pool, Membership, Share){
       $scope.currentItem = {}; 
       $scope.myMemberships = [];
+      refreshItemsAndMemberships();
 
-      Membership.query({}, function(data){
-        $scope.myMemberships = data;
-      });
+      function buildShareMap(item){
+        item.shareMap = {};
+        for (i = 0; i< $scope.myMemberships.length; i++){
+          var pool = $scope.myMemberships[i].pool;
+          item.shareMap[pool.id] = pool;
+        }
+        for (i = 0; i< item.shares.length; i++){
+          var share = item.shares[i];
+          item.shareMap[share.pool.id].itemIsShared = true;
+        }
+      }
 
-      Item.get({id: $routeParams.itemId}, function(data){
-        $scope.currentItem = data;
+      function refreshItemsAndMemberships(){
+        Membership.query({}, function(data){
+          $scope.myMemberships = data;
+
+          Item.get({id: $routeParams.itemId}, function(data2){
+            $scope.currentItem = data2;
+
+            buildShareMap($scope.currentItem);
+          });
+        });
+      }  
+
+      $scope.shareItem = function(item, pool){
+      Share.save(
+      {
+        itemId: item.id, 
+        poolId : pool.id
+      }, function(){
+        refreshItemsAndMemberships();
       });
+    };
+
+    $scope.unshareItem = function(item, pool){
+      for(i=0; i<$scope.currentItem.shares.length; i++){
+        if ($scope.currentItem.shares[i].pool.id==pool.id){ //Iterate through item shares to find the right one
+          Share.delete({id: $scope.currentItem.shares[i].id}, function(){
+            refreshItemsAndMemberships();
+          })
+        }
+      }
+    };
+  }]);
+
+  angular.module("tjingApp.controllers").controller("InteractionController",
+    ["$scope", "$routeParams", "Interaction", 
+    function($scope, $routeParams, Interaction){
+    
+    var stompClient = null;
+    $scope.currentInteraction = Interaction.get({id: $routeParams.interactionId}, function(){
+      connect();  
+    });
+      
+    function connect() {
+        var socket = new SockJS('/messaging');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function(frame) {
+            console.log('Connected: ' + frame);
+            stompClient.subscribe('/topic/messaging/'+$scope.currentInteraction.id, function(message){
+              $scope.$apply(function(){
+                $scope.currentInteraction.conversation.push(JSON.parse(message.body));
+              });
+            });
+        });
+    }
+
+    $scope.send = function() {
+        stompClient.send("/app/messaging/"+$scope.currentInteraction.id, {}, JSON.stringify({ 'text': $scope.text }));
+    }
+
+    function disconnect() {
+        if (stompClient != null) {
+            stompClient.disconnect();
+        }
+        setConnected(false);
+        //console.log("Disconnected");
+    }
   }]);
 
   angular.module("tjingApp.controllers").controller("PoolController", 

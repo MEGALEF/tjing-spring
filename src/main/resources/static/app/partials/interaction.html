@@ -1,0 +1,12 @@
+<div>
+	<tjing-user user="currentInteraction.borrower"></tjing-user>
+	vill låna  
+	<tjing-item item="currentInteraction.item"></tjing-item>
+	<ul>
+		<li ng-repeat="message in currentInteraction.conversation">{{message.text}}</li>
+	</ul>
+	<form ng-submit="send()">
+<input type="text" ng-model="text">
+<input type="submit"> 
+	</form>
+</div>

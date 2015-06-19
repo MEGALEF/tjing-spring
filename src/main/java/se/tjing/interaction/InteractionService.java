@@ -29,6 +29,9 @@ public class InteractionService {
 	InteractionRepository interactionRepo;
 	
 	@Autowired
+	InteractionMessageRepository msgRepo;
+	
+	@Autowired
 	ItemService itemService;
 
 	@Autowired
@@ -163,5 +166,31 @@ public class InteractionService {
 			interactionRepo.save(interaction);
 			notifService.sendNotification(new Notification(interaction, interaction.getItem().getOwner(), "Someone wants to borrow your thing"), true, true);
 			return interaction;
+		}
+
+		public Interaction getInteraction(Person user,
+				Integer interactionId) {
+			Interaction interaction = interactionRepo.findOne(interactionId);
+			if (isAccessibleToUser(user, interaction)){
+				return interaction;
+			} else {
+				throw new TjingException("Not accessible");
+			}
+		}
+
+		private boolean isAccessibleToUser(Person user,
+				Interaction interaction) {
+			if (isPersonBorrower(user, interaction) || isPersonItemOwner(user, interaction) ){
+				return true;
+			} else return false;
+		}
+
+		public InteractionMessage addMessage(Integer interactionId, IncomingMessage msg) {
+			Interaction interaction = interactionRepo.findOne(interactionId);
+			//TODO: Check auth
+			InteractionMessage message = new InteractionMessage(msg, interaction);
+			
+			return msgRepo.save(message);
+			
 		}
 }

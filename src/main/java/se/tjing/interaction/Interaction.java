@@ -25,6 +25,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 public class Interaction extends TjingEntity{
 
+	public List<InteractionMessage> getConversation() {
+		return conversation;
+	}
+
+	public void setConversation(List<InteractionMessage> conversation) {
+		this.conversation = conversation;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
@@ -35,6 +43,9 @@ public class Interaction extends TjingEntity{
 
 	@ManyToOne
 	private Person borrower;
+	
+	@OneToMany(mappedBy="interaction", cascade=CascadeType.ALL)
+	private List<InteractionMessage> conversation;
 	
 	@OneToMany(mappedBy="interaction", cascade=CascadeType.ALL)
 	private List<Notification> notifications;

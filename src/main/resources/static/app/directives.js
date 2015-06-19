@@ -18,10 +18,11 @@
 	myApp.directive("tjingInteraction", function(){
 		return {
 			scope: {
-				interaction : '='
+				interaction : '=',
+				user : '='
 			},
 			restrict: "E",
-			template: "<tjing-user user='interaction.borrower'></tjing-user> asked to borrow your {{interaction.item.title}}"
+			templateUrl: templatesDirectory+"interaction.tpl.html"
 		};
 	});
 
