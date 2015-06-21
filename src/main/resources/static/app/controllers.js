@@ -114,9 +114,7 @@
       });      
     };
     
-    $scope.requestItem = function(item){
-      Interaction.save({itemId:item.id})
-    };
+ 
 
     $scope.shareItem = function(item, pool){
       Share.save(
@@ -249,10 +247,14 @@
   }]);
 
   angular.module("tjingApp.controllers").controller("ItemController", 
-    ["$scope", "$routeParams", "Item", "Pool", "Membership", "Share", 
-    function($scope, $routeParams, Item, Pool, Membership, Share){
+    ["$scope", "$routeParams", "Item", "Membership", "Share", "User", "Interaction",
+    function($scope, $routeParams, Item, Membership, Share, User, Interaction){
       $scope.currentItem = {}; 
       $scope.myMemberships = [];
+      $scope.currentUser = User.current();
+
+      $scope.isOwner = {};
+
       refreshItemsAndMemberships();
 
       function buildShareMap(item){
@@ -275,19 +277,26 @@
             $scope.currentItem = data2;
 
             buildShareMap($scope.currentItem);
+            $scope.isOwner = $scope.currentItem.owner.id == $scope.currentUser.id;
           });
         });
       }  
 
       $scope.shareItem = function(item, pool){
-      Share.save(
-      {
-        itemId: item.id, 
-        poolId : pool.id
-      }, function(){
-        refreshItemsAndMemberships();
-      });
-    };
+        Share.save(
+        {
+          itemId: item.id, 
+          poolId : pool.id
+        }, function(){
+          refreshItemsAndMemberships();
+        });
+      };
+
+      $scope.requestItem = function(){
+        Interaction.save({itemId:$scope.currentItem.id}, function(data){
+          var b = data;
+        })
+      };
 
     $scope.unshareItem = function(item, pool){
       for(i=0; i<$scope.currentItem.shares.length; i++){

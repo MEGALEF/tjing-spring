@@ -118,7 +118,8 @@ var tjingServices = angular.module("tjingApp.services", ["ngResource"]);
     }, {
       current: {
         method: "GET",
-        url:userUrl+"/me"
+        url:userUrl+"/me",
+        cache : true
       }
     }
     )

@@ -41,7 +41,7 @@
   <h1>Tillgängliga prylar</h1>
     <ul>
       <li ng-repeat="item in items">
-        <tjing-user user="item.owner"></tjing-user>'s {{item.title}}
+        <tjing-user user="item.owner"></tjing-user>'s <tjing-item item="item"></tjing-item>
         <button type="button" title="Request" ng-click="requestItem(item)">Request
         </button>
       </li>
