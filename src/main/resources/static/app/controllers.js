@@ -133,7 +133,8 @@
     };
   }]);
 
-  angular.module("tjingApp.controllers").controller("MyPoolsController", ["$scope", "Pool", "Item", "Membership", function($scope, Pool, Item, Membership) {
+  angular.module("tjingApp.controllers").controller("MyPoolsController", 
+    ["$scope", "Pool", "Item", "Membership", function($scope, Pool, Item, Membership) {
     $scope.showPools = false;
 
     $scope.allPools = [];
@@ -345,14 +346,44 @@
   }]);
 
   angular.module("tjingApp.controllers").controller("PoolController", 
-    ["$scope", "$routeParams", "Pool",
-    function($scope, $routeParams, Pool){
-      $scope.currentPool = {};
+    ["$scope", "$routeParams", "Pool", "Membership",
+    function($scope, $routeParams, Pool, Membership){
+    $scope.currentPool = {};
+    $scope.myMemberships = [];
+    $scope.membership = null;
 
+    refresh();
+
+    $scope.joinPool = function(){
+      Membership.save({poolId: $scope.currentPool.id},function(response){
+        $scope.membership = response;
+      });
+    };
+
+    $scope.leavePool = function(){
+      Membership.delete({membershipId: $scope.membership.id}, function(){ //TODO äuuuuuäuäuuähh
+        $scope.membership = null;
+      })
+    };
+
+    function refresh(){ //TODO could be made nicer w an endpoint that retrieves membership or a specific Pool
       Pool.get({id: $routeParams.poolId}, function(data){
         $scope.currentPool = data;
+
+        Membership.query({}, function(data2){
+          $scope.myMemberships = data2;
+
+          for(i =0; i<$scope.myMemberships.length; i++){
+            var membership = $scope.myMemberships[i];
+
+            if (membership.pool.id == $scope.currentPool.id){
+              $scope.membership = membership;
+            }
+          }
+        });
       });
-    }]);
+    };
+  }]);
 
     angular.module("tjingApp.controllers").controller("UserController",
       ["$scope", "$routeParams", "User",
