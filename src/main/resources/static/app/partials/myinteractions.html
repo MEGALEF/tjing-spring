@@ -1,5 +1,5 @@
 <div>
-    <h1>Lånade prylar</h1>
+    <h1>Lånat</h1>
     <ul>
       <li ng-repeat="request in outgoingrequests">
         <tjing-interaction interaction="request" user="currentUser"/>
@@ -12,7 +12,7 @@
       </li>
     </ul>
     <hr />
-    <h1>Utlånade prylar</h1>
+    <h1>Utlån</h1>
     <ul>
       <li ng-repeat="request in incomingrequests">
         <tjing-interaction user="currentUser" interaction="request"></tjing-interaction>

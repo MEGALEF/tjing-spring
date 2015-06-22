@@ -3,16 +3,19 @@
 	//TODO description
 	//TODO picture
 	Ägare: {{currentItem.owner.firstName}}
-	<table ng-show="isOwner">
-		<tr>
-			<td ng-repeat="membership in myMemberships">{{membership.pool.title}}</td>
-		</tr>
-		<tr>
-			<td ng-repeat="pool in currentItem.shareMap">
-				<input type="checkbox" ng-model="pool.itemIsShared" ng-click="pool.itemIsShared ? shareItem(currentItem, pool) : unshareItem(currentItem, pool)">
-			</td>
-		</tr>
-	</table>
+
+	<div ng-show="isOwner">
+		<table>
+			<tr>
+				<td ng-repeat="pool in currentItem.shareMap">{{pool.title}}</td>
+			</tr>
+			<tr>
+				<td ng-repeat="pool in currentItem.shareMap">
+					<input type="checkbox" ng-model="pool.itemIsShared" ng-click="pool.itemIsShared ? shareItem(currentItem, pool) : unshareItem(currentItem, pool)">
+				</td>
+			</tr>
+		</table>
+	</div>
 	<div ng-show="!isOwner">
 		<button ng-click="requestItem()">Låna</button>
 	</div>
