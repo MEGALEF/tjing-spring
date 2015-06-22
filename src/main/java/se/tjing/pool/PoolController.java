@@ -59,15 +59,22 @@ public class PoolController {
 		return new ResponseEntity<List<Pool>>(result, null, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/{poolId}/item", method = RequestMethod.GET)
+	@RequestMapping(value = "/{poolId}/items", method = RequestMethod.GET)
 	public ResponseEntity<List<Item>> listItemsInPool(
 			@PathVariable Integer poolId) {
 		Person currentUser = personService.getCurrentUser();
 		List<Item> result = poolService.getItemsInPool(currentUser, poolId);
 		return new ResponseEntity<List<Item>>(result, null, HttpStatus.OK);
 	}
+	
+	@RequestMapping(value="/{poolId}/members", method = RequestMethod.GET)
+	public ResponseEntity<List<Person>> listPoolMembers(@PathVariable Integer poolId){
+		List<Person> result = poolService.getPoolMembers(personService.getCurrentUser(), poolId);
+		
+		return new ResponseEntity<List<Person>>(result, null, HttpStatus.OK);
+	}
 
-	@RequestMapping(value = "/{poolId}/item/owned", method = RequestMethod.GET)
+	@RequestMapping(value = "/{poolId}/items/owned", method = RequestMethod.GET)
 	public ResponseEntity<List<Item>> listOwnItemsInPool(
 			@PathVariable Integer poolId) {
 		List<Item> result = poolService.getOwnedItemsInPool(

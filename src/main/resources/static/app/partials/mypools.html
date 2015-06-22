@@ -1,5 +1,5 @@
 <div>
-  <h1>My pools</h1>
+  <h1>Mina grupper</h1>
   <div ng-hide="myMemberships && myMemberships.length >0">
     You are not a member of any pools. Join a pool!
   </div>
@@ -13,7 +13,7 @@
   </ul>
   <a href="#groupimport">Importera grupper från facebook</a>
   <hr/>
-  <h1>Create pool</h1>
+  <h1>Skapa ny grupp</h1>
   <form role="form" ng-submit="createPool(newPool)">
     <input type="text" ng-model="newPool.title" placeholder="Enter pool name.." required/>
     <button type="submit" ng-disabled="!newPool.title" title="Add">

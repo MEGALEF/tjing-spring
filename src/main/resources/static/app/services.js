@@ -81,8 +81,24 @@ var tjingServices = angular.module("tjingApp.services", ["ngResource"]);
           id: "@id"
         },
         isArray: true //This endpoint returns an array of the remaining member pools. Possibly use this method for all the other actions
-
+      },
+      members : {
+        method : "GET",
+        url: "/pool/:id/members",
+        params: {
+          id: "@id"
+        },
+        isArray: true
+      },
+      items : {
+        method: "GET",
+        url : "/pool/:id/items",
+        params: {
+          id: "@id"
+        },
+        isArray: true
       }
+      
     })
   }]);
 

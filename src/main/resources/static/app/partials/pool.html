@@ -11,4 +11,21 @@
 	<button ng-show="!membership" ng-click="joinPool()">
 		Gå med i grupp
 	</button>
+
+	<div ng-show="membership">
+		<h2>Medlemmar</h2>
+		<ul>
+			<li ng-repeat="member in members">
+				<tjing-user user="member"></tjing-user>
+			</li>
+		</ul>
+	</div>
+	<div>
+		<h2>Delade prylar</h2>
+		<ul>
+			<li ng-repeat="item in items">
+				<tjing-item item="item"></tjing-item>
+			</li>
+		</ul>	
+	</div>	
 </div>

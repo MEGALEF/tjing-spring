@@ -397,6 +397,8 @@
     $scope.currentPool = {};
     $scope.myMemberships = [];
     $scope.membership = null;
+    $scope.items = [];
+    $scope.members = [];
 
     refresh();
 
@@ -424,6 +426,8 @@
 
             if (membership.pool.id == $scope.currentPool.id){
               $scope.membership = membership;
+              $scope.members = Pool.members({id: $scope.currentPool.id}, function(){});
+              $scope.items = Pool.items({id: $scope.currentPool.id}, function(){});
             }
           }
         });

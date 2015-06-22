@@ -20,6 +20,7 @@ import se.tjing.share.QShare;
 import se.tjing.share.Share;
 import se.tjing.share.ShareRepository;
 import se.tjing.user.Person;
+import se.tjing.user.QPerson;
 
 import com.mysema.query.jpa.JPASubQuery;
 import com.mysema.query.jpa.impl.JPAQuery;
@@ -296,5 +297,21 @@ public class PoolService {
 			}
 		}
 		throw new TjingException("User is not a legit member of that group");
+	}
+
+	public List<Person> getPoolMembers(Person currentUser, Integer poolId) {
+		Pool pool = poolRepo.findOne(poolId);
+		
+		if (!isUserMemberOfPool(currentUser, pool)){
+			throw new TjingException("Only members may access this");
+		} else {
+			JPAQuery query = new JPAQuery(em);
+			QMembership membership = QMembership.membership;
+			QPerson person = QPerson.person;
+			query.from(membership).leftJoin(membership.member, person)
+			.where(membership.pool.eq(pool).and(membership.approved.isTrue()));
+			
+			return query.list(person);
+		}		
 	}
 }
