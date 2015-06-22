@@ -21,11 +21,11 @@
 	</div>
 
 	<div ng-show="!isOwner">
-		<div ng-show="currentInteraction.statusAccepted">(Accepted on {{request.statusAccepted | date}})
+		<div ng-show="currentInteraction.statusAccepted">(Accepted on {{currentInteraction.statusAccepted | date}})
           <button  ng-hide="currentInteraction.statusHandedOver" ng-click="confirmHandover()">
             Confirm handover
           </button>
-          <div ng-show="currentInteraction.statusHandedOver">(Handed over on {{request.statusHandedOver | date}})</div>
+          <div ng-show="currentInteraction.statusHandedOver">(Handed over on {{currentInteraction.statusHandedOver | date}})</div>
         </div>
 	</div>
 

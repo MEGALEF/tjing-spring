@@ -114,7 +114,11 @@
       });      
     };
     
- 
+    $scope.requestItem = function(item){
+        Interaction.save({itemId: item.id}, function(data){
+          var b = data;
+        })
+      };
 
     $scope.shareItem = function(item, pool){
       Share.save(
@@ -277,8 +281,10 @@
           Item.get({id: $routeParams.itemId}, function(data2){
             $scope.currentItem = data2;
 
-            buildShareMap($scope.currentItem);
             $scope.isOwner = $scope.currentItem.owner.id == $scope.currentUser.id;
+            if ($scope.isOwner){
+              buildShareMap($scope.currentItem);
+            }
           });
         });
       }  

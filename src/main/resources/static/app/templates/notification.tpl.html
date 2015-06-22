@@ -1,0 +1,27 @@
+<div ng-switch="notification.type">
+  <div ng-switch-when="INTERACTION">
+    <a href="#interaction/{{notification.interaction.id}}" >
+      <div ng-show="notification.interaction.statusReturned">
+        {{notification.interaction.item.owner.firstName}} bekräftade återlämning av {{notification.interaction.item.title}}.
+      </div>
+      
+      <div ng-show="notification.interaction.statusHandedOver && !notification.interaction.statusReturned">
+        {{notification.interaction.borrower.firstName}} bekräftade överlämning av {{notification.item.title}}.
+      </div>
+      
+      <div ng-show="notification.interaction.statusAccepted && !notification.interaction.statusHandedOver">
+        {{notification.interaction.item.owner.firstName}} accepterade din förfrågan.
+      </div>
+
+      <div ng-show="!notification.interaction.statusAccepted">
+        {{notification.interaction.borrower.firstName}} vill låna din {{notification.interaction.item.title}}.
+      </div>
+    </a>
+  </div>
+  <div ng-switch-when="ITEMREQUEST">
+    <tjing-itemrequest itemrequest="feedItem.itemrequest"></tjing-itemrequest>
+  </div>
+  <div ng-switch-default>
+    {{feedItem.message}}
+  </div>
+</div>

@@ -6,27 +6,11 @@
     </div>
     <ul>
       <li ng-repeat="item in owneditems" >
-        <tjing-item item="item"/>
+        <tjing-item item="item"></tjing-item>
         <button type="button" title="Delete" ng-click="deleteItem(item)">
           <span class="glyphicon glyphicon-trash"></span>
         </button>
-        <div ng-show="!item.shares[0]">This item isn't shared with anyone. Share it to a pool!</div>
-        <ul ng-show="item.shares[0]">
-          Delad med 
-          <li ng-repeat="share in item.shares">
-            {{share.pool.title}} 
-            <button ng-click="unshareItem(share)">Stoppa delning</button>
-          </li>
-        </ul>
         <div ng-show="item.activeInteraction"> utlånad till <tjing-user user="item.activeInteraction.borrower"/> on {{item.activeInteraction.statusHandedOver | date}}</div>
-        <form role="form" ng-submit="shareItem(item, poolToShareTo)">
-          <button type="submit" ng-disabled="!poolToShareTo">share to</button> 
-
-          <select ng-options="pool.title for pool in mypools" ng-model ="poolToShareTo" >
-            <option value="" selected>pool</option>
-          </select>
-          Vänner: <input type="checkbox" ng-model="item.fbAvailable" ng-change="setFbAvailable(item)"></input>
-        </form> 
       </li>
     </ul>     
     <hr />

@@ -55,9 +55,9 @@ public class InteractionService {
 		return interaction;
 	}
 
-	public Interaction confirmHandover(Integer interactionId, Person person) {
+	public Interaction confirmHandover(Integer interactionId, Person user) {
 		Interaction interaction = interactionRepo.findOne(interactionId);
-		if (!isPersonBorrower(person, interaction)) {
+		if (!isPersonBorrower(user, interaction)) {
 			throw new TjingException(
 					"Only the user who initially sent the request may do this");
 		}

@@ -54,5 +54,15 @@
 			restrict : "E",
 			templateUrl : "app/templates/pool.tpl.html"
 		}
-	})
+	});
+
+	myApp.directive("tjingNotification", function(){
+		return {
+			scope: {
+				notification : "="
+			},
+			restrict : "E",
+			templateUrl : templatesDirectory + "notification.tpl.html"
+		}
+	});
 }(angular));
