@@ -1,17 +1,4 @@
 <div>
-  <h1>All pools</h1><button ng-click="showPools=!showPools">show/hide</button>
-  <div ng-show="showPools">
-    <div ng-hide="allPools.length > 0">
-      No pools exist yet. Add a pool!
-    </div>
-    <ul>
-      <li ng-repeat="pool in allPools">
-        {{pool.title}} ({{pool.privacy}}<div ng-hide="pool.privacy == 'OPEN'">, requires approval from {{pool.approval}})</div>
-         <button type="button" ng-click="joinPool(pool)">Join</button>
-      </li>
-    </ul>
-  </div>
-  <hr />
   <h1>My pools</h1>
   <div ng-hide="myMemberships && myMemberships.length >0">
     You are not a member of any pools. Join a pool!
@@ -33,4 +20,18 @@
       <span class="glyphicon glyphicon-plus"></span>
     </button>
   </form>
+
+  <h1>Alla grupper som finns</h1><button ng-click="showPools=!showPools">show/hide</button>
+  <div ng-show="showPools">
+    <div ng-hide="allPools.length > 0">
+      No pools exist yet. Add a pool!
+    </div>
+    <ul>
+      <li ng-repeat="pool in allPools">
+        {{pool.title}} ({{pool.privacy}}<div ng-hide="pool.privacy == 'OPEN'">, requires approval from {{pool.approval}})</div>
+         <button type="button" ng-click="joinPool(pool)">Join</button>
+      </li>
+    </ul>
+  </div>
+  <hr />
 </div>

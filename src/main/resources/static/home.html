@@ -4,41 +4,44 @@
   <link rel="stylesheet" href="./bower_components/bootstrap-css-only/css/bootstrap.min.css" />
 </head>
 <body ng-app="tjingApp">
-  <header ng-controller="NavbarController">
-    <nav>
-      <div class="container">
-        <div class="navbar-header">
-          <a class ="navbar-brand" href="/">Tjing! [alpha]</a>
+  <div ng-controller="NavbarController">
+    <header>
+      <nav>
+        <div class="container">
+          <div class="navbar-header">
+            <a class ="navbar-brand" href="#">Tjing! [alpha]</a>
+          </div>
+          <ul class="nav navbar-nav navbar-left">
+            <li><a href="#items">Prylar</a></li>
+            <li><a href="#interactions">Aktiva lån</a></li>
+            <li><a href="#pools">Grupper</a></li>
+            <li ng-show="false"><a href="#requests">Förfrågningar</a></li>
+              <li>
+                  <a href="#myprofile">{{currentUser.firstName}}</a>
+              </li>
+              <li>
+                <img ng-src="{{currentUser.connection[0].imageurl}}">
+              </li>
+            <li>
+              <a href="/signout">Logga ut</a>
+            </li>
+          </ul>
+          <form ng-submit="search()">
+            <input type="text" ng-model="searchStr">
+            <input type="submit" class="glyphicons glyphicons-search" value="Sök">
+          </form>
         </div>
-        <ul class="nav navbar-nav navbar-left">
-          <li><a href="#items">Prylar</a></li>
-          <li><a href="#interactions">Aktiva lån</a></li>
-          <li><a href="#pools">Grupper</a></li>
-          <li ng-show="false"><a href="#requests">Förfrågningar</a></li>
-            <li>
-                <a href="#myprofile">{{currentUser.firstName}}</a>
-            </li>
-            <li>
-              <img ng-src="{{currentUser.connection[0].imageurl}}">
-            </li>
-          <li>
-            <a href="/signout">Logga ut</a>
-          </li>
-        </ul>
-        <form ng-submit="search()">
-          <input type="text" ng-model="searchStr">
-          <input type="submit" class="glyphicons glyphicons-search" value="Sök">
-        </form>
-      </div>
-    </nav>
-    <h1>Notification feed</h1>
-    <ul>
-      <div ng-repeat="feedItem in feedItems"> 
-        <tjing-notification notification="feedItem"></tjing-notification>
-      </div>
-    </ul>
-  </header>
-
+      </nav>
+    </header>
+    <div style="float:right">
+      <h1>Notification feed</h1>
+      <ul>
+        <div ng-repeat="feedItem in feedItems"> 
+          <tjing-notification notification="feedItem"></tjing-notification>
+        </div>
+      </ul>
+    </div>
+  </div>
   <div id="main">
     <div ng-view>
       <!-- Views go here -->

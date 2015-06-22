@@ -1,13 +1,13 @@
 <div>
 	<h1>{{currentItem.title}}</h1>
-	//TODO description
-	//TODO picture
-	Ägare: {{currentItem.owner.firstName}}
+	<h2>Ägare</h2>
+	{{currentItem.owner.firstName}}
 
 	<div ng-show="isOwner">
+		<h2>Dela med</h2>
 		<table>
 			<tr>
-				<td ng-repeat="pool in currentItem.shareMap">{{pool.title}}</td>
+				<th ng-repeat="pool in currentItem.shareMap">{{pool.title}}</td>
 			</tr>
 			<tr>
 				<td ng-repeat="pool in currentItem.shareMap">

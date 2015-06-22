@@ -62,5 +62,9 @@
                 controller : "InteractionController"
             })
 
+            .otherwise({
+                redirectTo: '/'
+            })
+
     });
 }(angular));

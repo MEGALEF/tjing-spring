@@ -99,7 +99,7 @@
         title: title
       }).$save(function (data){
         $scope.owneditems.push(data); //$save returns created item. Success callback adds the item to the scope array
-        $location.url('/items');
+        $location.path('/item/'+data.id);
       });
       $scope.newItem = "";
     };
