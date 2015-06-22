@@ -115,8 +115,8 @@
     };
     
     $scope.requestItem = function(item){
-        Interaction.save({itemId: item.id}, function(data){
-          var b = data;
+        Interaction.save({itemId: item.id}, function(response){
+          $location.path('/interaction/'+response.id);
         })
       };
 
@@ -252,8 +252,8 @@
   }]);
 
   angular.module("tjingApp.controllers").controller("ItemController", 
-    ["$scope", "$routeParams", "Item", "Membership", "Share", "User", "Interaction",
-    function($scope, $routeParams, Item, Membership, Share, User, Interaction){
+    ["$scope", "$routeParams", "$location", "Item", "Membership", "Share", "User", "Interaction",
+    function($scope, $routeParams, $location, Item, Membership, Share, User, Interaction){
       $scope.currentItem = {}; 
       $scope.myMemberships = [];
       $scope.currentUser = User.current();
@@ -300,8 +300,8 @@
       };
 
       $scope.requestItem = function(){
-        Interaction.save({itemId:$scope.currentItem.id}, function(data){
-          var b = data;
+        Interaction.save({itemId:$scope.currentItem.id}, function(response){
+          $location.path("/interaction/"+response.id);
         })
       };
 
