@@ -15,7 +15,6 @@
     <h1>Utlånade prylar</h1>
     <ul>
       <li ng-repeat="request in incomingrequests">
-
         <tjing-interaction user="currentUser" interaction="request"></tjing-interaction>
         <div ng-hide="request.statusAccepted">
           <button ng-disabled="request.statusAccepted" ng-click="acceptRequest(request)">Accept</button>

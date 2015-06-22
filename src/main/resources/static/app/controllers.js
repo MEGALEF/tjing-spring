@@ -311,13 +311,53 @@
   }]);
 
   angular.module("tjingApp.controllers").controller("InteractionController",
-    ["$scope", "$routeParams", "Interaction", 
-    function($scope, $routeParams, Interaction){
+    ["$scope", "$routeParams", "Interaction", "User", 
+    function($scope, $routeParams, Interaction, User){
+
+    $scope.currentInteraction = {};  
+    $scope.isOwner = null;
+    $scope.currentUser = null;
     
     var stompClient = null;
-    $scope.currentInteraction = Interaction.get({id: $routeParams.interactionId}, function(){
-      connect();  
-    });
+
+    refresh();
+
+    function refresh(){
+      $scope.currentInteraction = Interaction.get({id: $routeParams.interactionId}, function(){
+        connect();
+
+        $scope.currentUser = User.current({}, function(response){
+          $scope.currentUser = response;
+          $scope.isOwner = ($scope.currentUser.id == $scope.currentInteraction.item.owner.id);
+        })  
+      });
+    }
+
+    $scope.acceptRequest = function(){
+      Interaction.accept($scope.currentInteraction, function(response){
+        $scope.currentInteraction = response;
+      });
+    }
+
+    $scope.denyRequest = function(){
+      Interaction.deny($scope.currentInteraction, function(response){
+        $scope.currentInteraction = response;
+      });
+    }
+
+    //Borrower side
+    $scope.confirmHandover = function (){
+      Interaction.handoverconfirm($scope.currentInteraction, function(response){
+        $scope.currentInteraction = response;
+      });
+    }
+
+    //Owner side
+    $scope.confirmReturn = function(){
+      Interaction.returnconfirm($scope.currentInteraction, function(response){
+        $scope.currentInteraction = response;
+      });
+    }
       
     function connect() {
         var socket = new SockJS('/messaging');
@@ -332,8 +372,8 @@
         });
     }
 
-    $scope.send = function() {
-        stompClient.send("/app/messaging/"+$scope.currentInteraction.id, {}, JSON.stringify({ 'text': $scope.text }));
+    $scope.send = function(msg) {
+        stompClient.send("/app/messaging/"+$scope.currentInteraction.id, {}, JSON.stringify({ 'text': msg }));
     }
 
     function disconnect() {

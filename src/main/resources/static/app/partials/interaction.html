@@ -5,7 +5,31 @@
 	<ul>
 		<li ng-repeat="message in currentInteraction.conversation">{{message.text}}</li>
 	</ul>
-	<form ng-submit="send()">
+
+	<div ng-show="isOwner">
+		<div ng-hide="currentInteraction.statusAccepted">
+	    	<button ng-disabled="currentInteraction.statusAccepted" ng-click="acceptRequest()">Accept</button>
+	    	<button ng-disabled="currentInteraction.statusAccepted" ng-click="denyRequest()">Deny</button>
+	    </div>
+	    <div ng-show="currentInteraction.statusAccepted">
+	      (Accepterades {{currentInteraction.statusAccepted | date}})
+	    </div>
+	    <div ng-show="currentInteraction.statusHandedOver">
+	      (Överlämnad {{currentInteraction.statusHandedOver | date}})
+	      <button ng-disabled="currentInteraction.statusReturned" ng-click="confirmReturn()">Confirm return</button>
+	    </div>
+	</div>
+
+	<div ng-show="!isOwner">
+		<div ng-show="currentInteraction.statusAccepted">(Accepted on {{request.statusAccepted | date}})
+          <button  ng-hide="currentInteraction.statusHandedOver" ng-click="confirmHandover()">
+            Confirm handover
+          </button>
+          <div ng-show="currentInteraction.statusHandedOver">(Handed over on {{request.statusHandedOver | date}})</div>
+        </div>
+	</div>
+
+	<form ng-submit="send(text)">
 <input type="text" ng-model="text">
 <input type="submit"> 
 	</form>
