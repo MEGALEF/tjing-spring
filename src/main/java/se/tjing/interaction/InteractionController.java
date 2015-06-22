@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import se.tjing.TjingURL;
 import se.tjing.rating.Rating;
 import se.tjing.rating.RatingService;
 import se.tjing.user.PersonService;
@@ -156,7 +157,6 @@ public class InteractionController {
 	
 	@MessageMapping(value="/messaging/{interactionId}")
 	public void receiveMessage(IncomingMessage msg, @DestinationVariable Integer interactionId){
-		InteractionMessage message = interactionService.addMessage(interactionId, msg);
-		msgTpl.convertAndSend("/topic/messaging/" + interactionId, message);
+		InteractionMessage message = interactionService.addMessageFromUser(interactionId, msg);
 	}
 }

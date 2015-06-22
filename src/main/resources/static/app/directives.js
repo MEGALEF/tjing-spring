@@ -65,4 +65,14 @@
 			templateUrl : templatesDirectory + "notification.tpl.html"
 		}
 	});
+
+	myApp.directive("tjingMessage", function(){
+		return {
+			scope: {
+				message : "="
+			},
+			restrict : "E",
+			templateUrl : templatesDirectory + "message.tpl.html"
+		}
+	})
 }(angular));

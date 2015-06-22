@@ -3,7 +3,9 @@
 	vill låna  
 	<tjing-item item="currentInteraction.item"></tjing-item>
 	<ul>
-		<li ng-repeat="message in currentInteraction.conversation">{{message.text}}</li>
+		<li ng-repeat="message in currentInteraction.conversation">
+			<tjing-message message="message"></tjing-message>
+		</li>
 	</ul>
 
 	<div ng-show="isOwner">

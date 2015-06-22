@@ -9,6 +9,7 @@ import javax.persistence.ManyToOne;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import se.tjing.common.TjingEntity;
+import se.tjing.user.Person;
 
 @Entity
 public class InteractionMessage extends TjingEntity {
@@ -23,13 +24,21 @@ public class InteractionMessage extends TjingEntity {
 	@ManyToOne
 	private Interaction interaction;
 	
+	private boolean isSystemMessage = false;
+	
 	public InteractionMessage(){
 		
 	}
 
-	public InteractionMessage(IncomingMessage msg, Interaction interaction) {
-		this.text = msg.getText();
+	public InteractionMessage(String msg, Interaction interaction) {
+		this.text = msg;
 		this.interaction = interaction;
+	}
+	
+	public InteractionMessage(String msg, Interaction interaction, boolean isSystemMsg) {
+		this.text = msg;
+		this.interaction = interaction;
+		this.isSystemMessage = isSystemMsg;
 	}
 
 	@Override
@@ -55,6 +64,14 @@ public class InteractionMessage extends TjingEntity {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public boolean isSystemMessage() {
+		return isSystemMessage;
+	}
+
+	public void setSystemMessage(boolean isSystemMessage) {
+		this.isSystemMessage = isSystemMessage;
 	}
 
 }

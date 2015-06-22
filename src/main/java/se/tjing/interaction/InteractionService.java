@@ -6,8 +6,10 @@ import javax.persistence.EntityManager;
 
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import se.tjing.TjingURL;
 import se.tjing.exception.TjingException;
 import se.tjing.feed.Notification;
 import se.tjing.feed.NotificationService;
@@ -39,6 +41,9 @@ public class InteractionService {
 	
 	@Autowired
 	NotificationService notifService;
+	
+	@Autowired
+	SimpMessagingTemplate msgTpl;
 
 	public Interaction accept(Integer interactionId, Person person) {
 		Interaction interaction = interactionRepo.findOne(interactionId);
@@ -52,6 +57,7 @@ public class InteractionService {
 		itemRepo.save(item);
 		interactionRepo.save(interaction);
 		notifService.sendNotification(new Notification(interaction, interaction.getBorrower(), "Request was accepted!"), true, true);
+		addMessage(interaction, ":requestaccepted", true);
 		return interaction;
 	}
 
@@ -65,6 +71,7 @@ public class InteractionService {
 		interaction.setStatusHandedOver(DateTime.now());
 		interactionRepo.save(interaction);
 		notifService.sendNotification(new Notification(interaction, interaction.getItem().getOwner(), "Handover was confirmed!"), true, true);
+		addMessage(interaction, ":handoverconfirmed", true);
 		return interaction;
 	}
 
@@ -78,6 +85,7 @@ public class InteractionService {
 		notifService.sendNotification(new Notification(interaction, interaction.getBorrower(), "Return was confirmed"), true, true);
 		interaction.getItem().setActiveInteraction(null);
 		interaction.setActive(false);
+		addMessage(interaction, ":returnconfirmed", true);
 		return interactionRepo.save(interaction);
 	}
 
@@ -129,7 +137,6 @@ public class InteractionService {
 					"The interaction has already been accepted.");
 		}
 		interaction.setActive(false);
-		
 		return interactionRepo.save(interaction);
 	}
 
@@ -185,12 +192,15 @@ public class InteractionService {
 			} else return false;
 		}
 
-		public InteractionMessage addMessage(Integer interactionId, IncomingMessage msg) {
+		public InteractionMessage addMessageFromUser(Integer interactionId, IncomingMessage msg) {
 			Interaction interaction = interactionRepo.findOne(interactionId);
-			//TODO: Check auth
-			InteractionMessage message = new InteractionMessage(msg, interaction);
-			
-			return msgRepo.save(message);
-			
+
+			return addMessage(interaction, msg.getText(), false);
+		}
+		
+		public InteractionMessage addMessage(Interaction interaction, String text, boolean isSystemMsg){
+			InteractionMessage message = msgRepo.save(new InteractionMessage(text, interaction, isSystemMsg));
+			msgTpl.convertAndSend(TjingURL.INTERACTION_MESSAGING_OUT + interaction.getId(), message);
+			return message;
 		}
 }
