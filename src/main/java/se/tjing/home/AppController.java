@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import se.tjing.user.PersonRepository;
 
 @Controller
-public class HomeController {
+public class AppController {
 
 	private final Provider<ConnectionRepository> connectionRepositoryProvider;
 
@@ -39,7 +39,7 @@ public class HomeController {
 	PersonRepository personRepo;
 
 	@Inject
-	public HomeController(
+	public AppController(
 			Provider<ConnectionRepository> connectionRepositoryProvider) {
 		this.connectionRepositoryProvider = connectionRepositoryProvider;
 		// this.accountRepository = accountRepository;
@@ -51,6 +51,6 @@ public class HomeController {
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Principal currentUser, Model model) {
-		return "forward:/home.html";
+		return "forward:/app.html";
 	}
 }

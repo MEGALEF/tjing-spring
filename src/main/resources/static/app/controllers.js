@@ -391,6 +391,11 @@
     }
   }]);
 
+  angular.module("tjingApp.controllers").controller("HomeController",
+    ["$scope", function($scope){
+
+  }]);
+
   angular.module("tjingApp.controllers").controller("PoolController", 
     ["$scope", "$routeParams", "Pool", "Membership",
     function($scope, $routeParams, Pool, Membership){

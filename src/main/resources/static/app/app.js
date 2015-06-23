@@ -7,6 +7,11 @@
    tjingApp.config(function($routeProvider) {
         $routeProvider
 
+            .when('/home', {
+                templateUrl : partialsUrl +"home.html",
+                controller : "HomeController"
+            })
+
             .when('/myprofile', {
                 templateUrl : partialsUrl + "myprofile.html",
                 controller : "MyProfileController"
