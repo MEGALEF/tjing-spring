@@ -3,6 +3,7 @@ package se.tjing.item;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -39,7 +40,7 @@ public class Item extends TjingEntity {
 //	@JsonIdentityReference(alwaysAsId = true)
 	private Person owner;
 
-	@OneToMany(mappedBy = "item")
+	@OneToMany(mappedBy = "item", cascade=CascadeType.ALL)
 	@JsonIgnoreProperties("item")
 	private List<Share> shares;
 	
