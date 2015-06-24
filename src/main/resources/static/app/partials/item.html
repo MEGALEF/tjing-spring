@@ -15,6 +15,21 @@
 				</td>
 			</tr>
 		</table>
+
+		
+		<ul ng-show="currentItem.images && currentItem.images.length>0">
+			<li ng-repeat="image in currentItem.images">
+				<img src="{{image.imageUrl}}">
+			</li>
+		</ul>
+		
+
+		<form enctype="multipart/form-data" encoding="multipart/form-data" method="POST" action="{{imgUploadUrl()}}" ng-upload="complete(content)">
+			<h2>Lägg till en bild</h2>
+			<input type="file" name="file">
+			<input type="submit" value="Lägg till">
+		</form>
+
 	</div>
 	<div ng-show="!isOwner">
 		<button ng-click="requestItem()">Låna</button>

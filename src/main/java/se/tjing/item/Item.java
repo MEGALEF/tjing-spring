@@ -35,6 +35,14 @@ public class Item extends TjingEntity {
 	@OneToMany(mappedBy="item")
 	private List<ItemPicture> images;
 
+	public List<ItemPicture> getImages() {
+		return images;
+	}
+
+	public void setImages(List<ItemPicture> images) {
+		this.images = images;
+	}
+
 	@ManyToOne
 //	@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 //	@JsonIdentityReference(alwaysAsId = true)

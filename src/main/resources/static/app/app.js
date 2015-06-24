@@ -1,7 +1,7 @@
 (function(angular) {
   angular.module("tjingApp.controllers", []);
   
-  var tjingApp = angular.module("tjingApp", ["tjingApp.controllers", "tjingApp.services", "ngRoute"]);
+  var tjingApp = angular.module("tjingApp", ["tjingApp.controllers", "tjingApp.services", "ngRoute", "ngUpload"]);
   var partialsUrl = 'app/partials/';
 
    tjingApp.config(function($routeProvider) {
@@ -68,7 +68,7 @@
             })
 
             .otherwise({
-                redirectTo: '/'
+                redirectTo: '/home'
             })
 
     });

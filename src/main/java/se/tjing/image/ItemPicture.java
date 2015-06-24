@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import se.tjing.common.BaseEntity;
@@ -20,6 +21,7 @@ public class ItemPicture extends BaseEntity{
 	private Integer id;
 	
 	@ManyToOne
+	@JsonIgnore
 	private Item item;
 	
 	@JsonIgnore

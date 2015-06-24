@@ -257,10 +257,19 @@
       $scope.currentItem = {}; 
       $scope.myMemberships = [];
       $scope.currentUser = User.current();
+      $scope.uploadResponse;
 
       $scope.isOwner = {};
 
       refreshItemsAndMemberships();
+
+      $scope.imgUploadUrl = function(){
+        return "/item/"+ $scope.currentItem.id +"/image";
+      }
+
+      $scope.uploadComplete = function(response){
+        $scope.uploadResponse = response;
+      }
 
       function buildShareMap(item){
         item.shareMap = {};
