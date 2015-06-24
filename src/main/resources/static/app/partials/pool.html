@@ -1,11 +1,8 @@
 <div>
 	<h1>{{currentPool.title}}</h1>
 
-	//TODO shared items
-	//TODO members
-
 	<button ng-show="membership" ng-click="leavePool()">
-		Gå ur grupp
+		Lämna grupp
 	</button>
 
 	<button ng-show="!membership" ng-click="joinPool()">
@@ -19,8 +16,6 @@
 				<tjing-user user="member"></tjing-user>
 			</li>
 		</ul>
-	</div>
-	<div>
 		<h2>Delade prylar</h2>
 		<ul>
 			<li ng-repeat="item in items">

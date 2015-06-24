@@ -19,7 +19,7 @@
 		
 		<ul ng-show="currentItem.images && currentItem.images.length>0">
 			<li ng-repeat="image in currentItem.images">
-				<img src="{{image.imageUrl}}">
+				<img ng-src="{{image.imageUrl}}">
 			</li>
 		</ul>
 		

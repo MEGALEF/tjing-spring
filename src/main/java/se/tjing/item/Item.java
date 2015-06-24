@@ -32,7 +32,7 @@ public class Item extends TjingEntity {
 
 	private String title;
 	
-	@OneToMany(mappedBy="item")
+	@OneToMany(mappedBy="item", cascade=CascadeType.ALL)
 	private List<ItemPicture> images;
 
 	public List<ItemPicture> getImages() {

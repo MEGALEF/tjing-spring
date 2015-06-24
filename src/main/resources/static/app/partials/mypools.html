@@ -28,8 +28,9 @@
     </div>
     <ul>
       <li ng-repeat="pool in allPools">
-        {{pool.title}} ({{pool.privacy}}<div ng-hide="pool.privacy == 'OPEN'">, requires approval from {{pool.approval}})</div>
-         <button type="button" ng-click="joinPool(pool)">Join</button>
+        <tjing-pool pool="pool"></tjing-pool>
+        <div ng-hide="pool.privacy == 'OPEN'">, requires approval from {{pool.approval}})</div>
+         <button type="button" ng-click="joinPool(pool)">Gå med</button>
       </li>
     </ul>
   </div>
