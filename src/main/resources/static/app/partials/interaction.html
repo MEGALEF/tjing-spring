@@ -4,7 +4,7 @@
 	<tjing-item item="currentInteraction.item"></tjing-item>
 	<ul>
 		<li ng-repeat="message in currentInteraction.conversation">
-			<tjing-message message="message"></tjing-message>
+			<tjing-message message="message" owner="isOwner"></tjing-message>
 		</li>
 	</ul>
 
@@ -32,7 +32,7 @@
 	</div>
 
 	<form ng-submit="send()">
-<input type="text" ng-model="text">
-<input type="submit"> 
+<input type="text" ng-model="text" placeholder="Skriv ett meddelande..">
+<input type="submit" value="Skicka"> 
 	</form>
 </div>

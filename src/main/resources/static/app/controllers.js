@@ -201,14 +201,14 @@
   //TODO ^^
 
   angular.module("tjingApp.controllers").controller("NavbarController", 
-    ["$scope", "$location", "$http", "User", "Feed", 
-    function($scope, $location, $http, User, Feed){
+    ["$scope", "$location", "$http", "User", "Feed", "Messaging",
+    function($scope, $location, $http, User, Feed, Messaging){
     
     var stompClient = null;
     $scope.searchResult = [];
     $scope.feedItems = Feed.query();
     $scope.currentUser = User.current(function(data){
-       connect();
+       //connect();
       if (data.facebookId!=null){ //If the User object contains a facebookId, use it to get the profile picture from facebook
         $scope.profilePicUrl = "http://graph.facebook.com/" +data.facebookId + "/picture?type=small"
       }
@@ -331,22 +331,27 @@
   }]);
 
   angular.module("tjingApp.controllers").controller("InteractionController",
-    ["$scope", "$routeParams", "Interaction", "User", 
-    function($scope, $routeParams, Interaction, User){
+    ["$scope", "$routeParams", "Interaction", "User", "Messaging", 
+    function($scope, $routeParams, Interaction, User, Messaging){
 
+    $scope.messagingService = Messaging;
     $scope.currentInteraction = {};  
     $scope.isOwner = null;
     $scope.currentUser = null;
     $scope.text = "";
-    
-    var stompClient = null;
 
     refresh();
 
+    $scope.$watch('messagingService.newMessage', function(newVal, oldVal, scope){
+      if(newVal){
+        if (newVal.interactionId == $scope.currentInteraction.id){
+          $scope.currentInteraction.conversation.push(newVal);
+        }
+      }
+    })
+
     function refresh(){
       $scope.currentInteraction = Interaction.get({id: $routeParams.interactionId}, function(){
-        connect();
-
         $scope.currentUser = User.current({}, function(response){
           $scope.currentUser = response;
           $scope.isOwner = ($scope.currentUser.id == $scope.currentInteraction.item.owner.id);
@@ -379,30 +384,12 @@
         $scope.currentInteraction = response;
       });
     }
-      
-    function connect() {
-        var socket = new SockJS('/messaging');
-        stompClient = Stomp.over(socket);
-        stompClient.connect({}, function(frame) {
-            //console.log('Connected: ' + frame);
-            stompClient.subscribe('/topic/messaging/'+$scope.currentInteraction.id, function(message){
-              $scope.$apply(function(){
-                $scope.currentInteraction.conversation.push(JSON.parse(message.body));
-              });
-            });
-        });
-    }
 
     $scope.send = function() {
-        stompClient.send("/app/messaging/"+$scope.currentInteraction.id, {}, JSON.stringify({ 'text': $scope.text }));
-    }
-
-    function disconnect() {
-        if (stompClient != null) {
-            stompClient.disconnect();
-        }
-        setConnected(false);
-        //console.log("Disconnected");
+      if ($scope.text && $scope.text.length>0){
+        Messaging.send($scope.currentInteraction.id, $scope.text);  
+      }
+      $scope.text = "";
     }
   }]);
 

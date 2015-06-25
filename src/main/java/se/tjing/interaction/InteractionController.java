@@ -1,5 +1,6 @@
 package se.tjing.interaction;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -156,7 +157,7 @@ public class InteractionController {
 	}
 	
 	@MessageMapping(value="/messaging/{interactionId}")
-	public void receiveMessage(IncomingMessage msg, @DestinationVariable Integer interactionId){
-		InteractionMessage message = interactionService.addMessageFromUser(interactionId, msg);
+	public void receiveMessage(IncomingMessage msg, @DestinationVariable Integer interactionId, Principal principal){
+		InteractionMessage message = interactionService.addMessageFromUser(personService.getPersonByEmail(principal.getName()), interactionId, msg);
 	}
 }

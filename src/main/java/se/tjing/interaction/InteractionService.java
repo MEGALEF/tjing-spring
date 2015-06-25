@@ -57,7 +57,7 @@ public class InteractionService {
 		itemRepo.save(item);
 		interactionRepo.save(interaction);
 		notifService.sendNotification(new Notification(interaction, interaction.getBorrower(), "Request was accepted!"), true, true);
-		addMessage(interaction, ":requestaccepted", true);
+		addMessage(null, interaction, ":requestaccepted", true);
 		return interaction;
 	}
 
@@ -71,7 +71,7 @@ public class InteractionService {
 		interaction.setStatusHandedOver(DateTime.now());
 		interactionRepo.save(interaction);
 		notifService.sendNotification(new Notification(interaction, interaction.getItem().getOwner(), "Handover was confirmed!"), true, true);
-		addMessage(interaction, ":handoverconfirmed", true);
+		addMessage(null, interaction, ":handoverconfirmed", true);
 		return interaction;
 	}
 
@@ -85,7 +85,7 @@ public class InteractionService {
 		notifService.sendNotification(new Notification(interaction, interaction.getBorrower(), "Return was confirmed"), true, true);
 		interaction.getItem().setActiveInteraction(null);
 		interaction.setActive(false);
-		addMessage(interaction, ":returnconfirmed", true);
+		addMessage(null, interaction, ":returnconfirmed", true);
 		return interactionRepo.save(interaction);
 	}
 
@@ -192,15 +192,16 @@ public class InteractionService {
 			} else return false;
 		}
 
-		public InteractionMessage addMessageFromUser(Integer interactionId, IncomingMessage msg) {
+		public InteractionMessage addMessageFromUser(Person author, Integer interactionId, IncomingMessage msg) {
 			Interaction interaction = interactionRepo.findOne(interactionId);
 
-			return addMessage(interaction, msg.getText(), false);
+			return addMessage(author, interaction, msg.getText(), false);
 		}
 		
-		public InteractionMessage addMessage(Interaction interaction, String text, boolean isSystemMsg){
-			InteractionMessage message = msgRepo.save(new InteractionMessage(text, interaction, isSystemMsg));
-			msgTpl.convertAndSend(TjingURL.INTERACTION_MESSAGING_OUT + interaction.getId(), message);
+		public InteractionMessage addMessage(Person author, Interaction interaction, String text, boolean isSystemMsg){
+			InteractionMessage message = msgRepo.save(new InteractionMessage(author, text, interaction, isSystemMsg));
+			msgTpl.convertAndSendToUser(message.getInteraction().getBorrower().getUsername(), TjingURL.INTERACTION_MESSAGING_OUT, message);
+			msgTpl.convertAndSendToUser(message.getInteraction().getItem().getOwner().getUsername(), TjingURL.INTERACTION_MESSAGING_OUT, message);
 			return message;
 		}
 }

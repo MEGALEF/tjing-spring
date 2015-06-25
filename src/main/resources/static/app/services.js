@@ -145,4 +145,42 @@ var tjingServices = angular.module("tjingApp.services", ["ngResource"]);
     }
     )
   }]);
+
+  tjingServices.factory("Messaging", function($rootScope){
+
+    var service = {
+      newMessage : null,
+      messages : []
+    };
+      
+    connect();
+
+    function connect() {
+        var socket = new SockJS('/messaging');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function(frame) {
+            stompClient.subscribe('/user/queue/messaging/', function(data){
+              var message = JSON.parse(data.body);
+              service.newMessage = message;
+              service.messages.push(message);
+              $rootScope.$apply();
+            });
+        });
+    }
+
+    service.send = function(interactionId, text) {
+        stompClient.send("/app/messaging/"+interactionId, {}, JSON.stringify({ 'text': text }));
+    };
+
+    service.disconnect = function() {
+        if (stompClient != null) {
+            stompClient.disconnect();
+        }
+        setConnected(false);
+        //console.log("Disconnected");
+    }
+
+    return service;
+  });
+
 }(angular));

@@ -1,14 +1,14 @@
 <div ng-show="message.systemMessage" ng-switch="message.text">
 	<div ng-switch-when=":requestaccepted">
-		Förfrågan accepterades! 
+		<span>Förfrågan accepterades!</span>
 	</div>
 	<div ng-switch-when=":handoverconfirmed">
-		Överlämning bekräftad!
+		<span>Överlämning bekräftad!</span>
 	</div>
 	<div ng-switch-when=":returnconfirmed">
-		Återlämning bekräftad!
+		<span>Återlämning bekräftad!</span>
 	</div>
 </div>
 <div ng-show="!message.systemMessage">
-	{{message.text}}
+	<tjing-user user="message.author"></tjing-user>: {{message.text}}
 </div>

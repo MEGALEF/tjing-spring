@@ -69,7 +69,8 @@
 	myApp.directive("tjingMessage", function(){
 		return {
 			scope: {
-				message : "="
+				message : "=",
+				owner : "="
 			},
 			restrict : "E",
 			templateUrl : templatesDirectory + "message.tpl.html"
