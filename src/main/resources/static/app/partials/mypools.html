@@ -21,7 +21,21 @@
     </button>
   </form>
 
-  <h1>Alla grupper som finns</h1><button ng-click="showPools=!showPools">show/hide</button>
+  <h2>Sök grupper</h2>
+  <form ng-submit="searchPools()">
+    <input type="text" ng-model="searchStr">
+    <button type="submit" title="Sök"><span class="glyphicon glyphicon-search"></span></button>
+  </form> 
+  <div ng-show="searchResults">
+    <h3>Sökresultat</h3>
+    <ul>
+      <li ng-repeat="result in searchResults">
+      <tjing-pool pool=result></tjing-pool>  
+      </li>
+    </ul> 
+  </div>
+
+  <h2>Alla grupper som finns</h2><button ng-click="showPools=!showPools">show/hide</button>
   <div ng-show="showPools">
     <div ng-hide="allPools.length > 0">
       No pools exist yet. Add a pool!

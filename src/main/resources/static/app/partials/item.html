@@ -15,7 +15,6 @@
 				</td>
 			</tr>
 		</table>
-
 		
 		<ul ng-show="currentItem.images && currentItem.images.length>0">
 			<li ng-repeat="image in currentItem.images">
@@ -23,7 +22,6 @@
 			</li>
 		</ul>
 		
-
 		<form enctype="multipart/form-data" encoding="multipart/form-data" method="POST" action="{{imgUploadUrl()}}" ng-upload="complete(content)">
 			<h2>Lägg till en bild</h2>
 			<input type="file" name="file">

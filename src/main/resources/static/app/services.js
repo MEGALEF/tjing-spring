@@ -97,6 +97,11 @@ var tjingServices = angular.module("tjingApp.services", ["ngResource"]);
           id: "@id"
         },
         isArray: true
+      },
+      search: {
+        method : "GET",
+        url: "/pool/search/:searchStr",
+        isArray : true
       }
       
     })

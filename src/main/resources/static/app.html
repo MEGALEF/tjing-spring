@@ -6,34 +6,32 @@
 <body ng-app="tjingApp">
   <div ng-controller="NavbarController">
     <header>
-      <nav>
-        <div class="container">
-          <div class="navbar-header">
-            <a class ="navbar-brand" href="#home">Tjing! [alpha]</a>
-          </div>
+      <nav class="navbar-collapse navbar-inverse">
+        <div class="container">  
+          <a class ="navbar-brand" href="#home">Tjing! [alpha]</a>
           <ul class="nav navbar-nav navbar-left">
             <li><a href="#items">Prylar</a></li>
             <li><a href="#interactions">Aktiva lån</a></li>
             <li><a href="#pools">Grupper</a></li>
             <li ng-show="false"><a href="#requests">Förfrågningar</a></li>
-              <li>
-                  <a href="#myprofile">{{currentUser.firstName}}</a>
-              </li>
-              <li>
-                <img ng-src="{{currentUser.connection[0].imageurl}}">
-              </li>
+            <li>
+                <a href="#myprofile">{{currentUser.firstName}}</a>
+            </li>
+            <li>
+              <img ng-src="{{currentUser.connection[0].imageurl}}">
+            </li>
             <li>
               <a href="/signout">Logga ut</a>
             </li>
           </ul>
-          <form ng-submit="search()">
-            <input type="text" ng-model="searchStr">
-            <input type="submit" class="glyphicons glyphicons-search" value="Sök">
+          <form class="navbar-form" ng-submit="search()">
+            <input type="text" ng-model="searchStr" placeholder="Sök efter prylar..">
+            <button type="submit"><span class="glyphicon glyphicon-search"></span></button>
           </form>
         </div>
       </nav>
     </header>
-    <div style="float:right">
+    <div class="container" style="float:right" ng-show="1==2">
       <h1>Notification feed</h1>
       <ul>
         <div ng-repeat="feedItem in feedItems"> 
@@ -42,7 +40,8 @@
       </ul>
     </div>
   </div>
-  <div id="main">
+
+  <div class="container" id="main">
     <div ng-view>
       <!-- Views go here -->
     </div>

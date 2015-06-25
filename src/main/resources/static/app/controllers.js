@@ -148,6 +148,9 @@
     refreshMyPools();
     refreshAllPools();
 
+    $scope.searchStr = "";
+    $scope.searchResults = null;
+
     function refreshMyPools(){
       Membership.query({}, function (response){
         $scope.myMemberships = response;
@@ -164,8 +167,10 @@
       });
     };
 
-    $scope.searchPools = function(searchStr){
-      return Pool.query({q: searchStr});
+    $scope.searchPools = function(){
+      Pool.query({q: $scope.searchStr}, function(response){
+        $scope.searchResults = response;
+      });
     };
 
     $scope.joinPool = function(pool){
@@ -222,7 +227,7 @@
         var socket = new SockJS('/feed');
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function(frame) {
-            console.log('Connected: ' + frame);
+            //console.log('Connected: ' + frame);
             stompClient.subscribe('/user/queue/notifications/', function(notification){
               $scope.$apply(function(){
                 $scope.feedItems.unshift(JSON.parse(notification.body));
@@ -237,7 +242,7 @@
             stompClient.disconnect();
         }
         setConnected(false);
-        console.log("Disconnected");
+        //console.log("Disconnected");
     }
   }]);
 
@@ -332,6 +337,7 @@
     $scope.currentInteraction = {};  
     $scope.isOwner = null;
     $scope.currentUser = null;
+    $scope.text = "";
     
     var stompClient = null;
 
@@ -378,7 +384,7 @@
         var socket = new SockJS('/messaging');
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function(frame) {
-            console.log('Connected: ' + frame);
+            //console.log('Connected: ' + frame);
             stompClient.subscribe('/topic/messaging/'+$scope.currentInteraction.id, function(message){
               $scope.$apply(function(){
                 $scope.currentInteraction.conversation.push(JSON.parse(message.body));
@@ -387,8 +393,8 @@
         });
     }
 
-    $scope.send = function(msg) {
-        stompClient.send("/app/messaging/"+$scope.currentInteraction.id, {}, JSON.stringify({ 'text': msg }));
+    $scope.send = function() {
+        stompClient.send("/app/messaging/"+$scope.currentInteraction.id, {}, JSON.stringify({ 'text': $scope.text }));
     }
 
     function disconnect() {
@@ -453,9 +459,19 @@
       ["$scope", "$routeParams", "User",
       function($scope, $routeParams, User){
         $scope.currentUser = {};
+        $scope.loggedInUser = {};
+        $scope.editable = false;
 
-        User.get({id: $routeParams.userId}, function(data){
-          $scope.currentUser = data;
-        });
+        function refresh(){
+          User.get({id: $routeParams.userId}, function(data){
+            $scope.currentUser = data;
+
+            User.current({}, function(response){
+              $scope.loggedInUser = response;
+              $scope.editable = ($scope.currentUser == $scope.loggedInUser);
+            })
+          });
+        }
+        
       }]);
 }(angular));

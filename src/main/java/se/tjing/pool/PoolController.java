@@ -82,9 +82,7 @@ public class PoolController {
 		return new ResponseEntity<List<Item>>(result, null, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/search/{searchString}", method = RequestMethod.GET)
-	public ResponseEntity<List<Pool>> searchPools(
-			@PathVariable String searchString) {
+	private ResponseEntity<List<Pool>> searchPools(String searchString) {
 		List<Pool> result = poolService.search(searchString);
 		return new ResponseEntity<List<Pool>>(result, null, HttpStatus.OK);
 	}
