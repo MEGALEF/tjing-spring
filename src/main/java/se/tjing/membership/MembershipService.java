@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.mysema.query.jpa.impl.JPAQuery;
 
 import se.tjing.exception.TjingException;
+import se.tjing.feed.EventType;
 import se.tjing.feed.Notification;
 import se.tjing.feed.NotificationService;
 import se.tjing.pool.Pool;
@@ -54,7 +55,7 @@ public class MembershipService {
 			membership.setApproved(false);
 			membershipRepo.save(membership);
 			for (Membership member : pool.getApprovedMemberships()){
-				notifService.sendNotification(new Notification(membership, member.getMember(), "Someone applied for membership in a pool"), true, true);
+				notifService.sendNotification(new Notification(membership, member.getMember(), EventType.POOL_JOINREQUEST), true, true);
 			}
 			
 		} else if (PrivacyMode.OPEN.equals(pool.getPrivacy())){

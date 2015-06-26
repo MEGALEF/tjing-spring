@@ -24,91 +24,50 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonInclude(Include.NON_NULL)
 public class Notification extends BaseEntity {
 	
-	private NotificationType type = NotificationType.GENERIC;
+	private EventType event;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	Integer id;
 	
 	@ManyToOne
+	private Interaction interaction;
+	
+	@ManyToOne
+	private ItemRequest itemrequest;
+	
+	@ManyToOne
+	private Membership membership;
+	
+	@ManyToOne
 	private Person target;
 	
-	private String message;
+	private NotificationType type = NotificationType.GENERIC;
 	
 	public Notification(){
 		
 	}
 	
-	public Notification(Membership membership, Person target, String message){
-		this.setMembership(membership);
-		this.message = message;
-		this.target = target;
-	}
-	
-	public Notification(Interaction interaction, Person target, String message){
+	public Notification(Interaction interaction, Person target, EventType event){
 		this.setInteraction(interaction);
-		this.message = message;
 		this.target = target;
+		this.event = event;
 	}
-	
-	public Notification(ItemRequest itemrequest, Person target, String message){
+
+	public Notification(ItemRequest itemrequest, Person target, EventType event){
 		this.setItemrequest(itemrequest);
-		this.message = message;
 		this.target = target;
-	}
-	
-	public NotificationType getType() {
-		return type;
+		this.event = event;
 	}
 
-	public void setType(NotificationType type) {
-		this.type = type;
-	}
-
-	public Membership getMembership() {
-		return membership;
-	}
-
-	public void setMembership(Membership membership) {
-		this.membership = membership;
-		this.type = NotificationType.MEMBERSHIP;
-	}
-
-	public Interaction getInteraction() {
-		return interaction;
-	}
-
-	public void setInteraction(Interaction interaction) {
-		this.interaction = interaction;
-		this.type = NotificationType.INTERACTION;
-	}
-
-	public ItemRequest getItemrequest() {
-		return itemrequest;
-	}
-
-	public void setItemrequest(ItemRequest itemrequest) {
-		this.itemrequest = itemrequest;
-		this.type = NotificationType.ITEMREQUEST;
-	}
-
-	@ManyToOne
-	private Membership membership;
-	@ManyToOne
-	private Interaction interaction;
-	@ManyToOne
-	private ItemRequest itemrequest;
-
-	public Person getTarget() {
-		return target;
-	}
-
-	public void setTarget(Person target) {
+	public Notification(Membership membership, Person target, EventType event){
+		this.setMembership(membership);
 		this.target = target;
+		this.event = event;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public EventType getEvent() {
+		return event;
 	}
 
 	@Override
@@ -116,11 +75,52 @@ public class Notification extends BaseEntity {
 		return id;
 	}
 
-	public String getMessage() {
-		return message;
+	public Interaction getInteraction() {
+		return interaction;
 	}
 
-	public void setMessage(String message) {
-		this.message = message;
+	public ItemRequest getItemrequest() {
+		return itemrequest;
+	}
+
+	public Membership getMembership() {
+		return membership;
+	}
+
+	public Person getTarget() {
+		return target;
+	}
+	public NotificationType getType() {
+		return type;
+	}
+	public void setEvent(EventType event) {
+		this.event = event;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public void setInteraction(Interaction interaction) {
+		this.interaction = interaction;
+		this.type = NotificationType.INTERACTION;
+	}
+
+	public void setItemrequest(ItemRequest itemrequest) {
+		this.itemrequest = itemrequest;
+		this.type = NotificationType.ITEMREQUEST;
+	}
+
+	public void setMembership(Membership membership) {
+		this.membership = membership;
+		this.type = NotificationType.MEMBERSHIP;
+	}
+
+	public void setTarget(Person target) {
+		this.target = target;
+	}
+
+	public void setType(NotificationType type) {
+		this.type = type;
 	}
 }

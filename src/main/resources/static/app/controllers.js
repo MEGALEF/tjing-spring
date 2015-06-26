@@ -197,16 +197,20 @@
     };
   }]);
 
-  angular.module("tjingApp.controllers").controller("MyProfileController", function(){});
-  //TODO ^^
-
   angular.module("tjingApp.controllers").controller("NavbarController", 
-    ["$scope", "$location", "$http", "User", "Feed", "Messaging",
-    function($scope, $location, $http, User, Feed, Messaging){
+    ["$scope", "$location", "$http", "User", "Feed", "Messaging", "Notifications",
+    function($scope, $location, $http, User, Feed, Messaging, Notifications){
     
-    var stompClient = null;
     $scope.searchResult = [];
     $scope.feedItems = Feed.query();
+    $scope.notifService = Notifications;
+
+    $scope.$watch('notifService.newNotification', function(newVal, oldVal, scope){
+      if(newVal){
+        $scope.feedItems.unshift(newVal);
+      }
+    });
+
     $scope.currentUser = User.current(function(data){
        //connect();
       if (data.facebookId!=null){ //If the User object contains a facebookId, use it to get the profile picture from facebook
@@ -221,28 +225,6 @@
 
     $scope.signout = function(){
       location.href="/signout";
-    }
-
-    function connect() {
-        var socket = new SockJS('/feed');
-        stompClient = Stomp.over(socket);
-        stompClient.connect({}, function(frame) {
-            //console.log('Connected: ' + frame);
-            stompClient.subscribe('/user/queue/notifications/', function(notification){
-              $scope.$apply(function(){
-                $scope.feedItems.unshift(JSON.parse(notification.body));
-                //TODO: set some kind of flag for unread notifications
-              });
-            });
-        });
-    }
-
-    function disconnect() {
-        if (stompClient != null) {
-            stompClient.disconnect();
-        }
-        setConnected(false);
-        //console.log("Disconnected");
     }
   }]);
 
@@ -348,7 +330,7 @@
           $scope.currentInteraction.conversation.push(newVal);
         }
       }
-    })
+    });
 
     function refresh(){
       $scope.currentInteraction = Interaction.get({id: $routeParams.interactionId}, function(){

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import se.tjing.TjingURL;
 import se.tjing.exception.TjingException;
+import se.tjing.feed.EventType;
 import se.tjing.feed.Notification;
 import se.tjing.feed.NotificationService;
 import se.tjing.item.Item;
@@ -56,7 +57,7 @@ public class InteractionService {
 		item.setActiveInteraction(interaction);
 		itemRepo.save(item);
 		interactionRepo.save(interaction);
-		notifService.sendNotification(new Notification(interaction, interaction.getBorrower(), "Request was accepted!"), true, true);
+		notifService.sendNotification(new Notification(interaction, interaction.getBorrower(), EventType.INT_ACCEPT), true, true);
 		addMessage(null, interaction, ":requestaccepted", true);
 		return interaction;
 	}
@@ -70,7 +71,7 @@ public class InteractionService {
 		//TODO interaction.setNotifyUser(interaction.getItem().getOwner());
 		interaction.setStatusHandedOver(DateTime.now());
 		interactionRepo.save(interaction);
-		notifService.sendNotification(new Notification(interaction, interaction.getItem().getOwner(), "Handover was confirmed!"), true, true);
+		notifService.sendNotification(new Notification(interaction, interaction.getItem().getOwner(), EventType.INT_HAND), true, true);
 		addMessage(null, interaction, ":handoverconfirmed", true);
 		return interaction;
 	}
@@ -82,7 +83,7 @@ public class InteractionService {
 		}
 		interaction.setStatusReturned(DateTime.now());
 
-		notifService.sendNotification(new Notification(interaction, interaction.getBorrower(), "Return was confirmed"), true, true);
+		notifService.sendNotification(new Notification(interaction, interaction.getBorrower(), EventType.INT_RET), true, true);
 		interaction.getItem().setActiveInteraction(null);
 		interaction.setActive(false);
 		addMessage(null, interaction, ":returnconfirmed", true);
@@ -157,7 +158,7 @@ public class InteractionService {
 		} else {
 			interaction.setStatusCancelled(DateTime.now());
 			interaction.setActive(false);
-			notifService.sendNotification(new Notification(interaction, interaction.getBorrower(), "Interaction was cancelled. Bummer!"), true, true);
+			notifService.sendNotification(new Notification(interaction, interaction.getBorrower(), EventType.INT_CANCEL), true, true);
 			return interaction;
 		}
 		//TODO Cancel interactions even when item is handed over? Ok or not?
@@ -171,7 +172,7 @@ public class InteractionService {
 			}
 			Interaction interaction = new Interaction(currentUser, item, DateTime.now());
 			interactionRepo.save(interaction);
-			notifService.sendNotification(new Notification(interaction, interaction.getItem().getOwner(), "Someone wants to borrow your thing"), true, true);
+			notifService.sendNotification(new Notification(interaction, interaction.getItem().getOwner(), EventType.INT_REQUEST), true, true);
 			return interaction;
 		}
 

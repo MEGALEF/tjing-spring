@@ -29,9 +29,6 @@ public class NotificationService {
 	@Autowired
 	Facebook facebook;
 	
-//	@Autowired 
-//	MailService mailService;
-	
 	@Autowired
 	NotificationRepository notifRepo;
 	
@@ -70,8 +67,8 @@ public class NotificationService {
 		SimpleMailMessage message = new SimpleMailMessage();
 		message.setTo(notif.getTarget().getUsername());
 		message.setFrom("johannes@tribeofsales.com");
-		message.setSubject("[Tjing] " + notif.getMessage());
-		message.setText(notif.getMessage());
+		message.setSubject("[Tjing] "); //TODO
+		message.setText("TODO"); //TODO
 		mailSender.send(message);
 	}
 	
@@ -81,7 +78,7 @@ public class NotificationService {
 			sendFacebookNotification(notif);
 		}
 		if (notifyEmail){
-			sendMail(notif);
+			//sendMail(notif);
 		}
 		sendWebNotification(notif);
 	}

@@ -25,74 +25,50 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 public class Interaction extends TjingEntity{
 
-	public List<InteractionMessage> getConversation() {
-		return conversation;
-	}
+	private Boolean active = true;
 
-	public void setConversation(List<InteractionMessage> conversation) {
-		this.conversation = conversation;
-	}
+	@ManyToOne
+	private Person borrower;
+
+	@OneToOne
+	private Rating borrowerRating;
+
+	@OneToMany(mappedBy="interaction", cascade=CascadeType.ALL)
+	private List<InteractionMessage> conversation;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
-
+	
 	@ManyToOne
 	@JsonIgnoreProperties("activeInteraction")
 	private Item item;
-
-	@ManyToOne
-	private Person borrower;
-	
-	@OneToMany(mappedBy="interaction", cascade=CascadeType.ALL)
-	private List<InteractionMessage> conversation;
 	
 	@OneToMany(mappedBy="interaction", cascade=CascadeType.ALL)
 	private List<Notification> notifications;
 
-	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-	private DateTime statusRequested;
+	@OneToOne
+	private Rating ownerRating;
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	private DateTime statusAccepted;
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+	private DateTime statusCancelled;
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	private DateTime statusHandedOver;
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-	private DateTime statusReturned;
+	private DateTime statusRequested;
+	
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-	private DateTime statusCancelled;
+	private DateTime statusReturned;
 	
-	@OneToOne
-	private Rating borrowerRating;
-	
-	public Rating getBorrowerRating() {
-		return borrowerRating;
+	public Interaction(){
+		
 	}
-
-	public void setBorrowerRating(Rating borrowerRating) {
-		this.borrowerRating = borrowerRating;
-	}
-
-	public Rating getOwnerRating() {
-		return ownerRating;
-	}
-
-	public void setOwnerRating(Rating ownerRating) {
-		this.ownerRating = ownerRating;
-	}
-
-	@OneToOne
-	private Rating ownerRating;
-
-	private Boolean active = true;
 
 	public Interaction(Person currentUser, Item item2, DateTime now) {
 		this.borrower = currentUser;
 		this.item = item2;
 		this.statusRequested = now;
-	}
-	
-	public Interaction(){
-		
 	}
 
 	public Boolean getActive() {
@@ -103,15 +79,26 @@ public class Interaction extends TjingEntity{
 		return borrower;
 	}
 
+	public Rating getBorrowerRating() {
+		return borrowerRating;
+	}
+
+	public List<InteractionMessage> getConversation() {
+		return conversation;
+	}
+
 	@Override
 	public Integer getId() {
 		return id;
 	}
-
+	
 	public Item getItem() {
 		return item;
 	}
 
+	public Rating getOwnerRating() {
+		return ownerRating;
+	}
 
 	public DateTime getStatusAccepted() {
 		return statusAccepted;
@@ -124,6 +111,7 @@ public class Interaction extends TjingEntity{
 	public DateTime getStatusHandedOver() {
 		return statusHandedOver;
 	}
+
 
 	public DateTime getStatusRequested() {
 		return statusRequested;
@@ -141,12 +129,24 @@ public class Interaction extends TjingEntity{
 		this.borrower = borrower;
 	}
 
+	public void setBorrowerRating(Rating borrowerRating) {
+		this.borrowerRating = borrowerRating;
+	}
+
+	public void setConversation(List<InteractionMessage> conversation) {
+		this.conversation = conversation;
+	}
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
 
 	public void setItem(Item item) {
 		this.item = item;
+	}
+
+	public void setOwnerRating(Rating ownerRating) {
+		this.ownerRating = ownerRating;
 	}	
 
 	public void setStatusAccepted(DateTime statusAccepted) {

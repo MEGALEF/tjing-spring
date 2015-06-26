@@ -146,8 +146,40 @@ var tjingServices = angular.module("tjingApp.services", ["ngResource"]);
     )
   }]);
 
-  tjingServices.factory("Messaging", function($rootScope){
+  tjingServices.factory("Notifications", function($rootScope){
+    var service = {
+      newNotification : null,
+      notifications : []
+    };
 
+    connect();
+
+    function connect() {
+      var socket = new SockJS('/feed');
+      stompClient = Stomp.over(socket);
+      stompClient.connect({}, function(frame) {
+        //console.log('Connected: ' + frame);
+        stompClient.subscribe('/user/queue/notifications/', function(data){  
+          var notification = JSON.parse(data.body);
+          service.notifications.unshift(notification);
+          service.newNotification = notification;
+          $rootScope.$apply();
+        });
+      });
+    }
+
+    function disconnect() {
+      if (stompClient != null) {
+          stompClient.disconnect();
+      }
+      setConnected(false);
+      //console.log("Disconnected");
+    }
+
+    return service;
+  });
+
+  tjingServices.factory("Messaging", function($rootScope){
     var service = {
       newMessage : null,
       messages : []
@@ -156,16 +188,16 @@ var tjingServices = angular.module("tjingApp.services", ["ngResource"]);
     connect();
 
     function connect() {
-        var socket = new SockJS('/messaging');
-        stompClient = Stomp.over(socket);
-        stompClient.connect({}, function(frame) {
-            stompClient.subscribe('/user/queue/messaging/', function(data){
-              var message = JSON.parse(data.body);
-              service.newMessage = message;
-              service.messages.push(message);
-              $rootScope.$apply();
-            });
+      var socket = new SockJS('/messaging');
+      stompClient = Stomp.over(socket);
+      stompClient.connect({}, function(frame) {
+        stompClient.subscribe('/user/queue/messaging/', function(data){
+          var message = JSON.parse(data.body);
+          service.newMessage = message;
+          service.messages.push(message);
+          $rootScope.$apply();
         });
+      });
     }
 
     service.send = function(interactionId, text) {

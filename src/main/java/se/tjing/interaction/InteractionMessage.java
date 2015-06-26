@@ -15,40 +15,40 @@ import se.tjing.user.Person;
 @Entity
 public class InteractionMessage extends TjingEntity {
 	
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Integer id;
-	
-	private String text;
-	
 	@ManyToOne
 	@JsonIgnoreProperties("connection")
 	private Person author;
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private Integer id;
 	
 	@JsonIgnore
 	@ManyToOne
 	private Interaction interaction;
 	
-	public Integer getInteractionId(){
-		return interaction.getId();
-	}
-	
 	private boolean isSystemMessage = false;
+	
+	private String text;
 	
 	public InteractionMessage(){
 		
 	}
-
+	
 	public InteractionMessage(Person author, String msg, Interaction interaction) {
 		this.text = msg;
 		this.interaction = interaction;
 	}
-	
+
 	public InteractionMessage(Person author, String msg, Interaction interaction, boolean isSystemMsg) {
 		this.text = msg;
 		this.interaction = interaction;
 		this.isSystemMessage = isSystemMsg;
 		this.author = author;
+	}
+	
+	public Person getAuthor() {
+		return author;
 	}
 
 	@Override
@@ -56,40 +56,40 @@ public class InteractionMessage extends TjingEntity {
 		return id;
 	}
 
-	public String getText() {
-		return text;
-	}
-
-	public void setText(String text) {
-		this.text = text;
-	}
-
 	public Interaction getInteraction() {
 		return interaction;
 	}
 
-	public void setInteraction(Interaction interaction) {
-		this.interaction = interaction;
+	public Integer getInteractionId(){
+		return interaction.getId();
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public String getText() {
+		return text;
 	}
 
 	public boolean isSystemMessage() {
 		return isSystemMessage;
 	}
 
+	public void setAuthor(Person author) {
+		this.author = author;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public void setInteraction(Interaction interaction) {
+		this.interaction = interaction;
+	}
+
 	public void setSystemMessage(boolean isSystemMessage) {
 		this.isSystemMessage = isSystemMessage;
 	}
 
-	public Person getAuthor() {
-		return author;
-	}
-
-	public void setAuthor(Person author) {
-		this.author = author;
+	public void setText(String text) {
+		this.text = text;
 	}
 
 }

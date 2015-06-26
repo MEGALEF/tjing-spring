@@ -80,7 +80,7 @@ public class ItemController {
 	@RequestMapping(value = "/{itemId}/fbavailable", method=RequestMethod.POST)
 	public ResponseEntity<Item> setFbAvailable(@RequestBody PartialFbAvailable fbAvailable, @PathVariable Integer itemId){
 		Item result = itemService.setFbAvailable(personService.getCurrentUser(), fbAvailable);
-		return new ResponseEntity(result, null, HttpStatus.ACCEPTED);
+		return new ResponseEntity<Item>(result, null, HttpStatus.ACCEPTED);
 	}
 
 	@RequestMapping(value = "/search/{searchString}", method = RequestMethod.GET)

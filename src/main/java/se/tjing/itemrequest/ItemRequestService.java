@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import se.tjing.feed.EventType;
 import se.tjing.feed.Notification;
 import se.tjing.feed.NotificationService;
 import se.tjing.pool.PoolService;
@@ -51,7 +52,7 @@ public class ItemRequestService {
 		List<Person> targets = personService.getVisibleUsers(fullRequest.getUser());
 		
 		for (Person target:targets){
-			notifService.sendNotification(new Notification(fullRequest, target, "Someone needs a thing"), true, true);
+			notifService.sendNotification(new Notification(fullRequest, target, EventType.ITEMREQUEST), true, true);
 		}
 	}
 
