@@ -10,5 +10,5 @@
 	</div>
 </div>
 <div ng-show="!message.systemMessage">
-	<tjing-user user="message.author"></tjing-user>: {{message.text}}
+	{{message.author.firstName}}: {{message.text}}
 </div>

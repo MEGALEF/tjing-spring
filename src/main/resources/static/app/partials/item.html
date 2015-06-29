@@ -1,7 +1,7 @@
 <div>
 	<h1>{{currentItem.title}}</h1>
 	<h2>Ägare</h2>
-	{{currentItem.owner.firstName}}
+	<tjing-user user="currentItem.owner"></tjing-user>
 
 	<div ng-show="isOwner">
 		<h2>Dela med</h2>

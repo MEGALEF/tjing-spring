@@ -10,15 +10,15 @@
 
 	<div ng-show="isOwner">
 		<div ng-hide="currentInteraction.statusAccepted">
-	    	<button ng-disabled="currentInteraction.statusAccepted" ng-click="acceptRequest()">Accept</button>
-	    	<button ng-disabled="currentInteraction.statusAccepted" ng-click="denyRequest()">Deny</button>
+	    	<button ng-disabled="currentInteraction.statusAccepted" ng-click="acceptRequest()">Acceptera</button>
+	    	<button ng-disabled="currentInteraction.statusAccepted" ng-click="denyRequest()">Neka</button>
 	    </div>
 	    <div ng-show="currentInteraction.statusAccepted">
 	      (Accepterades {{currentInteraction.statusAccepted | date}})
 	    </div>
 	    <div ng-show="currentInteraction.statusHandedOver">
 	      (Överlämnad {{currentInteraction.statusHandedOver | date}})
-	      <button ng-disabled="currentInteraction.statusReturned" ng-click="confirmReturn()">Confirm return</button>
+	      <button ng-show="!currentInteraction.statusReturned" ng-click="confirmReturn()">Bekräfta retur</button>
 	    </div>
 	</div>
 

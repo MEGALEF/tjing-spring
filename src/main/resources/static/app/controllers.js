@@ -32,6 +32,8 @@
     $scope.incomingrequests = Interaction.query({param:'incoming'});
     $scope.outgoingrequests = Interaction.query({param:'outgoing'});
     $scope.currentUser = User.current();
+    $scope.truth = true;
+    $scope.lies = false;
 
     $scope.acceptRequest = function(interaction){
       Interaction.accept(interaction, function(response){

@@ -1,33 +1,35 @@
 <div>
-    <h1>Lånat</h1>
-    <ul>
-      <li ng-repeat="request in outgoingrequests">
-        <tjing-interaction interaction="request" user="currentUser"/>
-        <div ng-show="request.statusAccepted">(Accepted on {{request.statusAccepted | date}})
-          <button  ng-hide="request.statusHandedOver" ng-click="confirmHandover(request)">
-            Confirm handover
+  <h1>Lånat</h1>
+  <ul>
+    <li ng-repeat="interaction in outgoingrequests">
+      <tjing-interaction interaction="interaction" user="currentUser"></tjing-interaction>
+      <button ng-show="interaction.statusAccepted && !interaction.statusHandedOver" ng-click="confirmHandover(interaction)">
+        Bekräfta överlämning
+      </button>
+    </li>
+  </ul>
+  
+  <hr/>
+
+  <h1>Utlånat</h1>
+  <ul>
+    <li ng-repeat="interaction in incomingrequests">
+      <tjing-interaction interaction="interaction" user="currentUser"></tjing-interaction>
+
+      <div ng-show="!interaction.statusAccepted">
+          <button ng-disabled="interaction.statusAccepted" ng-click="acceptRequest(interaction)"> 
+            Acceptera
           </button>
-          <div ng-show="request.statusHandedOver">(Handed over on {{request.statusHandedOver | date}})</div>
+          <button ng-disabled="interaction.statusAccepted" ng-click="denyRequest(interaction)">
+            Neka
+          </button>
         </div>
-      </li>
-    </ul>
-    <hr />
-    <h1>Utlån</h1>
-    <ul>
-      <li ng-repeat="request in incomingrequests">
-        <tjing-interaction user="currentUser" interaction="request"></tjing-interaction>
-        <div ng-hide="request.statusAccepted">
-          <button ng-disabled="request.statusAccepted" ng-click="acceptRequest(request)">Accept</button>
-          <button ng-disabled="request.statusAccepted" ng-click="denyRequest(request)">Deny</button>
-        </div>
-        <div ng-show="request.statusAccepted">
-          (Accepterades {{request.statusAccepted | date}})
-        </div>
-        <div ng-show="request.statusHandedOver">
-          (Överlämnad {{request.statusHandedOver | date}})
-          <button ng-disabled="request.statusReturned" ng-click="confirmReturn(request)">Confirm return</button>
-        </div>
-      </li>
-    </ul>
-    <hr />
-  </div>
+      <div ng-show="interaction.statusHandedOver && !interaction.statusReturned">
+        <button ng-click="confirmReturn(interaction)">
+          Bekräfta återlämning
+        </button>
+      </div>
+    </li>
+  </ul>
+  <hr/>
+</div>

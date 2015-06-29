@@ -1,12 +1,31 @@
-	<DIV ng-show="interaction.item.owner.id==user.id">
-		<a href="#interaction/{{interaction.id}}">
-		{{interaction.borrower.firstName}} vill låna din {{interaction.item.title}}
-	</a>
-	</DIV>
+<a href="#interaction/{{interaction.id}}">
+	<div ng-show="interaction.item.owner.id==user.id">
+		<b>{{interaction.borrower.firstName}}</b> 
+		<span ng-show="!interaction.statusAccepted">
+			vill låna din 
+		</span>
+		<span ng-show="interaction.statusAccepted && !interaction.statusHandedOver">
+			vill låna din 
+		</span>
+		<span ng-show="interaction.statusHandedOver && !interaction.statusReturned"> 
+			har din 
+		</span>
+		<b>{{interaction.item.title}}</b>
+	</div>
 
-	<DIV ng-show="interaction.borrower.id==user.id">
-		<a href="#interaction/{{interaction.id}}">
-		Du skickade förfrågan att låna {{interaction.item.title}} av {{interaction.item.owner.firstName}}
-		</a>
-	</DIV>
+	<div ng-show="!(interaction.item.owner.id==user.id)">
+		<span>{{interaction.item.owner.firstName}} {{interaction.item.title}}</span>
+	</div>
+
+	<div ng-show="interaction.statusAccepted && !interaction.statusHandedOver">
+		Accepterades {{interaction.statusAccepted | date}}
+	</div>
+	<div ng-show="interaction.statusHandedOver && !interaction.statusReturned"> 
+		Överlämnades {{interaction.statusAccepted | date}}
+	</div>	
+
+	<div ng-show="interaction.conversation.length && interaction.conversation.length>0">
+		 <i><tjing-message message="interaction.conversation[interaction.conversation.length-1]"></tjing-message></i>
+	</div>
+</a>
 
