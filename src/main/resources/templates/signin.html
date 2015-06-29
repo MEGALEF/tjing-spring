@@ -2,55 +2,40 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:social="http://spring.io/springsocial"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	  layout:decorator="layout">
+	  >
 	<head>
 		<title>Tjing</title>
-		<link rel="stylesheet" th:href="@{/page.css}" type="text/css" media="screen"></link>
-		<link rel="stylesheet" th:href="@{/form.css}" type="text/css" media="screen"></link>
-		<link rel="stylesheet" th:href="@{/messages/messages.css}" type="text/css" media="screen"></link>
+		<link rel="stylesheet" href="./bower_components/bootstrap-css-only/css/bootstrap.min.css">
+		</link>
+		<link th:href="front.css" rel="stylesheet" type="text/css" media="screen"></link>
 	</head>
-	<body>
-		<div id="header">
-			<h1><a th:href="@{/}">Tjing</a></h1>
-		</div>
-		
-		<div id="leftNav">
-			Left nav menu
-		</div>
-		
-		<div id="content" layout:fragment="content">
-			<form id="signin" th:action="@{/signin/authenticate}" method="post">
+	<body>		
+		<div class="container">
+			<form class="form-signin" id="signin" th:action="@{/signin/authenticate}" method="post">
 				<!-- <input type="hidden" name="_csrf" th:value="${_csrf.token}"></input>  -->
-				<div class="formInfo">
-			  		<div class="error" th:if="${param.error eq 'bad_credentials'}">
-			  			Your sign in information was incorrect.
-			  			Please try again or <a th:href="@{/signup}">sign up</a>.
-			  		</div>
-<!-- 			  		<div class="error" th:if="${param.error eq 'multiple_users'}"> -->
-<!-- 			  			Multiple local accounts are connected to the provider account. -->
-<!-- 			  			Try again with a different provider or with your username and password. -->
-<!-- 			  		</div> -->
-				</div>
-				<fieldset>
-					<label for="login">Username</label>
-					<input id="login" name="username" type="text" size="25"></input>
-					<label for="password">Password</label>
-					<input id="password" name="password" type="password" size="25"></input>
-				</fieldset>
-				<button type="submit">Sign In</button>
+				<h2 class="form-signin-heading">Logga in</h2>
 				
-				<p>Or you can <a th:href="@{/signup}">signup</a> with a new account.</p>
+				<div class="error" th:if="${param.error eq 'bad_credentials'}">
+			  		Felaktiga inloggningsuppgifter. Vänligen försök igen eller <a href="/signup">skapa nytt konto</a>.
+				</div>
+				
+				<fieldset>
+					<label class="sr-only" for="login">E-post</label>
+					<input placeholder="E-postadress" class="form-control" id="login" name="username" type="text"></input>
+					<label class="sr-only" for="password">Lösenord</label>
+					<input placeholder="Lösenord" class="form-control" id="password" name="password" type="password"></input>
+				</fieldset>
+				<button  class="btn btn-lg btn-primary btn-block" type="submit">Logga in</button>
 			</form>
-
 		
 			<!-- FACEBOOK SIGNIN -->
-			<form name="fb_signin" id="fb_signin" th:action="@{/signin/facebook}" method="POST">
+			<form class="form-signin" name="fb_signin" id="fb_signin" action="/signin/facebook" method="POST">
 <!-- 				<input type="hidden" name="_csrf" th:value="${_csrf.token}"></input> -->
-				<input type="hidden" name="scope" value="user_groups"></input>
-				<button type="submit"><img th:src="@{/social/facebook/sign-in-with-facebook.png}"></img></button>
+				<input class="form-control" type="hidden" name="scope" value="user_groups"></input>
+				<button class="btn btn-lg btn-primary btn-block" type="submit">Logga in med facebook</button>
 			</form>
 		
-			
+			<p class="form-signin"><a href="/signup">Skapa nytt konto</a></p>
 		</div>		
 	</body>
 </html>

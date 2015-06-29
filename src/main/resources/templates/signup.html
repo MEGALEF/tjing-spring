@@ -1,47 +1,33 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:social="http://spring.io/springsocial"
-	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	  layout:decorator="layout">
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 	<head>
-		<title>Spring Social Showcase</title>
-		<link rel="stylesheet" th:href="@{/page.css}" type="text/css" media="screen"></link>
-		<link rel="stylesheet" th:href="@{/form.css}" type="text/css" media="screen"></link>
-		<link rel="stylesheet" th:href="@{/messages/messages.css}" type="text/css" media="screen"></link>
+		<title>Tjing</title>
+		<link rel="stylesheet" href="./bower_components/bootstrap-css-only/css/bootstrap.min.css">
+		</link>
+		<link th:href="front.css" rel="stylesheet" type="text/css" media="screen"></link>		
 	</head>
 	<body>
-		<div id="header">
-			<h1><a th:href="@{/}">Spring Social Showcase</a></h1>
-		</div>
-		
-		<div id="leftNav">
-			Left nav menu
-		</div>
-		
-		<div id="content" layout:fragment="content">
-			<h3>Sign Up</h3>
-			
-			<div th:if="${!#strings.isEmpty(message)}"
-				 th:class="${message.type.cssClass}" 
-				 th:text="${message.text}">error message text</div>
-			
-			<form id="signup" th:action="@{/signup}" method="post" th:object="${signupForm}">
+		<div class="container">			
+			<form class="form-signin" id="signup" th:action="@{/signup}" method="post" th:object="${signupForm}">
 				<!--  <input type="hidden" name="_csrf" th:value="${_csrf.token}" /> -->
+				<h2 class="form-signin-heading">Skapa nytt konto</h2>
 				<div class="formInfo">
-					<div class="error" th:if="${#fields.hasErrors('*')}">Unable to sign up. Please fix the errors below and resubmit.</div>
+					<div class="error" th:if="${#fields.hasErrors('*')}">Kunde inte skapa konto. Vänligen åtgärda felen i formuläret och försök igen.</div>
 				</div>
 				
 				<fieldset>
-					<label for="firstName">First Name <span th:if="${#fields.hasErrors('firstName')}" class="error" th:text="${#fields.errors('firstName')[0]}">Error</span></label>
-					<input type="text" th:field="*{firstName}" />
-					<label for="lastName">Last Name <span th:if="${#fields.hasErrors('lastName')}" class="error" th:text="${#fields.errors('lastName')[0]}">Error</span></label>
-					<input type="text" th:field="*{lastName}" />
-					<label for="username">E-mail <span th:if="${#fields.hasErrors('username')}" class="error" th:text="${#fields.errors('username')[0]}">Error</span></label>
-					<input type="email" th:field="*{username}" />
-					<label for="password">Password (at least 6 characters) <span th:if="${#fields.hasErrors('password')}" class="error" th:text="${#fields.errors('password')[0]}">Error</span></label>
-					<input type="password" th:field="*{password}" />
+					<label for="firstName">Förnamn <span th:if="${#fields.hasErrors('firstName')}" class="error" th:text="${#fields.errors('firstName')[0]}">Fel</span></label>
+					<input class="form-control" type="text" th:field="*{firstName}" />
+					<label for="lastName">Efternamn <span th:if="${#fields.hasErrors('lastName')}" class="error" th:text="${#fields.errors('lastName')[0]}">Fel</span></label>
+					<input class="form-control" type="text" th:field="*{lastName}" />
+					<label for="username">E-post <span th:if="${#fields.hasErrors('username')}" class="error" th:text="${#fields.errors('username')[0]}">Fel</span></label>
+					<input class="form-control" type="email" th:field="*{username}" />
+					<label for="password">Lösenord <span th:if="${#fields.hasErrors('password')}" class="error" th:text="${#fields.errors('password')[0]}">Fel</span></label>
+					<input class="form-control" type="password" th:field="*{password}" />
 				</fieldset>
-				<p><button type="submit">Sign Up</button></p>
+				<p><button class="btn btn-lg btn-primary btn-block" type="submit">Skapa konto</button></p>
 			</form>
 		</div>
 	</body>

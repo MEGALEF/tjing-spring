@@ -68,10 +68,10 @@ public class SignupController {
 					"message",
 					new Message(
 							MessageType.INFO,
-							"Your "
+							"Ditt "
 									+ StringUtils.capitalize(connection
 											.getKey().getProviderId())
-									+ " account is not associated with a Tjing account. If you're new, please sign up."),
+									+ "-konto är inte kopplat till något Tjing-konto än. Skapa ett nytt Tjing-konto nedan."),
 					WebRequest.SCOPE_REQUEST);
 			return SignupForm.fromProviderUser(connection.fetchUserProfile());
 		} else {
