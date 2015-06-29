@@ -1,6 +1,12 @@
 <h1>{{currentUser.firstName}} {{currentUser.lastName}}</h1>
 <img ng-src="{{currentUser.connection[0].imageurl}}">
 
-<div ng-show="editable">
+<h3>Plats</h3>
+{{currentUser.locationStr}}
+<h3>Presentation</h3>
+{{currentUser.description}}
+<div ng-show="currentUser.connection[0]">
+
+	<a href="{{currentUser.connection[0].profileurl}}"><h3>Facebook</h3></a>
 
 </div>

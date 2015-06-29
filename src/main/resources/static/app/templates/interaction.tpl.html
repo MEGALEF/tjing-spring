@@ -17,6 +17,10 @@
 		<span>{{interaction.item.owner.firstName}} {{interaction.item.title}}</span>
 	</div>
 
+	<div ng-show="!interaction.statusAccepted">
+		Förfrågan skickad.
+	</div>
+
 	<div ng-show="interaction.statusAccepted && !interaction.statusHandedOver">
 		Accepterades {{interaction.statusAccepted | date}}
 	</div>

@@ -81,6 +81,25 @@
         });
       };
     }]);
+
+  angular.module("tjingApp.controllers").controller("MyProfileController", ["$scope", "User", 
+    function($scope, User){
+      $scope.currentUser = {};
+
+      refresh();
+
+      $scope.save = function(){
+        User.update($scope.currentUser, function(response){
+          $scope.currentUser = response;
+        });
+      };
+
+      function refresh(){
+        User.current({}, function(response){
+          $scope.currentUser = response;
+        });
+      };
+    }]);
   
   angular.module("tjingApp.controllers").controller("MyItemsController", ["$scope", "$location", "Item", "Pool", "Interaction", "Share",
     function($scope, $location, Item, Pool, Interaction, Share) {
@@ -430,17 +449,12 @@
       ["$scope", "$routeParams", "User",
       function($scope, $routeParams, User){
         $scope.currentUser = {};
-        $scope.loggedInUser = {};
-        $scope.editable = false;
+
+        refresh();
 
         function refresh(){
           User.get({id: $routeParams.userId}, function(data){
             $scope.currentUser = data;
-
-            User.current({}, function(response){
-              $scope.loggedInUser = response;
-              $scope.editable = ($scope.currentUser == $scope.loggedInUser);
-            })
           });
         }
         

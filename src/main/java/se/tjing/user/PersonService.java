@@ -78,9 +78,9 @@ public class PersonService {
 		QPerson person = QPerson.person;
 		JPAQuery query = new JPAQuery(em);
 		query.from(person)
-		.where(person.fullName.containsIgnoreCase(searchStr).or(
+		.where(
 				person.firstName.containsIgnoreCase(searchStr).or(
-						person.lastName.containsIgnoreCase(searchStr))));
+						person.lastName.containsIgnoreCase(searchStr)));
 		return query.list(person);
 	}
 
@@ -120,7 +120,6 @@ public class PersonService {
 	}
 	
 	public boolean areFacebookFriends(Person a, Person b){
-		
 		//This is horrible 
 		//TODO: Find a better way to test if two users are facebook friends
 		if (a.getConnection()==null || a.getConnection().isEmpty() || b.getConnection() == null || b.getConnection().isEmpty()){
@@ -153,5 +152,17 @@ public class PersonService {
 		} else {
 			return new ArrayList<Person>();
 		}
+	}
+
+	public Person updateUser(Person currentUser, Person updatedUser, Integer userId) {
+		if (!currentUser.getId().equals(updatedUser.getId())) throw new TjingException("Error attempting to update another user");
+		
+		Person oldUser = personRepo.findOne(userId);
+		if (oldUser==null) throw new TjingException("No user of that id exists");
+		
+		if(updatedUser.getLocationStr()!=null && !updatedUser.getLocationStr().isEmpty()) oldUser.setLocationStr(updatedUser.getLocationStr());
+		if(updatedUser.getDescription()!=null && !updatedUser.getDescription().isEmpty()) oldUser.setDescription(updatedUser.getDescription());
+		
+		return personRepo.save(oldUser);
 	}
 }

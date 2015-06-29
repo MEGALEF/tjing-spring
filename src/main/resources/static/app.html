@@ -5,55 +5,74 @@
 </head>
 <body ng-app="tjingApp">
   <div ng-controller="NavbarController">
-    <header>
+
       <nav class="navbar-collapse navbar-inverse">
-        <div class="container">  
-          <a class ="navbar-brand" href="#home">Tjing! 
-            [Malmgården Alpha edition]</a>
-          <ul class="nav navbar-nav navbar-left">
-            <li><a href="#items">Prylar</a></li>
-            <li><a href="#interactions">Aktiva lån</a></li>
-            <li><a href="#pools">Grupper</a></li>
-            <li ng-show="false"><a href="#requests">Förfrågningar</a></li>
-            <li>
+        <div class="container-fluid">  
+          <div class="navbar-header">
+            <a class ="navbar-brand" href="#home">Tjing! 
+            [Malmgården Alpha]</a>
+          </div>
+            
+          <div id="navbar" class="navbar-collapse collapse"> 
+            <ul class="nav navbar-nav navbar-left">
+              <li>
+                <form class="navbar-form" ng-submit="search()">
+                 <div>
+                  <input class="form-control" type="text" ng-model="searchStr" placeholder="Sök efter prylar..">
+                  <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                </div>
+              </form>
+              </li>
+              <li><a href="#items">Prylar</a></li>
+              <li><a href="#interactions">Aktiva lån</a></li>
+              <li><a href="#pools">Grupper</a></li>
+              <li ng-show="false"><a href="#requests">Förfrågningar</a></li>
+              <li>
                 <a href="#myprofile">{{currentUser.firstName}}</a>
-            </li>
-            <li>
-              <img ng-src="{{currentUser.connection[0].imageurl}}">
-            </li>
-            <li>
-              <a href="/signout">Logga ut</a>
-            </li>
-          </ul>
-          <form class="navbar-form" ng-submit="search()">
-            <input class="form-control" type="text" ng-model="searchStr" placeholder="Sök efter prylar..">
-            <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
-          </form>
+              </li>
+              <li>
+                <img ng-src="{{currentUser.connection[0].imageurl}}">
+              </li>
+              <li>
+                <a href="/signout">Logga ut</a>
+              </li>
+            </ul>
+          </div>
+            
         </div>
       </nav>
-    </header>
-    <div class="container" style="float:right" ng-show="1==1">
-      <h2>Notiser</h2>
-      <ul>
-        <li ng-repeat="feedItem in feedItems"> 
-          <tjing-notification notification="feedItem"></tjing-notification>
-        </li>
-      </ul>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <div ng-show="1==1">
+            <h2>Notiser</h2>
+            <ul>
+              <li ng-repeat="feedItem in feedItems"> 
+                <tjing-notification notification="feedItem"></tjing-notification>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-offset-2 main">
+          <div class="container" id="main">
+            <div ng-view>
+              <!-- Views go here -->
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="container" id="main">
-    <div ng-view>
-      <!-- Views go here -->
-    </div>
-  </div>
+
   
   <script type="text/javascript" src="./bower_components/angular/angular.min.js"></script>
   <script type="text/javascript" src="./bower_components/angular-resource/angular-resource.min.js"></script>
   <script type="text/javascript" src="./bower_components/angular-route/angular-route.min.js"></script>
   <script src="./bower_components/sockjs/sockjs.min.js" type="text/javascript"></script>
-    <script src="./bower_components/stomp-websocket/lib/stomp.min.js" type="text/javascript"></script>
-    <script type="text/javascript" src="./bower_components/ngUpload/ng-upload.min.js"></script>
+  <script src="./bower_components/stomp-websocket/lib/stomp.min.js" type="text/javascript"></script>
+  <script type="text/javascript" src="./bower_components/ngUpload/ng-upload.min.js"></script>
 
   <!--     <script type="text/javascript" src="./bower_components/lodash/dist/lodash.min.js"></script> -->
   <script type="text/javascript" src="./app/app.js"></script>

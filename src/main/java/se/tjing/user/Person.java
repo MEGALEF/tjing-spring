@@ -35,9 +35,9 @@ public class Person extends TjingEntity implements Serializable {
 	// TODO sort out the fullname business. Plenty of opportunity for stuff to
 	// go wrong here. Sorry
 	private String firstName;
-	private String fullName;
 	
-	//private Point location;
+	private String description;
+	private String locationStr;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -90,9 +90,6 @@ public class Person extends TjingEntity implements Serializable {
 		return firstName;
 	}
 
-	public String getFullName() {
-		return fullName;
-	}
 
 	public Integer getId() {
 		return id;
@@ -124,11 +121,6 @@ public class Person extends TjingEntity implements Serializable {
 
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
-		this.fullName = firstName + " " + lastName;
-	}
-
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
 	}
 
 	public void setId(Integer id) {
@@ -145,7 +137,6 @@ public class Person extends TjingEntity implements Serializable {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
-		this.fullName = firstName + " " + lastName;
 	}
 
 	public void setMemberships(List<Membership> memberships) {
@@ -158,5 +149,21 @@ public class Person extends TjingEntity implements Serializable {
 
 	public void setUsername(String email) {
 		this.username = email;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getLocationStr() {
+		return locationStr;
+	}
+
+	public void setLocationStr(String locationStr) {
+		this.locationStr = locationStr;
 	}
 }

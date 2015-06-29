@@ -67,8 +67,8 @@ public class NotificationService {
 		SimpleMailMessage message = new SimpleMailMessage();
 		message.setTo(notif.getTarget().getUsername());
 		message.setFrom("johannes@tribeofsales.com");
-		message.setSubject("[Tjing] "); //TODO
-		message.setText("TODO"); //TODO
+		message.setSubject("[Tjing] Notis"); //TODO
+		message.setText("Det har hänt någonting på ditt Tjing-konto. Gå dit och kolla!"); //TODO
 		mailSender.send(message);
 	}
 	
@@ -78,7 +78,7 @@ public class NotificationService {
 			sendFacebookNotification(notif);
 		}
 		if (notifyEmail){
-			//sendMail(notif);
+			sendMail(notif);
 		}
 		sendWebNotification(notif);
 	}

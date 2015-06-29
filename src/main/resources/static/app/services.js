@@ -139,11 +139,13 @@ var tjingServices = angular.module("tjingApp.services", ["ngResource"]);
     }, {
       current: {
         method: "GET",
-        url:userUrl+"/me",
-        cache : true
+        url:userUrl+"/me"
+      },
+      update: {
+        method: "PATCH"
       }
-    }
-    )
+      
+    })
   }]);
 
   tjingServices.factory("Notifications", function($rootScope){

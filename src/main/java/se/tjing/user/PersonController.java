@@ -2,12 +2,17 @@ package se.tjing.user;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.tools.ant.taskdefs.Patch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import se.tjing.interaction.InteractionService;
@@ -45,7 +50,10 @@ public class PersonController {
 	}
 	
 	@RequestMapping(method=RequestMethod.GET)
-	public ResponseEntity<List<Person>> getVisibleUsers(){
+	public ResponseEntity<List<Person>> getUsers(@RequestParam(required=false, value="q") String q){
+		if(q!=null && !q.isEmpty()){
+			return searchUser(q);
+		}
 		Person current = pService.getCurrentUser();
 		List<Person> result = pService.getVisibleUsers(current);
 		return new ResponseEntity<List<Person>>(result, null, HttpStatus.OK);
@@ -72,5 +80,11 @@ public class PersonController {
 		List<Rating> result = ratingservice.getRatings(pService
 				.getPerson(userId));
 		return new ResponseEntity<List<Rating>>(result, null, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="{userId}", method=RequestMethod.PATCH)
+	public ResponseEntity<Person> updateUser(@PathVariable Integer userId, @RequestBody Person user){
+		Person result = pService.updateUser(pService.getCurrentUser(), user, userId);
+		return new ResponseEntity<Person>(result, null, HttpStatus.ACCEPTED);
 	}
 }
