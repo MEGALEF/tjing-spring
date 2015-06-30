@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import se.tjing.item.Item;
 import se.tjing.membership.Membership;
+import se.tjing.share.Share;
 import se.tjing.user.Person;
 import se.tjing.user.PersonService;
 
@@ -59,19 +60,19 @@ public class PoolController {
 		return new ResponseEntity<List<Pool>>(result, null, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/{poolId}/items", method = RequestMethod.GET)
-	public ResponseEntity<List<Item>> listItemsInPool(
+	@RequestMapping(value = "/{poolId}/shares", method = RequestMethod.GET)
+	public ResponseEntity<List<Share>> listItemsInPool(
 			@PathVariable Integer poolId) {
 		Person currentUser = personService.getCurrentUser();
-		List<Item> result = poolService.getItemsInPool(currentUser, poolId);
-		return new ResponseEntity<List<Item>>(result, null, HttpStatus.OK);
+		List<Share> result = poolService.getPoolShares(currentUser, poolId);
+		return new ResponseEntity<List<Share>>(result, null, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value="/{poolId}/members", method = RequestMethod.GET)
-	public ResponseEntity<List<Person>> listPoolMembers(@PathVariable Integer poolId){
-		List<Person> result = poolService.getPoolMembers(personService.getCurrentUser(), poolId);
+	@RequestMapping(value="/{poolId}/memberships", method = RequestMethod.GET)
+	public ResponseEntity<List<Membership>> listPoolMembers(@PathVariable Integer poolId){
+		List<Membership> result = poolService.getPoolMemberships(personService.getCurrentUser(), poolId);
 		
-		return new ResponseEntity<List<Person>>(result, null, HttpStatus.OK);
+		return new ResponseEntity<List<Membership>>(result, null, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{poolId}/items/owned", method = RequestMethod.GET)

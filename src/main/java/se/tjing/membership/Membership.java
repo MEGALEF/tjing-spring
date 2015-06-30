@@ -16,49 +16,47 @@ import javax.persistence.UniqueConstraint;
 import se.tjing.common.TjingEntity;
 import se.tjing.feed.Notification;
 import se.tjing.pool.Pool;
+import se.tjing.pool.PoolRole;
 import se.tjing.user.Person;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = { "pool", "member" }))
 public class Membership extends TjingEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	Integer id;
+	private PoolRole role;
 
-	@ManyToOne
-	private Person member;
+	private Boolean approved = false;
 	
 	private Boolean hidden = false;
 	
-	private Boolean administrator = false;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	Integer id;
 	
-	public Boolean getHidden() {
-		return hidden;
-	}
-
-	public void setHidden(Boolean hidden) {
-		this.hidden = hidden;
-	}
+	@ManyToOne
+	private Person member;
 
 	@OneToMany(mappedBy="membership", cascade=CascadeType.ALL)
 	private List<Notification> notifications;
+
+	@OneToOne
+	private Pool notifyPool = null;
 	
+
+	@OneToOne
+	private Person notifyUser = null;
 
 	@ManyToOne
 	private Pool pool;
 
-	@OneToOne
-	private Pool notifyPool = null;
-
-	@OneToOne
-	private Person notifyUser = null;
-	
-	private Boolean approved = false;
+	public Membership() {
+		// TODO Auto-generated constructor stub
+	}
 	
 	public Membership(Person member, Pool pool) {
 		this.member = member;
 		this.pool = pool;
+		this.role = PoolRole.MEMBER;
 	}
 	
 	public Membership(Person member, Pool pool, boolean preapproved){
@@ -66,29 +64,17 @@ public class Membership extends TjingEntity {
 		this.pool = pool;
 		this.approved = preapproved;
 	}
-
-	public Membership() {
-		// TODO Auto-generated constructor stub
-	}
-
+	
 	public void approve(){
 		this.approved = true;
 	}
 
-	public Person getMember() {
-		return member;
+	public Boolean getApproved() {
+		return approved;
 	}
 
-	public void setMember(Person member) {
-		this.member = member;
-	}
-
-	public Pool getPool() {
-		return pool;
-	}
-
-	public void setPool(Pool pool) {
-		this.pool = pool;
+	public Boolean getHidden() {
+		return hidden;
 	}
 
 	@Override
@@ -96,23 +82,39 @@ public class Membership extends TjingEntity {
 		return id;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public Person getMember() {
+		return member;
 	}
 
-	public Boolean getApproved() {
-		return approved;
+	public Pool getPool() {
+		return pool;
 	}
 
 	public void setApproved(Boolean approved) {
 		this.approved = approved;
 	}
 
-	public Boolean getAdministrator() {
-		return administrator;
+	public void setHidden(Boolean hidden) {
+		this.hidden = hidden;
 	}
 
-	public void setAdministrator(Boolean administrator) {
-		this.administrator = administrator;
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public void setMember(Person member) {
+		this.member = member;
+	}
+
+	public void setPool(Pool pool) {
+		this.pool = pool;
+	}
+
+	public PoolRole getRole() {
+		return role;
+	}
+
+	public void setRole(PoolRole role) {
+		this.role = role;
 	}
 }

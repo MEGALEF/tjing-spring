@@ -47,10 +47,10 @@ public class MembershipController {
 	}
 
 	@RequestMapping(value = "{requestId}", method = RequestMethod.PATCH)
-	public ResponseEntity<Membership> approve(@PathVariable Integer requestId) {
-		Membership membership = poolService.approveJoin(
-				personService.getCurrentUser(), requestId);
-		return new ResponseEntity<Membership>(membership, null,
+	public ResponseEntity<Membership> update(@PathVariable Integer requestId, @RequestBody Membership toUpdate) {
+		Membership result = poolService.update(
+				personService.getCurrentUser(), requestId, toUpdate);
+		return new ResponseEntity<Membership>(result, null,
 				HttpStatus.CREATED);
 	}
 

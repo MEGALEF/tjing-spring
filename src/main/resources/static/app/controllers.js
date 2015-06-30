@@ -405,39 +405,51 @@
     ["$scope", "$routeParams", "Pool", "Membership",
     function($scope, $routeParams, Pool, Membership){
     $scope.currentPool = {};
-    $scope.myMemberships = [];
-    $scope.membership = null;
-    $scope.items = [];
-    $scope.members = [];
-
+    $scope.memberships = [];
+    $scope.shares = [];
+    $scope.myMembership = null;
+    
     refresh();
+
+    $scope.makeAdmin = function(membership){
+      Membership.update({id: membership.id, role:"ADMIN"}, function(response){
+        membership = response;
+      });
+    }
 
     $scope.joinPool = function(){
       Membership.save({poolId: $scope.currentPool.id},function(response){
-        $scope.membership = response;
+        $scope.myMembership = response;
       });
     };
 
     $scope.leavePool = function(){
-      Membership.delete({membershipId: $scope.membership.id}, function(){ //TODO äuuuuuäuäuuähh
-        $scope.membership = null;
-      })
+      Membership.delete({membershipId: $scope.myMembership.id}, function(){ //TODO äuuuuuäuäuuähh
+        $scope.myMembership = null;
+      });
     };
 
+    $scope.kickMember = function(membership){
+      Membership.delete({membershipId: membership.id}, function(){ //TODO äuuuuuäuäuuähh
+        membership = null;
+      });
+    }
+
     function refresh(){ //TODO could be made nicer w an endpoint that retrieves membership or a specific Pool
-      Pool.get({id: $routeParams.poolId}, function(data){
-        $scope.currentPool = data;
+      Pool.get({id: $routeParams.poolId}, function(pool){
+        $scope.currentPool = pool;
 
-        Membership.query({}, function(data2){
-          $scope.myMemberships = data2;
+        Membership.query({}, function(myMemberships){
 
-          for(i =0; i<$scope.myMemberships.length; i++){
-            var membership = $scope.myMemberships[i];
+          for(i =0; i< myMemberships.length; i++){
+            var m = myMemberships[i];
 
-            if (membership.pool.id == $scope.currentPool.id){
-              $scope.membership = membership;
-              $scope.members = Pool.members({id: $scope.currentPool.id}, function(){});
-              $scope.items = Pool.items({id: $scope.currentPool.id}, function(){});
+            if (m.pool.id == $scope.currentPool.id){
+              $scope.myMembership = m;
+
+              //Get pool memberships and shares
+              $scope.memberships = Pool.memberships({id: $scope.currentPool.id}, function(){});
+              $scope.shares = Pool.shares({id: $scope.currentPool.id}, function(){});
             }
           }
         });

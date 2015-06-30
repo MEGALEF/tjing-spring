@@ -1,25 +1,35 @@
 <div>
 	<h1>{{currentPool.title}}</h1>
 
-	<button ng-show="membership" ng-click="leavePool()">
+	<button ng-show="myMembership" ng-click="leavePool()">
 		Lämna grupp
 	</button>
 
-	<button ng-show="!membership" ng-click="joinPool()">
+	<button ng-show="!myMembership" ng-click="joinPool()">
 		Gå med i grupp
 	</button>
 
-	<div ng-show="membership">
+	<div ng-show="myMembership">
+
+		<div ng-show="myMembership.role=='ADMIN'">
+			Admin stuff
+		</div>
+
 		<h2>Medlemmar</h2>
 		<ul>
-			<li ng-repeat="member in members">
-				<tjing-user user="member"></tjing-user>
+			<li ng-repeat="membership in memberships">
+				<tjing-user user="membership.member"></tjing-user>
+				<span>({{membership.role}})</span>
+				<span ng-show="myMembership.role=='ADMIN' && membership.role!='ADMIN'">
+					<button ng-click="makeAdmin(membership)">Ge admin</button>
+					<button ng-click="kickMember(membership)">Ta bort</button>
+				</span>
 			</li>
 		</ul>
 		<h2>Delade prylar</h2>
 		<ul>
-			<li ng-repeat="item in items">
-				<tjing-item item="item"></tjing-item>
+			<li ng-repeat="share in shares">
+				<tjing-item item="share.item"></tjing-item>
 			</li>
 		</ul>	
 	</div>	

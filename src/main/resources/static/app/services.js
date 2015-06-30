@@ -6,7 +6,13 @@ var tjingServices = angular.module("tjingApp.services", ["ngResource"]);
 
   tjingServices.factory("Membership", ['$resource', function($resource){
     var membershipUrl = "/membership/:membershipId";
-    return $resource(membershipUrl);
+    return $resource(membershipUrl, {
+      membershipId : "@id"
+    }, {
+      update : {
+        method: "PATCH"
+      }
+    });
   }]);
 
   tjingServices.factory("Share", ['$resource', function($resource){
@@ -82,17 +88,17 @@ var tjingServices = angular.module("tjingApp.services", ["ngResource"]);
         },
         isArray: true //This endpoint returns an array of the remaining member pools. Possibly use this method for all the other actions
       },
-      members : {
+      memberships : {
         method : "GET",
-        url: "/pool/:id/members",
+        url: "/pool/:id/memberships",
         params: {
           id: "@id"
         },
         isArray: true
       },
-      items : {
+      shares : {
         method: "GET",
-        url : "/pool/:id/items",
+        url : "/pool/:id/shares",
         params: {
           id: "@id"
         },

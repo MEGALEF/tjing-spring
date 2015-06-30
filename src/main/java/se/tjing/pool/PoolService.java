@@ -56,6 +56,7 @@ public class PoolService {
 		// Set pool creator as member in the pool
 		Membership creatorMembership = new Membership(creator, pool);
 		creatorMembership.approve();
+		creatorMembership.setRole(PoolRole.ADMIN);
 
 		Pool savedPool = poolRepo.save(pool);
 		membershipRepo.save(creatorMembership);
@@ -72,18 +73,17 @@ public class PoolService {
 		return query.list(pool);
 	}
 
-	public List<Item> getItemsInPool(Person user, Integer poolId) {
+	public List<Share> getPoolShares(Person user, Integer poolId) {
 		Pool pool = poolRepo.findOne(poolId);
 		if (pool == null || !isUserMemberOfPool(user, pool)) {
 			throw new TjingException(
 					"Pool does not exist or user is not allowed access to it");
 		} else {
-			QItem item = QItem.item;
 			QShare share = QShare.share;
 			JPAQuery query = new JPAQuery(em);
-			query.from(item).leftJoin(item.shares, share)
+			query.from(share)
 			.where(share.pool.eq(pool));
-			return query.list(item);
+			return query.list(share);
 		}
 	}
 
@@ -171,33 +171,54 @@ public class PoolService {
 		return query.list(membership);
 	}
 
-	public Membership approveJoin(Person user, Integer requestId) {
-		Membership req = membershipRepo.findOne(requestId);
+	public Membership update(Person user, Integer requestId, Membership update) {
+		Membership old = membershipRepo.findOne(requestId);
+		if (old == null) throw new TjingException("No such entity");
+		
+		if (update.getRole() != null){
+			if (PoolRole.ADMIN.equals(getMembership(user, old.getPool()).getRole())){
+				old.setRole(update.getRole());
+			} else throw new TjingException("Only admins may do this");
+		}		
 
-		//TODO: Make sure the user role in the pool is correct
-		if (!isUserMemberOfPool(user, req.getPool())) {
+		//TODO: Check user role vs Pool rules (approval)
+		if (!isUserMemberOfPool(user, old.getPool())) {
 			throw new TjingException("Only pool members may do this");
 		} else {
-			req.approve();
-
-			return membershipRepo.save(req);
+			old.approve();
 		}
+		
+		return membershipRepo.save(old);
 	}
 
-	public void removeMembership(Person user, Integer requestId) {
-		Membership membership = membershipRepo.findOne(requestId);
+	private Membership getMembership(Person user, Pool pool) {
+		JPAQuery query = new JPAQuery(em);
+		QMembership membership = QMembership.membership;
+		query.from(membership)
+		.where(membership.member.eq(user)
+				.and(membership.pool.eq(pool)));
+		return query.singleResult(membership);
+	}
+
+
+
+	public void removeMembership(Person user, Integer membershipId) {
+		Membership membership = membershipRepo.findOne(membershipId);
+		if (membership == null) throw new TjingException("No such Membership");
 		Pool pool = membership.getPool();
 		if (membership.getApproved()){ //Member is an approved member of the pool
 			if (!user.equals(membership.getMember())){
-				throw new TjingException("Only admins may remove other users");
-				//TODO: Implement admin kicking
+				Membership userM = getMembership(user, pool);
+				if (userM != null && PoolRole.ADMIN.equals(userM.getRole())){
+					deleteMembershipAndShares(membership);
+				} else throw new TjingException("Only admins may remove other users");
 			} else {
 				deleteMembershipAndShares(membership);
 			}
 		} else {
 			if (!isUserMemberOfPool(user, membership.getPool())) {
 				//TODO Here is for implementation of pool role approval
-				throw new TjingException("Only pool members may deny join requests");
+				throw new TjingException("Only pool members may do this");
 			} else {
 				deleteMembershipAndShares(membership);
 			}
@@ -299,7 +320,7 @@ public class PoolService {
 		throw new TjingException("User is not a legit member of that group");
 	}
 
-	public List<Person> getPoolMembers(Person currentUser, Integer poolId) {
+	public List<Membership> getPoolMemberships(Person currentUser, Integer poolId) {
 		Pool pool = poolRepo.findOne(poolId);
 		
 		if (!isUserMemberOfPool(currentUser, pool)){
@@ -307,11 +328,10 @@ public class PoolService {
 		} else {
 			JPAQuery query = new JPAQuery(em);
 			QMembership membership = QMembership.membership;
-			QPerson person = QPerson.person;
-			query.from(membership).leftJoin(membership.member, person)
+			query.from(membership)
 			.where(membership.pool.eq(pool).and(membership.approved.isTrue()));
 			
-			return query.list(person);
+			return query.list(membership);
 		}		
 	}
 }

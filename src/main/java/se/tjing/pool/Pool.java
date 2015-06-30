@@ -22,56 +22,42 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 public class Pool extends TjingEntity {
 	
-	public Pool(GroupMembership gm){
-		this.title = gm.getName();
-		this.privacy = PrivacyMode.FACEBOOK;
-		this.setFacebookId(Long.valueOf(gm.getId()));
-	}
+	// closed by default
+	private PoolRole approval = PoolRole.MEMBER; //By default members can approve joining members
 	
-	public Pool(){
-		
-	}
+	private String description;
 	
 	private Long facebookId;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
-
-	private String title;
-
-	private PrivacyMode privacy = PrivacyMode.CLOSED; // Pool privacy set to
-	// closed by default
-	private PoolRole approval = PoolRole.MEMBER; //By default members can approve joining members
 	
 	@OneToMany(mappedBy = "pool")
 	@JsonIgnore
 	private Set<Membership> memberships;
 
+	private PrivacyMode privacy = PrivacyMode.CLOSED; // Pool privacy set to
+
 	@OneToMany(mappedBy = "pool")
 	@JsonIgnore
 	private Set<Share> shares;
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public Set<Membership> getMemberships() {
-		return memberships;
-	}
+	private String title;
 	
+	public Pool(){
+		
+	}
+
+	public Pool(GroupMembership gm){
+		this.title = gm.getName();
+		this.privacy = PrivacyMode.FACEBOOK;
+		this.setFacebookId(Long.valueOf(gm.getId()));
+	}
+
+	public PoolRole getApproval() {
+		return approval;
+	}
+
 	@JsonIgnore
 	public List<Membership> getApprovedMemberships(){
 		List<Membership> activemembers = new ArrayList<Membership>();
@@ -83,31 +69,55 @@ public class Pool extends TjingEntity {
 		return activemembers;
 	}
 
-	public void setMemberships(Set<Membership> memberships) {
-		this.memberships = memberships;
-	}
-
-	public PrivacyMode getPrivacy() {
-		return privacy;
-	}
-
-	public void setPrivacy(PrivacyMode mode) {
-		this.privacy = mode;
-	}
-
-	public PoolRole getApproval() {
-		return approval;
-	}
-
-	public void setApproval(PoolRole approval) {
-		this.approval = approval;
+	public String getDescription() {
+		return description;
 	}
 
 	public Long getFacebookId() {
 		return facebookId;
 	}
 
+	public Integer getId() {
+		return id;
+	}
+	
+	public Set<Membership> getMemberships() {
+		return memberships;
+	}
+
+	public PrivacyMode getPrivacy() {
+		return privacy;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setApproval(PoolRole approval) {
+		this.approval = approval;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	public void setFacebookId(Long facebookId) {
 		this.facebookId = facebookId;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public void setMemberships(Set<Membership> memberships) {
+		this.memberships = memberships;
+	}
+
+	public void setPrivacy(PrivacyMode mode) {
+		this.privacy = mode;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 }
