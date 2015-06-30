@@ -1,0 +1,10 @@
+  <h1>Skapa ny grupp</h1>
+  <form ng-submit="createPool(newPool)">
+    <input type="text" ng-model="newPool.title" placeholder="Namn" required></input>
+    <br/>
+    <textarea ng-model="newPool.description" placeholder="Beskrivning"></textarea>
+    <br/>
+    <button type="submit" ng-disabled="!newPool.title">
+      Skapa
+    </button>
+  </form>

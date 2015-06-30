@@ -37,7 +37,7 @@ public class Pool extends TjingEntity {
 	@JsonIgnore
 	private Set<Membership> memberships;
 
-	private PrivacyMode privacy = PrivacyMode.CLOSED; // Pool privacy set to
+	private PrivacyMode privacy;
 
 	@OneToMany(mappedBy = "pool")
 	@JsonIgnore

@@ -39,7 +39,7 @@ public class PoolController {
 	@ResponseBody
 	public ResponseEntity<Pool> createPool(@RequestBody Pool pool) {
 		Pool newPool = poolService
-				.addPool(personService.getCurrentUser(), pool);
+				.createPool(personService.getCurrentUser(), pool);
 		return new ResponseEntity<Pool>(newPool, null, HttpStatus.CREATED);
 	}
 

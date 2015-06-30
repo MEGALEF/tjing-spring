@@ -1,5 +1,7 @@
 <div>
   <h1>Mina grupper</h1>
+  <a href="#newpool">Skapa ny grupp</a>
+  <span class="glyphicon glyphicon-plus"></span>
   <div ng-hide="myMemberships && myMemberships.length >0">
     Du är inte medlem i någon grupp än. Gå med i en grupp eller skapa en egen.
   </div>
@@ -13,13 +15,7 @@
   </ul>
   <a href="#groupimport">Importera grupper från facebook</a>
   <hr/>
-  <h1>Skapa ny grupp</h1>
-  <form role="form" ng-submit="createPool(newPool)">
-    <input type="text" ng-model="newPool.title" placeholder="Enter pool name.." required/>
-    <button type="submit" ng-disabled="!newPool.title" title="Add">
-      <span class="glyphicon glyphicon-plus"></span>
-    </button>
-  </form>
+
 
   <h2>Sök grupper</h2>
   <form ng-submit="searchPools()">

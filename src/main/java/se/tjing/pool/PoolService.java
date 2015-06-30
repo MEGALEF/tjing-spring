@@ -44,7 +44,7 @@ public class PoolService {
 	@Autowired
 	Facebook facebook;
 
-	public Pool addPool(Person creator, Pool pool) {
+	public Pool createPool(Person creator, Pool pool) {
 		if (pool.getTitle().trim().isEmpty()) {
 			throw new TjingException("A pool must have a title");
 		}

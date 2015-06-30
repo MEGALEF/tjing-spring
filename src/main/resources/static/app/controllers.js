@@ -159,7 +159,7 @@
   }]);
 
   angular.module("tjingApp.controllers").controller("MyPoolsController", 
-    ["$scope", "Pool", "Item", "Membership", function($scope, Pool, Item, Membership) {
+    ["$scope", "$location", "Pool", "Item", "Membership", function($scope, $location, Pool, Item, Membership) {
     $scope.showPools = false;
 
     $scope.allPools = [];
@@ -207,13 +207,8 @@
     };
 
     $scope.createPool = function(pool){
-      Pool.save({
-        title: pool.title,
-        //description: "", //TODO: add description
-        privacy: "OPEN" //TODO: enable other privacy modes
-      }, function() { //TODO:Does save return anything? In that case use that data instead of sending a new request
-        refreshAllPools();
-        refreshMyPools();
+      Pool.save(pool, function(response) { //TODO:Does save return anything? In that case use that data instead of sending a new request
+        $location.url("/pool/"+response.id);
       });
     };
   }]);

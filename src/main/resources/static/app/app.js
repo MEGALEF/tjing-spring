@@ -42,6 +42,11 @@
                 controller : "MyItemsController"
             })
 
+            .when('/newpool', {
+                templateUrl: partialsUrl + "newpool.html",
+                controller : "MyPoolsController"
+            })
+
             .when('/searchresult/:searchStr', {
                 templateUrl : 'app/partials/searchresult.html',
                 controller : "SearchResultController"
