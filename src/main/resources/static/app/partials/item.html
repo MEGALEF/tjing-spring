@@ -1,7 +1,11 @@
 <div>
 	<h1>{{currentItem.title}}</h1>
-	<h2>Ägare</h2>
-	<tjing-user user="currentItem.owner"></tjing-user>
+
+	<p>{{currentItem.description}}</p>
+	<div ng-show="!isOwner">
+		<h2>Ägare</h2>
+		<tjing-user user="currentItem.owner"></tjing-user>
+	</div>
 
 	<div ng-show="isOwner">
 		<h2>Dela med</h2>
@@ -23,7 +27,7 @@
 		</ul>
 		
 		<form enctype="multipart/form-data" encoding="multipart/form-data" method="POST" action="{{imgUploadUrl()}}" ng-upload="complete(content)">
-			<h2>Lägg till en bild</h2>
+			<h2>Lägg till en bild</h2> (Obs att den här funktionen inte funkar så bra just nu /Johannes)
 			<input type="file" name="file">
 			<input type="submit" value="Lägg till">
 		</form>

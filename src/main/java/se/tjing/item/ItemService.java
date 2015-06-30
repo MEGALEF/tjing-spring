@@ -58,10 +58,12 @@ public class ItemService {
 	@Autowired
 	PersonService personService;
 
-	public Item addItem(Item item) {
-		// TODO: Business logic. Check for existing items
-		itemRepo.save(item);
-		return item;
+	public Item addItem(Person user, Item item) {
+		if(item.getOwner() == null){
+			item.setOwner(user);
+		}
+		
+		return itemRepo.save(item);
 	}
 
 	public List<Item> getAvailableItemsToUser(Person user) {

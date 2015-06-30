@@ -1,10 +1,12 @@
 <div>
   <h1>Add item</h1>
-  <form role="form" ng-submit="addItem(newItem)">
-    <input type="text" ng-model="newItem" placeholder="Enter item title.." required/>
+  <form ng-submit="addItem(newItem)">
+    <input type="text" ng-model="newItem.title" placeholder="Titel" required/>
+    <br/>
+    <textarea ng-model="newItem.description" placeholder="Beskrivning"></textarea>
     <span>
-      <button type="submit" ng-disabled="!newItem" title="Add">
-        <span class="glyphicon glyphicon-plus"></span>
+      <button type="submit" ng-disabled="!newItem.title">
+        <span class="glyphicon glyphicon-plus">Lägg till</span>
       </button>
     </span>
   </form>

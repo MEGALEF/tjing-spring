@@ -115,14 +115,12 @@
       $scope.owneditems = Item.query({param:'owned'});
     }
     
-    $scope.addItem = function(title) {
-      new Item({
-        title: title
-      }).$save(function (data){
-        $scope.owneditems.push(data); //$save returns created item. Success callback adds the item to the scope array
-        $location.path('/item/'+data.id);
+    $scope.addItem = function(item) {
+      Item.save(item, function(response){
+        $scope.owneditems.push(response);
+        $scope.newItem = "";
+        $location.path('/item/' + response.id);
       });
-      $scope.newItem = "";
     };
 
     $scope.setFbAvailable = function(item){

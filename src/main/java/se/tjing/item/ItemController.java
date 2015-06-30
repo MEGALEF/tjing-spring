@@ -48,10 +48,9 @@ public class ItemController {
 
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<Item> addItem(@RequestBody AddItemRestObject addItem) {
+	public ResponseEntity<Item> createItem(@RequestBody Item newItem) {
 		Person currentUser = personService.getCurrentUser();
-		Item addedItem = itemService.addItem(addItem
-				.buildItemWithOwner(currentUser));
+		Item addedItem = itemService.addItem(currentUser, newItem);
 		return new ResponseEntity<Item>(addedItem, null, HttpStatus.CREATED);
 	}
 

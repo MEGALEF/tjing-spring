@@ -5,7 +5,6 @@
 </head>
 <body ng-app="tjingApp">
   <div ng-controller="NavbarController">
-
       <nav class="navbar-collapse navbar-inverse">
         <div class="container-fluid">  
           <div class="navbar-header">
@@ -47,8 +46,8 @@
         <div class="col-sm-3 col-md-2 sidebar">
           <div ng-show="1==1">
             <h2>Notiser</h2>
-            <ul>
-              <li ng-repeat="feedItem in feedItems"> 
+            <ul class="list-group">
+              <li class="list-group-item list-group-item-info" ng-repeat="feedItem in feedItems"> 
                 <tjing-notification notification="feedItem"></tjing-notification>
               </li>
             </ul>
