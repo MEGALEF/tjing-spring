@@ -3,45 +3,30 @@
   <a href="#newpool">Skapa ny grupp</a>
   <span class="glyphicon glyphicon-plus"></span>
   <div ng-hide="myMemberships && myMemberships.length >0">
-    Du är inte medlem i någon grupp än. Gå med i en grupp eller skapa en egen.
+    Du Ã¤r inte medlem i nÃ¥gon grupp Ã¤n. GÃ¥ med i en grupp eller skapa en egen.
   </div>
-  <ul>
+  <ul class="list-unstyled">
     <li ng-repeat="membership in myMemberships">
       <tjing-pool pool="membership.pool"></tjing-pool> ({{membership.pool.nbrMembers}} medlemmar/{{membership.pool.nbrShares}} prylar)
       <button type="button" ng-click="leavePool(membership)">
-        Lämna
+        LÃ¤mna
       </button>
     </li>
   </ul>
-  <a href="#groupimport">Importera grupper från facebook</a>
+  <a href="#groupimport">Importera grupper frÃ¥n facebook</a>
   <hr/>
 
-  <h2>Sök grupper</h2>
+  <h2>SÃ¶k grupper</h2>
   <form ng-submit="searchPools()">
     <input type="text" ng-model="searchStr">
-    <button type="submit" title="Sök"><span class="glyphicon glyphicon-search"></span></button>
+    <button type="submit" title="SÃ¶k"><span class="glyphicon glyphicon-search"></span></button>
   </form> 
   <div ng-show="searchResults">
-    <h3>Sökresultat</h3>
-    <ul>
+    <h3>SÃ¶kresultat</h3>
+    <ul class="list-unstyled">
       <li ng-repeat="result in searchResults">
       <tjing-pool pool=result></tjing-pool> ({{result.nbrMembers}} medlemmar/{{result.nbrShares}} prylar)
       </li>
     </ul> 
   </div>
-
-  <h2>Alla grupper som finns</h2><button ng-click="showPools=!showPools">show/hide</button>
-  <div ng-show="showPools">
-    <div ng-hide="allPools.length > 0">
-      Det finns inga grupper än. Skapa en grupp!
-    </div>
-    <ul>
-      <li ng-repeat="pool in allPools">
-        <tjing-pool pool="pool"></tjing-pool>
-        <div ng-hide="pool.privacy == 'OPEN'">, kräver godkännande från {{pool.approval}})</div>
-         <button type="button" ng-click="joinPool(pool)">Gå med</button>
-      </li>
-    </ul>
-  </div>
-  <hr />
 </div>

@@ -7,7 +7,7 @@
     Lägg till en pryl
     <span class="glyphicon glyphicon-plus"></span>
   </a>
-  <ul>
+  <ul class="list-unstyled">
     <li ng-repeat="item in owneditems" >
       <tjing-item item="item"></tjing-item>
       <button type="button" title="Delete" ng-click="deleteItem(item)">
@@ -20,7 +20,7 @@
   <hr />
 
   <h1>Tillgängliga prylar</h1>
-  <ul>
+  <ul class="list-unstyled">
     <li ng-repeat="item in items">
       <tjing-item item="item"></tjing-item> (<tjing-user user="item.owner"></tjing-user>)
       <button type="button" title="Request" ng-click="requestItem(item)">Skicka förfrågan

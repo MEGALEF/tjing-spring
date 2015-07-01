@@ -18,13 +18,13 @@
 				</div>
 				
 				<fieldset>
-					<label for="firstName">Förnamn <span th:if="${#fields.hasErrors('firstName')}" class="error" th:text="${#fields.errors('firstName')[0]}">Fel</span></label>
+					<label for="firstName">F&ouml;rnamn <span th:if="${#fields.hasErrors('firstName')}" class="error" th:text="${#fields.errors('firstName')[0]}">Fel</span></label>
 					<input class="form-control" type="text" th:field="*{firstName}" />
 					<label for="lastName">Efternamn <span th:if="${#fields.hasErrors('lastName')}" class="error" th:text="${#fields.errors('lastName')[0]}">Fel</span></label>
 					<input class="form-control" type="text" th:field="*{lastName}" />
 					<label for="username">E-post <span th:if="${#fields.hasErrors('username')}" class="error" th:text="${#fields.errors('username')[0]}">Fel</span></label>
 					<input class="form-control" type="email" th:field="*{username}" />
-					<label for="password">Lösenord <span th:if="${#fields.hasErrors('password')}" class="error" th:text="${#fields.errors('password')[0]}">Fel</span></label>
+					<label for="password">L&ouml;senord <span th:if="${#fields.hasErrors('password')}" class="error" th:text="${#fields.errors('password')[0]}">Fel</span></label>
 					<input class="form-control" type="password" th:field="*{password}" />
 				</fieldset>
 				<p><button class="btn btn-lg btn-primary btn-block" type="submit">Skapa konto</button></p>

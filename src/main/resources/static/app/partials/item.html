@@ -1,4 +1,4 @@
-<div>
+<div class="container">
 	<h1>{{currentItem.title}}</h1>
 
 	<p>{{currentItem.description}}</p>
@@ -9,16 +9,11 @@
 
 	<div ng-show="isOwner">
 		<h2>Dela med</h2>
-		<table>
-			<tr>
-				<th ng-repeat="pool in currentItem.shareMap">{{pool.title}}</td>
-			</tr>
-			<tr>
-				<td ng-repeat="pool in currentItem.shareMap">
-					<input type="checkbox" ng-model="pool.itemIsShared" ng-click="pool.itemIsShared ? shareItem(currentItem, pool) : unshareItem(currentItem, pool)">
-				</td>
-			</tr>
-		</table>
+		<ul class="list-unstyled">
+			<li ng-repeat="pool in currentItem.shareMap">
+				<input type="checkbox" ng-model="pool.itemIsShared" ng-click="pool.itemIsShared ? shareItem(currentItem, pool) : unshareItem(currentItem, pool)">  <b>{{pool.title}}</b>
+			</li>
+		</ul>
 		
 		<ul ng-show="currentItem.images && currentItem.images.length>0">
 			<li ng-repeat="image in currentItem.images">

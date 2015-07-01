@@ -20,7 +20,7 @@
 		</div>
 
 		<h2>Medlemmar</h2>
-		<ul>
+		<ul class="list-unstyled">
 			<li ng-repeat="membership in memberships">
 				<tjing-user user="membership.member"></tjing-user>
 				<span>({{membership.role}})</span>
@@ -31,7 +31,7 @@
 			</li>
 		</ul>
 		<h2>Delade prylar</h2>
-		<ul>
+		<ul class="list-unstyled">
 			<li ng-repeat="share in shares">
 				<tjing-item item="share.item"></tjing-item>
 			</li>
