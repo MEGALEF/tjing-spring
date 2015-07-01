@@ -121,10 +121,10 @@ public class Pool extends TjingEntity {
 	}
 	
 	public Integer getNbrMembers(){
-		return this.memberships.size();
+		return (memberships!=null) ? memberships.size() : 0;
 	}
 	
 	public Integer getNbrShares(){
-		return this.shares.size();
+		return (shares!=null) ?  shares.size() : 0;
 	}
 }
