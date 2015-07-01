@@ -119,4 +119,12 @@ public class Pool extends TjingEntity {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+	
+	public Integer getNbrMembers(){
+		return this.memberships.size();
+	}
+	
+	public Integer getNbrShares(){
+		return this.shares.size();
+	}
 }
