@@ -40,30 +40,29 @@ public class MembershipService {
 	 * @param membership
 	 * @return
 	 */
-	public Membership addMembership(Person currentUser, AddMembership addMembership) {
-		Pool pool = poolRepo.findOne(addMembership.poolId);
+	public Membership createMembership(Person currentUser, Membership addMembership) {
+		Pool pool = poolRepo.findOne(addMembership.getPool().getId());
+		addMembership.setMember(currentUser);
+		Membership result;
 		
 		if (findMembership(currentUser, pool) != null){
 			throw new TjingException("User is already a member of that pool");
 		}
 		
-		Membership membership = new Membership(currentUser, pool);
-		
 		// If the group is closed or secret, notify users to approve. If Pool is open, preapprove membership
-		if (PrivacyMode.CLOSED.equals(pool.getPrivacy()) 
-				|| PrivacyMode.SECRET.equals(pool.getPrivacy())) {
-			membership.setApproved(false);
-			membershipRepo.save(membership);
+		if (PrivacyMode.CLOSED.equals(pool.getPrivacy())) {
+			addMembership.setApproved(false);
+			result = membershipRepo.save(addMembership);
 			for (Membership member : pool.getApprovedMemberships()){
-				notifService.sendNotification(new Notification(membership, member.getMember(), EventType.POOL_JOINREQUEST), true, true);
+				notifService.sendNotification(new Notification(addMembership, member.getMember(), EventType.POOL_JOINREQUEST), true, true);
 			}
 			
-		} else if (PrivacyMode.OPEN.equals(pool.getPrivacy())){
-			membership.approve();
-			membershipRepo.save(membership);
+		} else { //If PrivacyMode = OPEN
+			addMembership.approve();
+			result = membershipRepo.save(addMembership);
 		}
 		
-		return membership;
+		return result;
 	}
 
 	private Membership findMembership(Person currentUser, Pool pool) {

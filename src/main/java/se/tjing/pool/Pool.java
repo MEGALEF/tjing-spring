@@ -37,7 +37,7 @@ public class Pool extends TjingEntity {
 	@JsonIgnore
 	private Set<Membership> memberships;
 
-	private PrivacyMode privacy;
+	private PrivacyMode privacy = PrivacyMode.OPEN;
 
 	@OneToMany(mappedBy = "pool")
 	@JsonIgnore
@@ -50,7 +50,6 @@ public class Pool extends TjingEntity {
 
 	public Pool(GroupMembership gm){
 		this.title = gm.getName();
-		this.privacy = PrivacyMode.FACEBOOK;
 		this.setFacebookId(Long.valueOf(gm.getId()));
 	}
 

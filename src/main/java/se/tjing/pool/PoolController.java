@@ -84,7 +84,7 @@ public class PoolController {
 	}
 
 	private ResponseEntity<List<Pool>> searchPools(String searchString) {
-		List<Pool> result = poolService.search(searchString);
+		List<Pool> result = poolService.searchPools(searchString);
 		return new ResponseEntity<List<Pool>>(result, null, HttpStatus.OK);
 	}
 	

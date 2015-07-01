@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.GeneratedValue;
@@ -14,6 +15,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.geo.Point;
 import org.springframework.social.connect.UsersConnectionRepository;
@@ -38,6 +41,17 @@ public class Person extends TjingEntity implements Serializable {
 	
 	private String description;
 	private String locationStr;
+	
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+	private DateTime lastAction;
+
+	public DateTime getLastAction() {
+		return lastAction;
+	}
+
+	public void setLastAction(DateTime lastLogin) {
+		this.lastAction = lastLogin;
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

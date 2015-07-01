@@ -69,7 +69,7 @@ public class PoolService {
 		// TODO: Limit to user visible pools. Business Logic
 		QPool pool = QPool.pool;
 		JPAQuery query = new JPAQuery(em);
-		query.from(pool).where(pool.privacy.ne(PrivacyMode.FACEBOOK).and(pool.privacy.ne(PrivacyMode.SECRET)));
+		query.from(pool).where(pool.privacy.ne(PrivacyMode.SECRET));
 		return query.list(pool);
 	}
 
@@ -112,10 +112,10 @@ public class PoolService {
 		return pool;
 	}
 
-	public List<Pool> search(String searchString) {
+	public List<Pool> searchPools(String searchString) {
 		QPool pool = QPool.pool;
 		JPAQuery query = new JPAQuery(em);
-		query.from(pool).where(pool.title.containsIgnoreCase(searchString));
+		query.from(pool).where(pool.title.containsIgnoreCase(searchString).and(pool.privacy.ne(PrivacyMode.SECRET)));
 		return query.list(pool);
 	}
 

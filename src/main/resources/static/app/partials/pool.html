@@ -1,5 +1,8 @@
 <div>
-	<h1>{{currentPool.title}}</h1>
+	<h1>{{currentPool.title}}</h1> 
+	<a ng-show="currentPool.facebookId" ng-href="{{'http://www.facebook.com/groups/' + currentPool.facebookId}}">
+	<img src="/social/facebook/FB-f-Logo__blue_29.png">
+	</a>
 	<p>{{currentPool.description}}</p>
 
 	<button ng-show="myMembership" ng-click="leavePool()">

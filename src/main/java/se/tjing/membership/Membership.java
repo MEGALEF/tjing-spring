@@ -23,7 +23,7 @@ import se.tjing.user.Person;
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = { "pool", "member" }))
 public class Membership extends TjingEntity {
 
-	private PoolRole role;
+	private PoolRole role = PoolRole.MEMBER;
 
 	private Boolean approved = false;
 	

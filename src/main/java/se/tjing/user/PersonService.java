@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -65,7 +66,8 @@ public class PersonService {
 
 		User currentUserObject = (User) authentication.getPrincipal();
 		Person currentUser = getPersonByEmail(currentUserObject.getUsername());
-		return currentUser;
+		
+		return personRepo.save(currentUser);
 	}
 
 	public void addPerson(String username) {

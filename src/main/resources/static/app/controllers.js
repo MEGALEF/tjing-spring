@@ -193,7 +193,8 @@
     };
 
     $scope.joinPool = function(pool){
-      Membership.save({poolId:pool.id},function(){
+      var newMembership = {pool: {id : pool.id}};
+      Membership.save(newMembership, function(){
         refreshMyPools();
       });
     };
@@ -411,7 +412,8 @@
     }
 
     $scope.joinPool = function(){
-      Membership.save({poolId: $scope.currentPool.id},function(response){
+      var newMembership = {pool:{id: $scope.currentPool.id}};
+      Membership.save(newMembership, function(response){
         $scope.myMembership = response;
       });
     };
