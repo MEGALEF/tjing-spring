@@ -17,7 +17,9 @@ var tjingServices = angular.module("tjingApp.services", ["ngResource"]);
 
   tjingServices.factory("Share", ['$resource', function($resource){
     var shareUrl = "/share/:shareId";
-    return $resource(shareUrl);
+    return $resource(shareUrl, {
+      shareId: "@id"
+    });
   }]);
 
   tjingServices.factory("ItemRequest", ['$resource', function($resource) {

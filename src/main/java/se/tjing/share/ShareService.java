@@ -1,13 +1,17 @@
 package se.tjing.share;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import se.tjing.exception.TjingException;
+import se.tjing.interaction.QInteraction;
 import se.tjing.item.Item;
 import se.tjing.item.ItemRepository;
+import se.tjing.item.QItem;
 import se.tjing.pool.Pool;
 import se.tjing.pool.PoolRepository;
 import se.tjing.user.Person;
@@ -56,5 +60,24 @@ public class ShareService {
 		} else {
 			shareRepo.delete(shareToRemove);
 		}
+	}
+
+	public List<Share> getShares(Person user) {
+		JPAQuery query = new JPAQuery(em);
+		QShare share = QShare.share;
+		QItem item = QItem.item;
+		
+		query.from(share).leftJoin(share.item, item).where(item.owner.eq(user));
+		return query.list(share);
+	}
+	
+	public List<Share> getShares(Person user, Integer poolId){
+		JPAQuery query = new JPAQuery(em);
+		QShare share = QShare.share;
+		QItem item = QItem.item;
+		
+		query.from(share).leftJoin(share.item, item)
+		.where(item.owner.eq(user).and(share.pool.id.eq(poolId)));
+		return query.list(share);
 	}
 }

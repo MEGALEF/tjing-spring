@@ -17,7 +17,7 @@
 
 		<div ng-show="myMembership.role=='ADMIN'">
 			Admin stuff
-		</div>
+		</div>	
 
 		<h2>Medlemmar</h2>
 		<ul class="list-unstyled">
@@ -35,6 +35,16 @@
 			<li ng-repeat="share in shares">
 				<tjing-item item="share.item"></tjing-item>
 			</li>
-		</ul>	
+		</ul>
+
+		<h2>Dela dina prylar med {{currentPool.title}}</h2>
+		<ul class="list-unstyled">
+			<li ng-repeat="tuple in shareMap">
+				<input type="checkbox" ng-model="tuple.isShared" ng-click="tuple.isShared ? addShare(tuple.item) : removeShare(tuple.share)">
+
+				<tjing-item item="tuple.item"></tjing-item> 
+				
+			</li>
+		</ul>
 	</div>	
 </div>
