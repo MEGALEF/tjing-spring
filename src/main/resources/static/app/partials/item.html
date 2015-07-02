@@ -10,8 +10,11 @@
 	<div ng-show="isOwner">
 		<h2>Dela med</h2>
 		<ul class="list-unstyled">
-			<li ng-repeat="pool in currentItem.shareMap">
-				<input type="checkbox" ng-model="pool.itemIsShared" ng-click="pool.itemIsShared ? shareItem(currentItem, pool) : unshareItem(currentItem, pool)">  <b>{{pool.title}}</b>
+			<li>
+				<input type="checkbox" ng-model="currentItem.sharedPublic" ng-click="updatePublic()"/> <b>Alla användare</b> 
+			</li>
+			<li ng-repeat="pool in shareMap">
+				<input type="checkbox" ng-model="pool.itemIsShared" ng-click="pool.itemIsShared ? shareItem(currentItem, pool) : unshareItem(currentItem, pool)" >  <b>{{pool.title}}</b>
 			</li>
 		</ul>
 		
