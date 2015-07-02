@@ -28,12 +28,9 @@
 
   angular.module('tjingApp.controllers').controller("MyInteractionsController", 
     ["$scope", "Interaction", "User", function($scope, Interaction, User){
-      $scope.allinteractions = Interaction.query();
       $scope.incomingrequests = Interaction.query({param:'incoming'});
       $scope.outgoingrequests = Interaction.query({param:'outgoing'});
       $scope.currentUser = User.current();
-      $scope.truth = true;
-      $scope.lies = false;
 
       $scope.acceptRequest = function(interaction){
         Interaction.accept(interaction, function(response){
@@ -104,20 +101,17 @@ angular.module("tjingApp.controllers").controller("MyProfileController", ["$scop
 angular.module("tjingApp.controllers").controller("MyItemsController", ["$scope", "$location", "Item", "Pool", "Interaction", "Share",
   function($scope, $location, Item, Pool, Interaction, Share) {
     // Scope variable initialization
-    $scope.owneditems = [];
-    $scope.borroweditems = Item.query({param:'borrowed'});
-    $scope.items=Item.query();
-    $scope.mypools = Pool.query({param:"mine"});
+    $scope.myItems = [];
 
     refreshMyItems();
 
     function refreshMyItems(){
-      $scope.owneditems = Item.query({param:'owned'});
+      $scope.myItems = Item.query({param:'owned'});
     }
     
     $scope.addItem = function(item) {
       Item.save(item, function(response){
-        $scope.owneditems.push(response);
+        $scope.myItems.push(response);
         $scope.newItem = "";
         $location.path('/item/' + response.id);
       });
@@ -138,34 +132,15 @@ angular.module("tjingApp.controllers").controller("MyItemsController", ["$scope"
         $location.path('/interaction/'+response.id);
       })
     };
-
-    $scope.shareItem = function(item, pool){
-      Share.save(
-      {
-        itemId: item.id, 
-        poolId : pool.id
-      }, function(){
-        $scope.owneditems = Item.query({param:'owned'});
-      });
-    };
-
-    $scope.unshareItem = function(share){
-      Share.delete({id: share.id}, function(){
-        $scope.owneditems = Item.query({param:'owned'});
-      });
-    };
   }]);
 
 angular.module("tjingApp.controllers").controller("MyPoolsController", 
   ["$scope", "$location", "Pool", "Item", "Membership", function($scope, $location, Pool, Item, Membership) {
     $scope.showPools = false;
-
-    $scope.allPools = [];
     $scope.myPools = [];
     $scope.myMemberships = [];
 
     refreshMyPools();
-    refreshAllPools();
 
     $scope.searchStr = "";
     $scope.searchResults = null;
@@ -177,12 +152,6 @@ angular.module("tjingApp.controllers").controller("MyPoolsController",
         for (membership in $scope.myMemberships){
           $scope.myPools.push(membership.pool);
         }
-      });
-    };
-
-    function refreshAllPools(){
-      Pool.query({}, function(response){
-        $scope.allPools = response;
       });
     };
 
@@ -260,6 +229,7 @@ angular.module("tjingApp.controllers").controller("ItemController",
     $scope.myMemberships = [];
     $scope.currentUser = User.current();
     $scope.uploadResponse;
+    $scope.shareMap = {};
 
     $scope.isOwner = {};
 
@@ -269,19 +239,25 @@ angular.module("tjingApp.controllers").controller("ItemController",
       return "/item/"+ $scope.currentItem.id +"/image";
     }
 
+    $scope.updatePublic = function(){
+      Item.update({id: $scope.currentItem.id, sharedPublic: $scope.currentItem.sharedPublic}, function(response){
+        $scope.currentItem = response;
+      });
+    }
+
     $scope.uploadComplete = function(response){
       $scope.uploadResponse = response;
     }
 
     function buildShareMap(item){
-      item.shareMap = {};
+      $scope.shareMap = {};
       for (i = 0; i< $scope.myMemberships.length; i++){
         var pool = $scope.myMemberships[i].pool;
-        item.shareMap[pool.id] = pool;
+        $scope.shareMap[pool.id] = pool;
       }
       for (i = 0; i< item.shares.length; i++){
         var share = item.shares[i];
-        item.shareMap[share.pool.id].itemIsShared = true;
+        $scope.shareMap[share.pool.id].itemIsShared = true;
       }
     }
 

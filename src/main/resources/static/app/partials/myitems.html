@@ -1,6 +1,6 @@
 <div>
   <h1>Mina prylar</h1> 
-  <div ng-hide="owneditems && owneditems.length >0">
+  <div ng-hide="myItems && myItems.length >0">
     Du har inga prylar inlagda än.
   </div>
   <a href="#newitem">
@@ -8,7 +8,7 @@
     <span class="glyphicon glyphicon-plus"></span>
   </a>
   <ul class="list-unstyled">
-    <li ng-repeat="item in owneditems" >
+    <li ng-repeat="item in myItems" >
       <tjing-item item="item"></tjing-item>
       <button type="button" title="Delete" ng-click="deleteItem(item)">
         <span class="glyphicon glyphicon-trash"></span>
@@ -16,15 +16,4 @@
       <div ng-show="item.activeInteraction"> utlånad till <tjing-user user="item.activeInteraction.borrower"/> on {{item.activeInteraction.statusHandedOver | date}}</div>
     </li>
   </ul>     
-
-  <hr />
-
-  <h1>Tillgängliga prylar</h1>
-  <ul class="list-unstyled">
-    <li ng-repeat="item in items">
-      <tjing-item item="item"></tjing-item> (<tjing-user user="item.owner"></tjing-user>)
-      <button type="button" title="Request" ng-click="requestItem(item)">Skicka förfrågan
-      </button>
-    </li>
-  </ul>
 </div>

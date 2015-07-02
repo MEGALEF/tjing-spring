@@ -53,6 +53,14 @@ public class ItemController {
 		Item addedItem = itemService.addItem(currentUser, newItem);
 		return new ResponseEntity<Item>(addedItem, null, HttpStatus.CREATED);
 	}
+	
+	@RequestMapping(value="{itemId}", method = RequestMethod.PATCH)
+	@ResponseBody
+	public ResponseEntity<Item> updateItem(@RequestBody Item update, @PathVariable Integer itemId){
+		Item result = itemService.updateItem(personService.getCurrentUser(), itemId, update);
+		
+		return new ResponseEntity<Item>(result, null, HttpStatus.ACCEPTED);
+	}
 
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<Item>> getItems(@RequestParam(value = "param", required=false) String param) {

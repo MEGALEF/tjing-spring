@@ -29,6 +29,8 @@ public class Item extends TjingEntity {
 	private Integer id;
 
 	private String description;
+	
+	private Boolean sharedPublic;
 
 	private String title;
 	
@@ -53,7 +55,7 @@ public class Item extends TjingEntity {
 	private List<Share> shares;
 	
 	//@JsonIgnore
-	private Boolean fbAvailable = false;
+	private Boolean fbAvailable;
 
 	public List<Share> getShares() {
 		return shares;
@@ -128,15 +130,25 @@ public class Item extends TjingEntity {
 	}
 
 	public Boolean getFbAvailable() {
-		return fbAvailable;
+		if (fbAvailable == null) return false;
+		else return fbAvailable;
 	}
 
 	public void setFbAvailable(Boolean fbAvailable) {
 		this.fbAvailable = fbAvailable;
 	}
 	
-	public boolean isOwnedBy(Person user){
+	public Boolean isOwnedBy(Person user){
 		return this.owner.equals(user);
+	}
+
+	public Boolean isSharedPublic() {
+		if (sharedPublic == null) return false;
+		else return sharedPublic;
+	}
+
+	public void setSharedPublic(boolean sharedPublic) {
+		this.sharedPublic = sharedPublic;
 	}
 
 }

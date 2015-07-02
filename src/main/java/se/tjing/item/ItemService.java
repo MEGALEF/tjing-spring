@@ -76,7 +76,7 @@ public class ItemService {
 		JPAQuery query = new JPAQuery(em).from(item)
 				.leftJoin(item.shares, share).leftJoin(share.pool, pool)
 				.leftJoin(pool.memberships, membership)
-				.where(itemIsAvailableViaPools(user));
+				.where(itemIsAvailableToUser(user));
 		List<Item> result = query.distinct().list(item);
 
 		//Get facebook shared items
@@ -118,12 +118,14 @@ public class ItemService {
 	}
 	
 	public Boolean isItemVisibleToUser(Person user, Item item) {
+		if (item.isSharedPublic()) return true;
 		if (item.getOwner().equals(user)) {
 			return true;
 		}
 		if (item.getFbAvailable() && personService.areFacebookFriends(user, item.getOwner())){
 			return true;
 		}
+		
 		QShare share = QShare.share;
 		QPool pool = QPool.pool;
 		QItem itemtable = QItem.item;
@@ -134,15 +136,17 @@ public class ItemService {
 				.leftJoin(share.pool, pool)
 				.leftJoin(pool.memberships, membership)
 				.leftJoin(share.item, itemtable)
-				.where(itemIsAvailableViaPools(user));
+				.where(itemIsAvailableToUser(user));
 		return query.exists();
 	}
 
-	private BooleanExpression itemIsAvailableViaPools(Person user){
+	private BooleanExpression itemIsAvailableToUser(Person user){
 		QMembership membership = QMembership.membership;
 		QItem item = QItem.item;
 		
-		return membership.member.eq(user).and(membership.approved.isTrue()).and(item.owner.ne(user));
+		return membership.member.eq(user).and(membership.approved.isTrue())
+				.or(item.sharedPublic.isTrue())
+				.and(item.owner.ne(user));
 	}
 
 	public void removeItem(Person user, Integer itemId) {
@@ -168,7 +172,7 @@ public class ItemService {
 		.leftJoin(item.shares, share)
 		.leftJoin(share.pool, pool)
 		.leftJoin(pool.memberships, membership)
-		.where(itemIsAvailableViaPools(person)
+		.where(itemIsAvailableToUser(person).or(item.sharedPublic.isTrue())
 				.and(item.title.containsIgnoreCase(searchStr)));
 		//TODO add facebook items
 
@@ -183,5 +187,14 @@ public class ItemService {
 			item.setFbAvailable(partial.getFbAvailable());
 			return itemRepo.save(item);
 		}
+	}
+
+	public Item updateItem(Person currentUser, Integer itemId, Item update) {
+		Item item = itemRepo.findOne(itemId);
+		if (item==null) throw new TjingException("No such item");
+		if (update.isSharedPublic() != null) item.setSharedPublic(update.isSharedPublic());
+		if (update.getFbAvailable() != null) item.setFbAvailable(update.getFbAvailable());
+		
+		return itemRepo.save(item);
 	}
 }

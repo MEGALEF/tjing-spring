@@ -36,7 +36,7 @@ var tjingServices = angular.module("tjingApp.services", ["ngResource"]);
       id: '@id'
     }, {
       update: {
-        method: "PUT"
+        method: "PATCH"
       },
       remove: {
         method: "DELETE"
