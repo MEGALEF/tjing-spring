@@ -4,7 +4,7 @@
 	<img src="/social/facebook/FB-f-Logo__blue_29.png">
 	</a>
 	<p>{{currentPool.description}}</p>
-	{{currentPool.privacy}}
+	<p>{{currentPool.privacy}}</p>
 
 	<button ng-show="myMembership" ng-click="leavePool()">
 		Lämna grupp
@@ -28,7 +28,7 @@
 		</ul>
 		<div ng-show="myMembership.role=='ADMIN'">
 			<h3>Medlemsförfrågningar</h3>
-			<ul>
+			<ul class="list-unstyled">
 				<li ng-repeat="request in requests">
 					<tjing-user user="request.member"></tjing-user> 
 					<button ng-click="approveRequest(request)">Godkänn</button>

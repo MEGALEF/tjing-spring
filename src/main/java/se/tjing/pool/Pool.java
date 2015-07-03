@@ -51,6 +51,7 @@ public class Pool extends TjingEntity {
 	public Pool(GroupMembership gm){
 		this.title = gm.getName();
 		this.setFacebookId(Long.valueOf(gm.getId()));
+		this.privacy = PrivacyMode.CLOSED;
 	}
 
 	public PoolRole getApproval() {

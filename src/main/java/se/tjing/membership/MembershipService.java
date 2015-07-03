@@ -42,6 +42,7 @@ public class MembershipService {
 	 */
 	public Membership createMembership(Person currentUser, Membership addMembership) {
 		Pool pool = poolRepo.findOne(addMembership.getPool().getId());
+		if (pool==null) throw new TjingException("No such pool");
 		addMembership.setMember(currentUser);
 		Membership result;
 		
@@ -65,11 +66,12 @@ public class MembershipService {
 		return result;
 	}
 
-	private Membership findMembership(Person currentUser, Pool pool) {
+	private Membership findMembership(Person user, Pool pool) {
 		JPAQuery query = new JPAQuery(em);
 		QMembership membership = QMembership.membership;
 		
-		query.from(membership).where(membership.member.eq(currentUser).and(membership.pool.eq(pool)));
+		query.from(membership)
+		.where(membership.member.eq(user).and(membership.pool.eq(pool)));
 		
 		return query.singleResult(membership);
 	}

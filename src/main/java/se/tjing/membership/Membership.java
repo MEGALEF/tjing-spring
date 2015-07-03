@@ -56,10 +56,11 @@ public class Membership extends TjingEntity {
 		this.role = PoolRole.MEMBER;
 	}
 	
-	public Membership(Person member, Pool pool, boolean preapproved){
+	public Membership(Person member, Pool pool, boolean preapproved, PoolRole role){
 		this.member = member;
 		this.pool = pool;
 		this.approved = preapproved;
+		this.role = role;
 	}
 
 	public Boolean getApproved() {

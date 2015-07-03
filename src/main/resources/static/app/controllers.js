@@ -413,13 +413,12 @@ angular.module("tjingApp.controllers").controller("PoolController",
     };
 
     $scope.approveRequest = function(membership){
-      membership.approved = true;
-      Membership.update(membership, function(response){
+      Membership.update({id: membership.id, approved: true}, function(response){
       });
     }
 
     $scope.denyRequest = function(membership){
-      Membership.delete(membership, function(){
+      Membership.delete({membershipId: membership.id}, function(){
       });
     }
 
@@ -447,8 +446,8 @@ angular.module("tjingApp.controllers").controller("PoolController",
         $scope.shareMap.push({item: item, share: share, isShared: share ? true : false});
 
         function findShare(item){
-          for(i=0; i<$scope.myShares.length; i++){
-            var share = $scope.myShares[i];
+          for(j=0; j<$scope.myShares.length; j++){
+            var share = $scope.myShares[j];
             if(share.item.id == item.id) return share;
           }
           return null;
@@ -473,17 +472,21 @@ angular.module("tjingApp.controllers").controller("PoolController",
 
             if (m.pool.id == $scope.currentPool.id){
               $scope.myMembership = m;
+              if (m.role=="ADMIN"){
+                $scope.requests = Pool.memberships({id: $scope.currentPool.id, approved: false}, function(){});
+              }
 
-              //Get pool memberships and shares
-              $scope.memberships = Pool.memberships({id: $scope.currentPool.id}, function(){
-                $scope.shares = Pool.shares({id: $scope.currentPool.id}, function(){
-                  if (m.role=="ADMIN"){
-                    //$scope.requests = Pool.memberships({id: $scope.currentPool.id, approved: false}, function(){});
-                  }
-                });
-              });
+              refreshMembersAndShares();
             }
           }
+        });
+      });
+    };
+    
+    function refreshMembersAndShares(){
+      $scope.memberships = Pool.memberships({id: $scope.currentPool.id}, function(){
+        $scope.shares = Pool.shares({id: $scope.currentPool.id}, function(){
+          
         });
       });
     };

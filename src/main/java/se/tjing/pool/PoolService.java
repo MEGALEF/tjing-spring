@@ -285,17 +285,6 @@ public class PoolService {
 			throw new TjingException("You must use login via facebook to access this feature");
 		}else {
 			fbmemberships = facebook.groupOperations().getMemberships();
-
-			/*for (GroupMembership gm : fbmemberships){
-				Pool pool = new Pool(gm);
-
-				result.add(pool);
-
-				Long id = pool.getFacebookId();
-				List<Pool> existing = poolRepo.findByFacebookId(id);
-
-
-			}*/
 		}
 		return fbmemberships;
 	}
@@ -310,12 +299,12 @@ public class PoolService {
 
 		if (existing.isEmpty()){
 			Pool savedPool = poolRepo.save(newpool);
-			return membershipRepo.save(new Membership(currentUser, savedPool, true));
+			return membershipRepo.save(new Membership(currentUser, savedPool, true, PoolRole.ADMIN));
 			
 		} else {
 			Pool existingpool = existing.get(0);
 			if (!isUserMemberOfPool(currentUser, existingpool)){
-				return membershipRepo.save(new Membership(currentUser, existingpool, true));
+				return membershipRepo.save(new Membership(currentUser, existingpool, true, PoolRole.MEMBER));
 			} else {
 				QMembership membership = QMembership.membership;
 				JPAQuery query = new JPAQuery(em);

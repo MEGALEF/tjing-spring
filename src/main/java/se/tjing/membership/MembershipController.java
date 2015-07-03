@@ -37,7 +37,7 @@ public class MembershipController {
 				HttpStatus.OK);
 	}
 	
-	@RequestMapping(value="", method=RequestMethod.POST)
+	@RequestMapping(method=RequestMethod.POST)
 	public ResponseEntity<Membership> join(@RequestBody Membership membership){
 		Membership newMembership = membershipService.createMembership(personService.getCurrentUser(), membership);
 		return new ResponseEntity<Membership>(newMembership, null, HttpStatus.OK);
