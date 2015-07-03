@@ -4,6 +4,11 @@
     <br/>
     <textarea ng-model="newPool.description" placeholder="Beskrivning"></textarea>
     <br/>
+    <select ng-model="newPool.privacy">
+      <option value="OPEN">Öppen</option>
+      <option value="CLOSED">Stängd</option>
+      <option value="SECRET">Hemlig</option>
+    </select>
     <button type="submit" ng-disabled="!newPool.title">
       Skapa
     </button>

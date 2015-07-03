@@ -378,6 +378,7 @@ angular.module("tjingApp.controllers").controller("PoolController",
   function($scope, $routeParams, Pool, Membership, Share, Item){
     $scope.currentPool = {};
     $scope.memberships = [];
+    $scope.requests = [];
     $scope.shares = [];
     $scope.myShares = [];
     $scope.myMembership = null;
@@ -408,6 +409,17 @@ angular.module("tjingApp.controllers").controller("PoolController",
     $scope.kickMember = function(membership){
       Membership.delete({membershipId: membership.id}, function(){ //TODO äuuuuuäuäuuähh
         membership = null;
+      });
+    };
+
+    $scope.approveRequest = function(membership){
+      membership.approved = true;
+      Membership.update(membership, function(response){
+      });
+    }
+
+    $scope.denyRequest = function(membership){
+      Membership.delete(membership, function(){
       });
     }
 
@@ -463,8 +475,13 @@ angular.module("tjingApp.controllers").controller("PoolController",
               $scope.myMembership = m;
 
               //Get pool memberships and shares
-              $scope.memberships = Pool.memberships({id: $scope.currentPool.id}, function(){});
-              $scope.shares = Pool.shares({id: $scope.currentPool.id}, function(){});
+              $scope.memberships = Pool.memberships({id: $scope.currentPool.id}, function(){
+                $scope.shares = Pool.shares({id: $scope.currentPool.id}, function(){
+                  if (m.role=="ADMIN"){
+                    //$scope.requests = Pool.memberships({id: $scope.currentPool.id, approved: false}, function(){});
+                  }
+                });
+              });
             }
           }
         });

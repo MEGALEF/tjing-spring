@@ -58,7 +58,7 @@ public class MembershipService {
 			}
 			
 		} else { //If PrivacyMode = OPEN
-			addMembership.approve();
+			addMembership.setApproved(true);;
 			result = membershipRepo.save(addMembership);
 		}
 		

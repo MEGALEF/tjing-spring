@@ -27,8 +27,6 @@ public class Membership extends TjingEntity {
 
 	private Boolean approved = false;
 	
-	private Boolean hidden = false;
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	Integer id;
@@ -50,7 +48,6 @@ public class Membership extends TjingEntity {
 	private Pool pool;
 
 	public Membership() {
-		// TODO Auto-generated constructor stub
 	}
 	
 	public Membership(Person member, Pool pool) {
@@ -64,17 +61,9 @@ public class Membership extends TjingEntity {
 		this.pool = pool;
 		this.approved = preapproved;
 	}
-	
-	public void approve(){
-		this.approved = true;
-	}
 
 	public Boolean getApproved() {
 		return approved;
-	}
-
-	public Boolean getHidden() {
-		return hidden;
 	}
 
 	@Override
@@ -92,10 +81,6 @@ public class Membership extends TjingEntity {
 
 	public void setApproved(Boolean approved) {
 		this.approved = approved;
-	}
-
-	public void setHidden(Boolean hidden) {
-		this.hidden = hidden;
 	}
 
 	public void setId(Integer id) {

@@ -110,8 +110,7 @@ var tjingServices = angular.module("tjingApp.services", ["ngResource"]);
         method : "GET",
         url: "/pool/search/:searchStr",
         isArray : true
-      }
-      
+      }      
     })
   }]);
 

@@ -28,14 +28,11 @@ public class MembershipController {
 	@Autowired
 	MembershipService membershipService;
 
-	@RequestMapping(value = "", method = RequestMethod.GET)
-	public ResponseEntity<List<Membership>> getMemberships(@RequestParam(value="pending", defaultValue="false") Boolean pending) {
+	@RequestMapping(method = RequestMethod.GET)
+	public ResponseEntity<List<Membership>> getMemberships() {
 		List<Membership> result; 
-		if (pending) {
-			result = poolService.getPendingMemberships(personService.getCurrentUser());
-		} else {
-			result = poolService.getUserMemberships(personService.getCurrentUser());
-		}
+		result = poolService.getUserMemberships(personService.getCurrentUser());
+		
 		return new ResponseEntity<List<Membership>>(result, null,
 				HttpStatus.OK);
 	}

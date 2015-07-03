@@ -55,7 +55,7 @@ public class PoolService {
 
 		// Set pool creator as member in the pool
 		Membership creatorMembership = new Membership(creator, pool);
-		creatorMembership.approve();
+		creatorMembership.setApproved(true);
 		creatorMembership.setRole(PoolRole.ADMIN);
 
 		Pool savedPool = poolRepo.save(pool);
@@ -90,8 +90,20 @@ public class PoolService {
 	private Boolean isUserMemberOfPool(Person person, Pool pool) {
 		QMembership membership = QMembership.membership;
 		JPAQuery query = new JPAQuery(em);
-		query.from(membership).where(
-				membership.pool.eq(pool).and(membership.member.eq(person).and(membership.approved.isTrue())));
+		query.from(membership)
+		.where(membership.pool.eq(pool)
+				.and(membership.member.eq(person)
+				.and(membership.approved.isTrue())));
+		return query.exists();
+	}
+	
+	private Boolean isUserAdminOfPool(Person user, Pool pool){
+		QMembership membership = QMembership.membership;
+		JPAQuery query = new JPAQuery(em).from(membership)
+				.where(membership.pool.eq(pool)
+						.and(membership.member.eq(user))
+						.and(membership.approved.isTrue())
+						.and(membership.role.eq(PoolRole.ADMIN)));
 		return query.exists();
 	}
 
@@ -160,15 +172,19 @@ public class PoolService {
 		return currentUser.getMemberships();
 	}
 
-	public List<Membership> getPendingMemberships(Person currentUser) {
+	public List<Membership> getPendingMemberships(Person currentUser, Integer poolId) {
+		Pool pool = getPool(poolId);
 		JPAQuery query = new JPAQuery(em);
 		QMembership membership = QMembership.membership;
-		// Get requests to groups in which the user is a member
+		
+		if (!isUserAdminOfPool(currentUser, pool)) throw new TjingException("Only for pool admins");
+		else {
+			query.from(membership)
+			.where(membership.approved.isFalse()
+				.and(membership.pool.eq(pool)));
 
-		query.from(membership)
-		.where(membership.approved.isFalse().and(membership.pool.in(this.getUsersPools(currentUser))));
-
-		return query.list(membership);
+			return query.list(membership);
+		}
 	}
 
 	public Membership update(Person user, Integer requestId, Membership update) {
@@ -185,7 +201,7 @@ public class PoolService {
 		if (!isUserMemberOfPool(user, old.getPool())) {
 			throw new TjingException("Only pool members may do this");
 		} else {
-			old.approve();
+			old.setApproved(true);;
 		}
 		
 		return membershipRepo.save(old);

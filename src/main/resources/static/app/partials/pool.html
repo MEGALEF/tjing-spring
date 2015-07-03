@@ -4,6 +4,7 @@
 	<img src="/social/facebook/FB-f-Logo__blue_29.png">
 	</a>
 	<p>{{currentPool.description}}</p>
+	{{currentPool.privacy}}
 
 	<button ng-show="myMembership" ng-click="leavePool()">
 		Lämna grupp
@@ -14,11 +15,6 @@
 	</button>
 
 	<div ng-show="myMembership">
-
-		<div ng-show="myMembership.role=='ADMIN'">
-			Admin stuff
-		</div>	
-
 		<h2>Medlemmar</h2>
 		<ul class="list-unstyled">
 			<li ng-repeat="membership in memberships">
@@ -30,6 +26,16 @@
 				</span>
 			</li>
 		</ul>
+		<div ng-show="myMembership.role=='ADMIN'">
+			<h3>Medlemsförfrågningar</h3>
+			<ul>
+				<li ng-repeat="request in requests">
+					<tjing-user user="request.member"></tjing-user> 
+					<button ng-click="approveRequest(request)">Godkänn</button>
+					<button ng-click="denyRequest(request)">Neka</button>
+				</li>
+			</ul>
+		</div>	
 		<h2>Delade prylar</h2>
 		<ul class="list-unstyled">
 			<li ng-repeat="share in shares">

@@ -69,18 +69,16 @@ public class PoolController {
 	}
 	
 	@RequestMapping(value="/{poolId}/memberships", method = RequestMethod.GET)
-	public ResponseEntity<List<Membership>> listPoolMembers(@PathVariable Integer poolId){
-		List<Membership> result = poolService.getPoolMemberships(personService.getCurrentUser(), poolId);
+	public ResponseEntity<List<Membership>> getPoolMemberships(@PathVariable Integer poolId, @RequestParam(value="approved", required=false) Boolean approved){
+		List<Membership> result;
+		if (approved != null && approved.booleanValue() == false){
+			result = poolService.getPendingMemberships(personService.getCurrentUser(), poolId);
+		}
+		else {
+			result = poolService.getPoolMemberships(personService.getCurrentUser(), poolId);
+		}		
 		
 		return new ResponseEntity<List<Membership>>(result, null, HttpStatus.OK);
-	}
-
-	@RequestMapping(value = "/{poolId}/items/owned", method = RequestMethod.GET)
-	public ResponseEntity<List<Item>> listOwnItemsInPool(
-			@PathVariable Integer poolId) {
-		List<Item> result = poolService.getOwnedItemsInPool(
-				personService.getCurrentUser(), poolId);
-		return new ResponseEntity<List<Item>>(result, null, HttpStatus.OK);
 	}
 
 	private ResponseEntity<List<Pool>> searchPools(String searchString) {
