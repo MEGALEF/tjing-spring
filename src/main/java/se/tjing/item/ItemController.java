@@ -63,16 +63,22 @@ public class ItemController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<List<Item>> getItems(@RequestParam(value = "param", required=false) String param) {
+	public ResponseEntity<List<Item>> getItems(@RequestParam(value = "param", required=false) String param, @RequestParam(value="owner", required=false) Integer ownerId) {
 		List<Item> result;
 		Person currentUser = personService.getCurrentUser();
-		if ("owned".equals(param)){
-			result = itemService.getUsersItems(currentUser);
-		} else if ("borrowed".equals(param)){
-			result = itemService.getUsersBorrowedItems(currentUser);
-		} else {
-			result = itemService.getAvailableItemsToUser(currentUser);
+		if(ownerId != null){
+			result = itemService.getOtherUsersItems(currentUser, ownerId);
+		} //TODO: Make this consistent. Will require frontend changes
+		else {
+			if ("owned".equals(param)){
+				result = itemService.getUsersItems(currentUser);
+			} else if ("borrowed".equals(param)){
+				result = itemService.getUsersBorrowedItems(currentUser);
+			} else {
+				result = itemService.getAvailableItemsToUser(currentUser);
+			}
 		}
+		
 		return new ResponseEntity<List<Item>>(
 				result, null, HttpStatus.OK);
 	}

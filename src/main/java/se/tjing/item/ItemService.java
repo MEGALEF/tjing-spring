@@ -74,7 +74,8 @@ public class ItemService {
 		
 		//"Get all items shared with groups I am a member of and are not owned by me"
 		JPAQuery query = new JPAQuery(em).from(item)
-				.leftJoin(item.shares, share).leftJoin(share.pool, pool)
+				.leftJoin(item.shares, share)
+				.leftJoin(share.pool, pool)
 				.leftJoin(pool.memberships, membership)
 				.where(itemIsAvailableToUser(user));
 		List<Item> result = query.distinct().list(item);
@@ -132,10 +133,10 @@ public class ItemService {
 		QMembership membership = QMembership.membership;
 		
 		// "Is there a group in which the user is a member to which the item is shared?"
-		JPAQuery query = new JPAQuery(em).from(share)
+		JPAQuery query = new JPAQuery(em).from(itemtable)
+				.leftJoin(itemtable.shares, share)
 				.leftJoin(share.pool, pool)
 				.leftJoin(pool.memberships, membership)
-				.leftJoin(share.item, itemtable)
 				.where(itemIsAvailableToUser(user));
 		return query.exists();
 	}
@@ -196,5 +197,21 @@ public class ItemService {
 		if (update.getFbAvailable() != null) item.setFbAvailable(update.getFbAvailable());
 		
 		return itemRepo.save(item);
+	}
+
+	public List<Item> getOtherUsersItems(Person currentUser, Integer ownerId) {
+		Person otherUser = personService.getPerson(ownerId);
+		QItem item = QItem.item;
+		QShare share = QShare.share;
+		QPool pool = QPool.pool;
+		QMembership membership = QMembership.membership;
+		
+		JPAQuery query = new JPAQuery(em).from(item)
+				.leftJoin(item.shares, share)
+				.leftJoin(share.pool, pool)
+				.leftJoin(pool.memberships, membership)
+				.where(itemIsAvailableToUser(currentUser).and(item.owner.eq(otherUser)));
+		
+		return query.list(item);
 	}
 }

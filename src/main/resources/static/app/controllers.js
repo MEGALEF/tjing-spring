@@ -471,15 +471,19 @@ angular.module("tjingApp.controllers").controller("PoolController",
   }]);
 
 angular.module("tjingApp.controllers").controller("UserController",
-  ["$scope", "$routeParams", "User",
-  function($scope, $routeParams, User){
+  ["$scope", "$routeParams", "User", "Item",
+  function($scope, $routeParams, User, Item){
     $scope.currentUser = {};
+    $scope.items = [];
 
     refresh();
 
     function refresh(){
       User.get({id: $routeParams.userId}, function(data){
         $scope.currentUser = data;
+        Item.query({owner: $scope.currentUser.id}, function(response){
+          $scope.items = response;
+        })
       });
     }
 

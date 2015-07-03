@@ -10,3 +10,12 @@
 	<a href="{{currentUser.connection[0].profileurl}}"><h3>Facebook</h3></a>
 
 </div>
+
+<div ng-show="items">
+	<h2>Prylar</h2>
+	<ul class="list-unstyled">
+		<li ng-repeat="item in items">
+			<tjing-item item="item"></tjing-item>
+		</li>
+	</ul>
+</div>

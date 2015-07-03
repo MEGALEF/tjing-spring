@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import se.tjing.interaction.InteractionService;
+import se.tjing.item.Item;
 import se.tjing.item.ItemService;
 import se.tjing.pool.PoolService;
 import se.tjing.rating.Rating;
@@ -72,6 +73,12 @@ public class PersonController {
 	public ResponseEntity<Person> getUser(@PathVariable Integer userId) {
 		Person user = pService.getPerson(userId);
 		return new ResponseEntity<Person>(user, null, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="{userId}/items", method = RequestMethod.GET)
+	public ResponseEntity<List<Item>> getUserItems(@PathVariable Integer userId){
+		List<Item> result = itemService.getOtherUsersItems(pService.getCurrentUser(), userId);
+		return new ResponseEntity<List<Item>>(result, null, HttpStatus.OK);
 	}
 
 	@ApiOperation("Returns a list of all ratings the user plays a part in, either as item owner or borrower")
