@@ -13,7 +13,9 @@
     getGroups();
 
     function getGroups(){
+      $scope.loading = true;
       $http.get(importUrl).success(function(data){
+        $scope.loading = false;
         $scope.facebookGroups = data;
       });
     };

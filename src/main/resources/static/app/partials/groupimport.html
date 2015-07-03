@@ -3,6 +3,12 @@
       Nu är du medlem i {{importedGroupMembership.pool.title}} på Tjing!
     </div>
     <h2>Välj vilka grupper du vill använda på Tjing</h2>
+
+    <div ng-show="loading">
+    	<h3>Hämtar grupper från facebook..</h3>
+    	<img src="/app/img/ajax-loader.gif">
+    </div>
+
     <ul>
       <li ng-repeat="group in facebookGroups">{{group.name}}<button type="button" ng-click="importGroup(group)">Importera</button></li>
     </ul>
