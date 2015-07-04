@@ -39,7 +39,7 @@ public class InteractionController {
 	@Autowired
 	PersonService personService;
 	
-	@RequestMapping(value="", method=RequestMethod.POST)
+	@RequestMapping(method=RequestMethod.POST)
 	public ResponseEntity<Interaction> initiateRequest(@RequestBody AddInteraction interaction){
 		Interaction newInteraction = interactionService.initiateRequest(personService.getCurrentUser(),
 				interaction);

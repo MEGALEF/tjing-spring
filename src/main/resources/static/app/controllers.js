@@ -4,7 +4,7 @@
  (function(angular) {
   var controllersModule = angular.module('tjingApp.controllers');
 
-  controllersModule.controller("FacebookImportController", ["$scope", "$http", function($scope, $http){
+  controllersModule.controller("FacebookImportController", ["$scope", "$http", "$location", function($scope, $http, $location){
     var importUrl = 'pool/import/facebook/';
 
     $scope.facebookGroups = [];
@@ -22,7 +22,7 @@
 
     $scope.importGroup = function(group){
       $http.post(importUrl, group).success(function(data){
-        $scope.importedGroupMembership = data;
+        $location.path("/pool/"+ data.pool.id);
       });
     };
 
@@ -204,6 +204,10 @@ angular.module("tjingApp.controllers").controller("NavbarController",
       }
     });
     $scope.profilePicUrl = "/messages/error.png";
+
+    $scope.about = function(){
+      alert("Tjing 2015\nJohannes Andersson \n(nossredna.sennahoj@gmail.com) \nJens Hylander\nMarcus Nyman");
+    }
 
     $scope.search = function(){
       $location.url("/searchresult/"+$scope.searchStr);

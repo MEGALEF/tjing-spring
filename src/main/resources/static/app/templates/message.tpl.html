@@ -1,13 +1,15 @@
 <div ng-show="message.systemMessage" ng-switch="message.text">
-	<div ng-switch-when=":requestaccepted">
-		<span>Förfrågan accepterades!</span>
-	</div>
-	<div ng-switch-when=":handoverconfirmed">
-		<span>Överlämning bekräftad!</span>
-	</div>
-	<div ng-switch-when=":returnconfirmed">
-		<span>Återlämning bekräftad!</span>
-	</div>
+	<b>
+		<div ng-switch-when=":requestaccepted">
+			<span>Förfrågan accepterades!</span>
+		</div>
+		<div ng-switch-when=":handoverconfirmed">
+			<span>Överlämning bekräftad!</span>
+		</div>
+		<div ng-switch-when=":returnconfirmed">
+			<span>Återlämning bekräftad!</span>
+		</div>
+	</b>
 </div>
 <div ng-show="!message.systemMessage">
 	{{message.author.firstName}}: {{message.text}}

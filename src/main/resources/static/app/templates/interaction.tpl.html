@@ -18,14 +18,14 @@
 	</div>
 
 	<div ng-show="!interaction.statusAccepted">
-		Förfrågan skickad.
+		Väntar på svar
 	</div>
 
 	<div ng-show="interaction.statusAccepted && !interaction.statusHandedOver">
-		Accepterades {{interaction.statusAccepted | date}}
+		Tackade ja {{interaction.statusAccepted | date}}
 	</div>
 	<div ng-show="interaction.statusHandedOver && !interaction.statusReturned"> 
-		Överlämnades {{interaction.statusAccepted | date}}
+		Överlämnad {{interaction.statusAccepted | date}}
 	</div>	
 
 	<div ng-show="interaction.conversation.length && interaction.conversation.length>0">

@@ -1,7 +1,7 @@
 <div>
   <h1>Lånat</h1>
-  <ul>
-    <li ng-repeat="interaction in outgoingrequests">
+  <ul class="list-group">
+    <li class="list-group-item" ng-repeat="interaction in outgoingrequests">
       <tjing-interaction interaction="interaction" user="currentUser"></tjing-interaction>
       <button ng-show="interaction.statusAccepted && !interaction.statusHandedOver" ng-click="confirmHandover(interaction)">
         Bekräfta överlämning
@@ -12,8 +12,8 @@
   <hr/>
 
   <h1>Utlånat</h1>
-  <ul>
-    <li ng-repeat="interaction in incomingrequests">
+  <ul class="list-group">
+    <li class="list-group-item" ng-repeat="interaction in incomingrequests">
       <tjing-interaction interaction="interaction" user="currentUser"></tjing-interaction>
 
       <div ng-show="!interaction.statusAccepted">

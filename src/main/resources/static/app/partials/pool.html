@@ -11,7 +11,7 @@
 	</button>
 
 	<button ng-show="!myMembership" ng-click="joinPool()">
-		Gå med i grupp
+		<span class="glypicon glyphicon-plus"></span>Gå med i grupp
 	</button>
 
 	<div ng-show="myMembership">
@@ -39,7 +39,7 @@
 		<h2>Delade prylar</h2>
 		<ul class="list-unstyled">
 			<li ng-repeat="share in shares">
-				<tjing-item item="share.item"></tjing-item>
+				<tjing-item item="share.item"></tjing-item> ({{share.item.owner.firstName}})
 			</li>
 		</ul>
 
