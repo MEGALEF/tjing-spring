@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
@@ -28,12 +29,14 @@ public class Interaction extends TjingEntity{
 	private Boolean active = true;
 
 	@ManyToOne
+	@JsonIgnoreProperties("connection")
 	private Person borrower;
 
 	@OneToOne
 	private Rating borrowerRating;
 
 	@OneToMany(mappedBy="interaction", cascade=CascadeType.ALL)
+	@OrderBy("creation_time ASC")
 	private List<InteractionMessage> conversation;
 
 	@Id

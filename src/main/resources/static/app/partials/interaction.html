@@ -2,7 +2,7 @@
 	<tjing-user user="currentInteraction.borrower"></tjing-user>
 	vill låna  
 	<tjing-item item="currentInteraction.item"></tjing-item>
-	<ul>
+	<ul class="list-unstyled">
 		<li ng-repeat="message in currentInteraction.conversation">
 			<tjing-message message="message" owner="isOwner"></tjing-message>
 		</li>

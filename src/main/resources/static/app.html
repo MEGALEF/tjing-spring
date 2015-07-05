@@ -23,7 +23,7 @@
               </form>
               </li>
               <li><a href="#items">Prylar</a></li>
-              <li><a href="#interactions">Aktiva lån</a></li>
+              <li><a href="#interactions">Aktiva lån<span class="badge" ng-show="unreadMsgs() && unreadMsgs().length>0">{{unreadMsgs().length}}</span></a></li>
               <li><a href="#pools">Grupper</a></li>
               <li ng-show="false"><a href="#requests">Förfrågningar</a></li>
               <li>

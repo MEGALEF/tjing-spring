@@ -34,6 +34,12 @@ import com.mysema.query.jpa.impl.JPAQuery;
 @Entity
 public class Person extends TjingEntity implements Serializable {
 	
+	public static Person nullUser(){
+		Person nullUser = new Person();
+		nullUser.setFirstName("NULL");
+		return nullUser;
+	}
+	
 
 	// TODO sort out the fullname business. Plenty of opportunity for stuff to
 	// go wrong here. Sorry

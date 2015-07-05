@@ -23,11 +23,25 @@ public class InteractionMessage extends TjingEntity {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
 	
-	@JsonIgnore
+	@JsonIgnoreProperties("conversation")
 	@ManyToOne
 	private Interaction interaction;
 	
+	@ManyToOne
+	@JsonIgnoreProperties("connection")
+	private Person recipient;
+	
+	public Person getRecipient() {
+		return recipient;
+	}
+
+	public void setRecipient(Person recipient) {
+		this.recipient = recipient;
+	}
+
 	private boolean isSystemMessage = false;
+	
+	private Boolean read = false;
 	
 	private String text;
 	
@@ -35,16 +49,19 @@ public class InteractionMessage extends TjingEntity {
 		
 	}
 	
-	public InteractionMessage(Person author, String msg, Interaction interaction) {
+	public InteractionMessage(Person author, Person recipient, String msg, Interaction interaction) {
 		this.text = msg;
 		this.interaction = interaction;
+		this.author = author;
+		this.recipient = recipient;
 	}
 
-	public InteractionMessage(Person author, String msg, Interaction interaction, boolean isSystemMsg) {
+	public InteractionMessage(Person author, Person recipient, String msg, Interaction interaction, boolean isSystemMsg) {
 		this.text = msg;
 		this.interaction = interaction;
 		this.isSystemMessage = isSystemMsg;
 		this.author = author;
+		this.recipient = recipient;
 	}
 	
 	public Person getAuthor() {
@@ -90,6 +107,14 @@ public class InteractionMessage extends TjingEntity {
 
 	public void setText(String text) {
 		this.text = text;
+	}
+
+	public Boolean getRead() {
+		return read;
+	}
+
+	public void setRead(Boolean read) {
+		this.read = read;
 	}
 
 }

@@ -1,6 +1,3 @@
-/**
- * 
- */
  (function(angular) {
   var controllersModule = angular.module('tjingApp.controllers');
 
@@ -61,7 +58,7 @@
     }
   }]);
 
-angular.module("tjingApp.controllers").controller("ItemRequestController", 
+ angular.module("tjingApp.controllers").controller("ItemRequestController", 
   ["$scope", "ItemRequest",
   function($scope, ItemRequest){
     $scope.myRequests = [];
@@ -81,7 +78,7 @@ angular.module("tjingApp.controllers").controller("ItemRequestController",
     };
   }]);
 
-angular.module("tjingApp.controllers").controller("MyProfileController", ["$scope", "User", 
+ angular.module("tjingApp.controllers").controller("MyProfileController", ["$scope", "User", 
   function($scope, User){
     $scope.currentUser = {};
 
@@ -100,7 +97,7 @@ angular.module("tjingApp.controllers").controller("MyProfileController", ["$scop
     };
   }]);
 
-angular.module("tjingApp.controllers").controller("MyItemsController", ["$scope", "$location", "Item", "Pool", "Interaction", "Share",
+ angular.module("tjingApp.controllers").controller("MyItemsController", ["$scope", "$location", "Item", "Pool", "Interaction", "Share",
   function($scope, $location, Item, Pool, Interaction, Share) {
     // Scope variable initialization
     $scope.myItems = [];
@@ -136,7 +133,7 @@ angular.module("tjingApp.controllers").controller("MyItemsController", ["$scope"
     };
   }]);
 
-angular.module("tjingApp.controllers").controller("MyPoolsController", 
+ angular.module("tjingApp.controllers").controller("MyPoolsController", 
   ["$scope", "$location", "Pool", "Item", "Membership", function($scope, $location, Pool, Item, Membership) {
     $scope.showPools = false;
     $scope.myPools = [];
@@ -183,13 +180,17 @@ angular.module("tjingApp.controllers").controller("MyPoolsController",
     };
   }]);
 
-angular.module("tjingApp.controllers").controller("NavbarController", 
-  ["$scope", "$location", "$http", "User", "Feed", "Messaging", "Notifications",
-  function($scope, $location, $http, User, Feed, Messaging, Notifications){
+ angular.module("tjingApp.controllers").controller("NavbarController", 
+  ["$scope", "$location", "$http", "User", "Feed", "Messaging", "Notifications", "InteractionMessage",
+  function($scope, $location, $http, User, Feed, Messaging, Notifications, InteractionMessage){
 
     $scope.searchResult = [];
     $scope.feedItems = Feed.query();
     $scope.notifService = Notifications;
+
+    $scope.unreadMsgs = function(){
+      return Messaging.unread;
+    };
 
     $scope.$watch('notifService.newNotification', function(newVal, oldVal, scope){
       if(newVal){
@@ -218,7 +219,7 @@ angular.module("tjingApp.controllers").controller("NavbarController",
     }
   }]);
 
-angular.module("tjingApp.controllers").controller("SearchResultController", 
+ angular.module("tjingApp.controllers").controller("SearchResultController", 
   ["$scope", "$routeParams", "$http", 
   function($scope, $routeParams, $http){
     $scope.searchResults = [];
@@ -228,7 +229,7 @@ angular.module("tjingApp.controllers").controller("SearchResultController",
     });
   }]);
 
-angular.module("tjingApp.controllers").controller("ItemController", 
+ angular.module("tjingApp.controllers").controller("ItemController", 
   ["$scope", "$routeParams", "$location", "Item", "Membership", "Share", "User", "Interaction",
   function($scope, $routeParams, $location, Item, Membership, Share, User, Interaction){
     $scope.currentItem = {}; 
@@ -282,7 +283,7 @@ angular.module("tjingApp.controllers").controller("ItemController",
       });
     }  
 
-     $scope.requestItem = function(){
+    $scope.requestItem = function(){
       Interaction.save({itemId:$scope.currentItem.id}, function(response){
         $location.path("/interaction/"+response.id);
       })
@@ -309,28 +310,33 @@ angular.module("tjingApp.controllers").controller("ItemController",
     };
   }]);
 
-angular.module("tjingApp.controllers").controller("InteractionController",
-  ["$scope", "$routeParams", "Interaction", "User", "Messaging", 
-  function($scope, $routeParams, Interaction, User, Messaging){
+ angular.module("tjingApp.controllers").controller("InteractionController",
+  ["$scope", "$routeParams", "Interaction", "User", "Messaging", "InteractionMessage",
+  function($scope, $routeParams, Interaction, User, Messaging, InteractionMessage){
 
-    $scope.messagingService = Messaging;
     $scope.currentInteraction = {};  
     $scope.isOwner = null;
     $scope.currentUser = null;
     $scope.text = "";
+    $scope.Messaging = Messaging;
+    $scope.tick = Messaging.tick;
 
     refresh();
 
-    $scope.$watch('messagingService.newMessage', function(newVal, oldVal, scope){
-      if(newVal){
-        if (newVal.interactionId == $scope.currentInteraction.id){
-          $scope.currentInteraction.conversation.push(newVal);
+    $scope.$watch('Messaging.tick', function(newVal){
+      if(Messaging.unread && Messaging.unread.length>0){
+        var newMsg = Messaging.unread[Messaging.unread.length-1];
+        if(newMsg.interaction && newMsg.interaction.id == $scope.currentInteraction.id){
+          $scope.currentInteraction.conversation.push(newMsg);
+          Messaging.unread.splice(Messaging.unread.length-1,1)
         }
       }
     });
 
+
     function refresh(){
       $scope.currentInteraction = Interaction.get({id: $routeParams.interactionId}, function(){
+        Messaging.markAsRead($scope.currentInteraction.id);
         $scope.currentUser = User.current({}, function(response){
           $scope.currentUser = response;
           $scope.isOwner = ($scope.currentUser.id == $scope.currentInteraction.item.owner.id);
@@ -366,18 +372,20 @@ angular.module("tjingApp.controllers").controller("InteractionController",
 
     $scope.send = function() {
       if ($scope.text && $scope.text.length>0){
-        Messaging.send($scope.currentInteraction.id, $scope.text);  
+        InteractionMessage.save({interaction : {id: $scope.currentInteraction.id}, text: $scope.text}, function(response){
+          $scope.currentInteraction.conversation.push(response);
+          $scope.text = "";
+        });
       }
-      $scope.text = "";
     }
   }]);
 
-angular.module("tjingApp.controllers").controller("HomeController",
+ angular.module("tjingApp.controllers").controller("HomeController",
   ["$scope", function($scope){
 
   }]);
 
-angular.module("tjingApp.controllers").controller("PoolController", 
+ angular.module("tjingApp.controllers").controller("PoolController", 
   ["$scope", "$routeParams", "Pool", "Membership", "Share", "Item",
   function($scope, $routeParams, Pool, Membership, Share, Item){
     $scope.currentPool = {};
@@ -490,13 +498,13 @@ angular.module("tjingApp.controllers").controller("PoolController",
     function refreshMembersAndShares(){
       $scope.memberships = Pool.memberships({id: $scope.currentPool.id}, function(){
         $scope.shares = Pool.shares({id: $scope.currentPool.id}, function(){
-          
+
         });
       });
     };
   }]);
 
-angular.module("tjingApp.controllers").controller("UserController",
+ angular.module("tjingApp.controllers").controller("UserController",
   ["$scope", "$routeParams", "User", "Item",
   function($scope, $routeParams, User, Item){
     $scope.currentUser = {};

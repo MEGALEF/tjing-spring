@@ -17,16 +17,5 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public abstract class TjingEntity extends BaseEntity{
 	
-	private Boolean needsAction = false;
-
-	
-	public Boolean getNeedsAction() {
-		return needsAction;
-	}
-
-	
-	public void setNeedsAction(Boolean needsAction) {
-		this.needsAction = needsAction;
-	}
 	
 }

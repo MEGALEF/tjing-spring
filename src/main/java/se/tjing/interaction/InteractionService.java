@@ -56,9 +56,9 @@ public class InteractionService {
 		Item item = interaction.getItem();
 		item.setActiveInteraction(interaction);
 		itemRepo.save(item);
-		interactionRepo.save(interaction);
+		interaction = interactionRepo.save(interaction);
 		notifService.sendNotification(new Notification(interaction, interaction.getBorrower(), EventType.INT_ACCEPT), true, true);
-		addMessage(null, interaction, ":requestaccepted", true);
+		sendMessage(new InteractionMessage(null, interaction.getBorrower(), ":requestaccepted", interaction), true);
 		return interaction;
 	}
 
@@ -70,9 +70,9 @@ public class InteractionService {
 		}
 		//TODO interaction.setNotifyUser(interaction.getItem().getOwner());
 		interaction.setStatusHandedOver(DateTime.now());
-		interactionRepo.save(interaction);
+		interaction = interactionRepo.save(interaction);
 		notifService.sendNotification(new Notification(interaction, interaction.getItem().getOwner(), EventType.INT_HAND), true, true);
-		addMessage(null, interaction, ":handoverconfirmed", true);
+		sendMessage(new InteractionMessage(null, interaction.getItem().getOwner(), ":handoverconfirmed", interaction), true);
 		return interaction;
 	}
 
@@ -86,7 +86,7 @@ public class InteractionService {
 		notifService.sendNotification(new Notification(interaction, interaction.getBorrower(), EventType.INT_RET), true, true);
 		interaction.getItem().setActiveInteraction(null);
 		interaction.setActive(false);
-		addMessage(null, interaction, ":returnconfirmed", true);
+		sendMessage(new InteractionMessage(null, interaction.getBorrower(), ":returnconfirmed", interaction), true);
 		return interactionRepo.save(interaction);
 	}
 
@@ -113,7 +113,7 @@ public class InteractionService {
 	}
 
 	private boolean isPersonItemOwner(Person p, Interaction i) {
-		if (!p.equals(i.getItem().getOwner())) {
+		if (!p.getId().equals(i.getItem().getOwner().getId())) {
 			return false;
 		} else {
 			return true;
@@ -121,7 +121,7 @@ public class InteractionService {
 	}
 
 	private boolean isPersonBorrower(Person p, Interaction i) {
-		if (!p.equals(i.getBorrower())) {
+		if (!p.getId().equals(i.getBorrower().getId())) {
 			return false;
 		} else {
 			return true;
@@ -179,6 +179,15 @@ public class InteractionService {
 		public Interaction getInteraction(Person user,
 				Integer interactionId) {
 			Interaction interaction = interactionRepo.findOne(interactionId);
+			if (interaction.getConversation()!=null){
+				for (InteractionMessage msg : interaction.getConversation()){
+					if (msg.getRecipient().getId() == user.getId()){
+						msg.setRead(true);
+						msgRepo.save(msg);
+					}
+				}
+			}
+			
 			if (isAccessibleToUser(user, interaction)){
 				return interaction;
 			} else {
@@ -192,17 +201,58 @@ public class InteractionService {
 				return true;
 			} else return false;
 		}
-
-		public InteractionMessage addMessageFromUser(Person author, Integer interactionId, IncomingMessage msg) {
-			Interaction interaction = interactionRepo.findOne(interactionId);
-
-			return addMessage(author, interaction, msg.getText(), false);
+		
+		public InteractionMessage relayMessage(Person sender, InteractionMessage msg){
+			msg.setAuthor(sender);
+			Interaction interaction = interactionRepo.findOne(msg.getInteraction().getId());
+			
+			if (sender.getId().equals(interaction.getBorrower().getId())){
+				msg.setRecipient(interaction.getItem().getOwner());
+			} else if (sender.getId().equals(interaction.getItem().getOwner().getId())){
+				msg.setRecipient(interaction.getBorrower());
+			} else throw new TjingException("Nope");
+			
+			return sendMessage(msg, false);
 		}
 		
-		public InteractionMessage addMessage(Person author, Interaction interaction, String text, boolean isSystemMsg){
-			InteractionMessage message = msgRepo.save(new InteractionMessage(author, text, interaction, isSystemMsg));
-			msgTpl.convertAndSendToUser(message.getInteraction().getBorrower().getUsername(), TjingURL.INTERACTION_MESSAGING_OUT, message);
-			msgTpl.convertAndSendToUser(message.getInteraction().getItem().getOwner().getUsername(), TjingURL.INTERACTION_MESSAGING_OUT, message);
+		private InteractionMessage sendMessage(InteractionMessage msg, boolean systemMessage){
+			msg.setSystemMessage(systemMessage);
+			InteractionMessage message = msgRepo.save(msg);
+			
+			msgTpl.convertAndSendToUser(message.getRecipient().getUsername(), TjingURL.INTERACTION_MESSAGING_OUT, message);
 			return message;
+		}
+
+		public List<InteractionMessage> getUnread(Person currentUser) {
+			JPAQuery query = new JPAQuery(em);
+			QInteractionMessage messages = QInteractionMessage.interactionMessage;
+			
+			query.from(messages)
+			.where(messages.recipient.eq(currentUser).and(messages.read.isFalse()));
+			
+			return query.list(messages);
+		}
+
+		public List<InteractionMessage> getConversation(Person user,
+				Integer interactionId) {
+			Interaction interaction = getInteraction(user, interactionId);
+			List<InteractionMessage> conversation = interaction.getConversation();
+			for (InteractionMessage message : conversation){
+				if (message.getRecipient().getId().equals(user.getId())){
+					message.setRead(true);
+					msgRepo.save(message);
+				}
+			}
+			return interaction.getConversation();
+		}
+
+		public InteractionMessage updateMessage(Person currentUser, InteractionMessage update) {
+			InteractionMessage msg = msgRepo.findOne(update.getId());
+			if (msg==null) throw new TjingException("No such message");
+			
+			if(msg.getRecipient().getId().equals(currentUser.getId())){
+				if(update.getRead() == true) msg.setRead(true);
+				return msgRepo.save(msg);
+			} return msg;			
 		}
 }

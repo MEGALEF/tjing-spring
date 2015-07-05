@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import se.tjing.TjingURL;
 import se.tjing.rating.Rating;
 import se.tjing.rating.RatingService;
+import se.tjing.user.Person;
 import se.tjing.user.PersonService;
 
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -149,15 +150,10 @@ public class InteractionController {
 		}
 	}
 	
-	@RequestMapping(value="{interactionId}",method=RequestMethod.GET)
+	@RequestMapping(value="{interactionId}", method=RequestMethod.GET)
 	public ResponseEntity<Interaction> getInteraction(@PathVariable Integer interactionId){
 		Interaction result = interactionService.getInteraction(personService.getCurrentUser(), interactionId);
 		
 		return new ResponseEntity<Interaction>(result, null, HttpStatus.OK);
-	}
-	
-	@MessageMapping(value="/messaging/{interactionId}")
-	public void receiveMessage(IncomingMessage msg, @DestinationVariable Integer interactionId, Principal principal){
-		InteractionMessage message = interactionService.addMessageFromUser(personService.getPersonByEmail(principal.getName()), interactionId, msg);
 	}
 }

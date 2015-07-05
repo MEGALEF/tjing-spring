@@ -1,8 +1,8 @@
 /**
  * 
  */
-(function(angular) {
-var tjingServices = angular.module("tjingApp.services", ["ngResource"]);
+ (function(angular) {
+  var tjingServices = angular.module("tjingApp.services", ["ngResource"]);
 
   tjingServices.factory("Membership", ['$resource', function($resource){
     var membershipUrl = "/membership/:membershipId";
@@ -135,6 +135,10 @@ var tjingServices = angular.module("tjingApp.services", ["ngResource"]);
       returnconfirm:{
         method:"PATCH",
         url: interactionURL +'/returnconfirm'
+      },
+      unread: {
+        method:"GET",
+        url:"/messages/unread"
       }
     })
   }]);
@@ -153,6 +157,18 @@ var tjingServices = angular.module("tjingApp.services", ["ngResource"]);
       }
       
     })
+  }]);
+
+  tjingServices.factory("InteractionMessage", ["$resource", function($resource){
+    var msgUrl = "/interactionmessage/:id";
+
+    return $resource(msgUrl, {
+      id: "@id"
+    }, {
+      update: {
+        method : "PATCH"
+      }  
+    });
   }]);
 
   tjingServices.factory("Notifications", function($rootScope){
@@ -179,7 +195,7 @@ var tjingServices = angular.module("tjingApp.services", ["ngResource"]);
 
     function disconnect() {
       if (stompClient != null) {
-          stompClient.disconnect();
+        stompClient.disconnect();
       }
       setConnected(false);
       //console.log("Disconnected");
@@ -188,40 +204,55 @@ var tjingServices = angular.module("tjingApp.services", ["ngResource"]);
     return service;
   });
 
-  tjingServices.factory("Messaging", function($rootScope){
-    var service = {
-      newMessage : null,
-      messages : []
-    };
-      
-    connect();
+  tjingServices.factory("Messaging", ["$rootScope", "User", "InteractionMessage",
+    function($rootScope, User, InteractionMessage){
+      var currentUser = User.current();
 
-    function connect() {
-      var socket = new SockJS('/messaging');
-      stompClient = Stomp.over(socket);
-      stompClient.connect({}, function(frame) {
-        stompClient.subscribe('/user/queue/messaging/', function(data){
-          var message = JSON.parse(data.body);
-          service.newMessage = message;
-          service.messages.push(message);
-          $rootScope.$apply();
-        });
-      });
-    }
+      var Fact = function(){
+        var self = this;
 
-    service.send = function(interactionId, text) {
-        stompClient.send("/app/messaging/"+interactionId, {}, JSON.stringify({ 'text': text }));
-    };
+        self.tick=0;
+        self.unread=[];
+        self.newMessage =null;
 
-    service.disconnect = function() {
-        if (stompClient != null) {
-            stompClient.disconnect();
+        connect();
+        InteractionMessage.query({}, function(response){
+          self.unread = response;
+          self.tick++;
+        }); 
+
+        self.markAsRead = function(interactionId){
+          for(i=0; i<self.unread.length; i++){
+            if (self.unread[i].interaction.id == interactionId){
+              self.unread.splice(i, 1);
+              i--;
+            }
+          }
         }
-        setConnected(false);
-        //console.log("Disconnected");
-    }
 
-    return service;
-  });
+        function connect() {
+          var socket = new SockJS('/messaging');
+          stompClient = Stomp.over(socket);
+          stompClient.connect({}, function(frame) {
+            stompClient.subscribe('/user/queue/messaging/', function(data){
+              var message = JSON.parse(data.body);
+
+              self.newMessage = message;
+              self.unread.push(message);
+              self.tick++;
+              $rootScope.$apply();
+            });
+          });
+        }
+
+        function disconnect() {
+          if (stompClient != null) {
+            stompClient.disconnect();
+          }
+          setConnected(false);
+        }
+      }
+      return new Fact();
+    }]);
 
 }(angular));
