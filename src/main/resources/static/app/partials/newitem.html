@@ -3,7 +3,7 @@
   <form role="form" ng-submit="addItem(newItem)">
     <input class="form-control" type="text" ng-model="newItem.title" placeholder="Titel" required/>
     <br/>
-    <input class="form-control" type="text" ng-model="newItem.category" typeahead="cat as cat.name for cat in categories($viewValue)" placeholder="Kategori">
+    <input class="form-control" type="text" ng-model="newItem.category" typeahead="cat as cat.name for cat in categories($viewValue)" placeholder="Kategori" typeahead-wait-ms="60">
     <br>
     <textarea class="form-control" ng-model="newItem.description" placeholder="Beskrivning"></textarea>
     <br>    

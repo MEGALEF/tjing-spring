@@ -1,10 +1,11 @@
-  <h1>Skapa ny grupp</h1>
-  <form ng-submit="createPool(newPool)">
-    <input type="text" ng-model="newPool.title" placeholder="Namn" required></input>
+<h1>Skapa ny grupp</h1>
+<form ng-submit="createPool(newPool)" role="form">
+  <div class="form-group">
+    <input class="form-control" type="text" ng-model="newPool.title" placeholder="Namn" required></input>
     <br/>
-    <textarea ng-model="newPool.description" placeholder="Beskrivning"></textarea>
+    <textarea class="form-control" ng-model="newPool.description" placeholder="Beskrivning"></textarea>
     <br/>
-    <select ng-model="newPool.privacy">
+    <select class="form-control" ng-model="newPool.privacy">
       <option value="OPEN">Öppen</option>
       <option value="CLOSED">Stängd</option>
       <option value="SECRET">Hemlig</option>
@@ -12,4 +13,5 @@
     <button class="btn btn-standard" type="submit" ng-disabled="!newPool.title">
       Skapa
     </button>
-  </form>
+  </div>
+</form>

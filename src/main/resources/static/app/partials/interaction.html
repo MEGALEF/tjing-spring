@@ -15,30 +15,32 @@
 	<div ng-show="isOwner">
 		<div ng-hide="currentInteraction.statusAccepted">
 
-	    	<button class="btn btn-standard" ng-disabled="currentInteraction.statusAccepted" ng-click="acceptRequest()">Acceptera</button>
-	    	<button class="btn btn-standard" ng-disabled="currentInteraction.statusAccepted" ng-click="denyRequest()">Neka</button>
-	    </div>
-	    <div ng-show="currentInteraction.statusAccepted">
-	      (Accepterades {{currentInteraction.statusAccepted | date}})
-	    </div>
-	    <div ng-show="currentInteraction.statusHandedOver">
-	      (Överlämnad {{currentInteraction.statusHandedOver | date}})
-	      <button class="btn btn-standard" ng-show="!currentInteraction.statusReturned" ng-click="confirmReturn()">Bekräfta retur</button>
-	    </div>
+			<button class="btn btn-standard" ng-disabled="currentInteraction.statusAccepted" ng-click="acceptRequest()">Acceptera</button>
+			<button class="btn btn-standard" ng-disabled="currentInteraction.statusAccepted" ng-click="denyRequest()">Neka</button>
+		</div>
+		<div ng-show="currentInteraction.statusAccepted">
+			(Accepterades {{currentInteraction.statusAccepted | date}})
+		</div>
+		<div ng-show="currentInteraction.statusHandedOver">
+			(Överlämnad {{currentInteraction.statusHandedOver | date}})
+			<button class="btn btn-standard" ng-show="!currentInteraction.statusReturned" ng-click="confirmReturn()">Bekräfta retur</button>
+		</div>
 	</div>
 
 	<div ng-show="!isOwner">
 		<div ng-show="currentInteraction.statusAccepted">(Accepterades {{currentInteraction.statusAccepted | date}})
-          <button class="btn btn-standard" ng-hide="currentInteraction.statusHandedOver" ng-click="confirmHandover()">
-            Bekräfta överlämning
-          </button>
-          <div ng-show="currentInteraction.statusHandedOver">(Överlämnad {{currentInteraction.statusHandedOver | date}})</div>
-        </div>
+			<button class="btn btn-standard" ng-hide="currentInteraction.statusHandedOver" ng-click="confirmHandover()">
+				Bekräfta överlämning
+			</button>
+			<div ng-show="currentInteraction.statusHandedOver">(Överlämnad {{currentInteraction.statusHandedOver | date}})</div>
+		</div>
 	</div>
 
-	<form ng-submit="send()">
-<textarea rows="4" cols="50" ng-model="text" placeholder="Skriv ett meddelande.."></textarea>
-<br/>
-<input class="btn btn-standard" type="submit" value="Skicka"> 
-	</form>
+	<form ng-submit="send()" role="form"><div class="form-group">
+
+		<textarea class="form-control" rows="4" cols="50" ng-model="text" placeholder="Skriv ett meddelande.."></textarea>
+		<br/>
+		<input class="btn btn-standard" type="submit" value="Skicka"> 
+	</div>
+</form>
 </div>
