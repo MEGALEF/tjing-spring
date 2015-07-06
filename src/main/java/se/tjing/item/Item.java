@@ -30,6 +30,9 @@ public class Item extends TjingEntity {
 
 	private String description;
 	
+	@OneToOne
+	private ItemCategory category;
+	
 	private Boolean sharedPublic;
 
 	private String title;
@@ -149,6 +152,14 @@ public class Item extends TjingEntity {
 
 	public void setSharedPublic(boolean sharedPublic) {
 		this.sharedPublic = sharedPublic;
+	}
+
+	public ItemCategory getCategory() {
+		return category;
+	}
+
+	public void setCategory(ItemCategory category) {
+		this.category = category;
 	}
 
 }

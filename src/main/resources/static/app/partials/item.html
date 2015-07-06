@@ -1,14 +1,20 @@
 <div class="container">
+
 	<h1>{{currentItem.title}}</h1>
 
+	<h4>Kategori</h4> 
+	<p>{{currentItem.category.name}}</p>
+
+	<h4>Beskrivning</h4>
 	<p>{{currentItem.description}}</p>
+
 	<div ng-show="!isOwner">
-		<h2>Ägare</h2>
+		<h3>Ägare</h3>
 		<tjing-user user="currentItem.owner"></tjing-user>
 	</div>
 
 	<div ng-show="isOwner">
-		<h2>Dela med</h2>
+		<h3>Dela med</h3>
 		<ul class="list-unstyled">
 			<li>
 				<input type="checkbox" ng-model="currentItem.sharedPublic" ng-click="updatePublic()"/> <b>Alla användare</b> 

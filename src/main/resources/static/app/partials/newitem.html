@@ -1,10 +1,12 @@
-<div>
-  <h1>Add item</h1>
-  <form ng-submit="addItem(newItem)">
-    <input type="text" ng-model="newItem.title" placeholder="Titel" required/>
+<div class="form-group">
+  <h1>Lägg till en ny pryl</h1>
+  <form role="form" ng-submit="addItem(newItem)">
+    <input class="form-control" type="text" ng-model="newItem.title" placeholder="Titel" required/>
     <br/>
-    <textarea rows="4" cols="50" ng-model="newItem.description" placeholder="Beskrivning"></textarea>
+    <input class="form-control" type="text" ng-model="newItem.category" typeahead="cat as cat.name for cat in categories($viewValue)" placeholder="Kategori">
     <br>
+    <textarea class="form-control" ng-model="newItem.description" placeholder="Beskrivning"></textarea>
+    <br>    
     <button type="submit" ng-disabled="!newItem.title" class="btn btn-standard">
       <span class="glyphicon glyphicon-plus"></span>Lägg till
     </button>

@@ -113,12 +113,19 @@
     };
   }]);
 
- angular.module("tjingApp.controllers").controller("MyItemsController", ["$scope", "$location", "Item", "Pool", "Interaction", "Share",
-  function($scope, $location, Item, Pool, Interaction, Share) {
+ angular.module("tjingApp.controllers").controller("MyItemsController", 
+  ["$scope", "$http", "$location", "Item", "Pool", "Interaction", "Share", "ItemCategory",
+  function($scope, $http, $location, Item, Pool, Interaction, Share, ItemCategory) {
     // Scope variable initialization
     $scope.myItems = [];
-
+    
     refreshMyItems();
+
+    $scope.categories = function(searchStr){
+      return $http.get("/itemcategory/", {params: {q: searchStr}}).then(function(response){
+        return response.data;
+      });
+    };
 
     function refreshMyItems(){
       $scope.myItems = Item.query({param:'owned'});

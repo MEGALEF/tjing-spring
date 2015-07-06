@@ -1,7 +1,8 @@
 (function(angular) {
   angular.module("tjingApp.controllers", []);
   
-  var tjingApp = angular.module("tjingApp", ["tjingApp.controllers", "tjingApp.services", "ngRoute", "ngUpload"]);
+  var tjingApp = angular.module("tjingApp", 
+    ["tjingApp.controllers", "tjingApp.services", "ngRoute", "ngUpload", "ui.bootstrap"]);
   var partialsUrl = 'app/partials/';
 
    tjingApp.config(function($routeProvider) {

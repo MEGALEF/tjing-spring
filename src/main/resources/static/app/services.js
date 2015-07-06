@@ -171,6 +171,10 @@
     });
   }]);
 
+  tjingServices.factory("ItemCategory", ["$resource", function($resource){
+    return $resource("/itemcategory");
+  }]);
+
   tjingServices.factory("Notifications", function($rootScope){
     var service = {
       newNotification : null,

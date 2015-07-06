@@ -57,8 +57,15 @@ public class ItemService {
 
 	@Autowired
 	PersonService personService;
+	
+	@Autowired
+	ItemCategoryService catService;
 
 	public Item addItem(Person user, Item item) {
+		if (item.getCategory()!=null){
+			ItemCategory cat = catService.findOrAdd(item.getCategory().getName());
+			item.setCategory(cat);
+		}
 		if(item.getOwner() == null){
 			item.setOwner(user);
 		}
