@@ -215,7 +215,7 @@
         self.unread=[];
         self.newMessage =null;
 
-        connect();
+        setTimeout(connect(), 200);
         InteractionMessage.query({}, function(response){
           self.unread = response;
           self.tick++;

@@ -15,7 +15,7 @@
    	
    	<class>se.tjing.feed.Notification</class>
 	<class>se.tjing.image.ItemPicture</class>
-	<class>se.tjing.interaction.InteractionMessage</class>
+	<class>se.tjing.interactionmessage.InteractionMessage</class>
    	
         <properties>
 <!--             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/> -->

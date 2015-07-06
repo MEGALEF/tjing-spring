@@ -1,5 +1,5 @@
 <div>
-  <h1>Lånat</h1>
+  <h1>Du har lånat av andra</h1>
   <ul class="list-group">
     <li class="list-group-item" ng-repeat="interaction in outgoingrequests">
       <tjing-interaction interaction="interaction" user="currentUser"></tjing-interaction>
@@ -11,7 +11,7 @@
   
   <hr/>
 
-  <h1>Utlånat</h1>
+  <h1>Andra har lånat av dig</h1>
   <ul class="list-group">
     <li class="list-group-item" ng-repeat="interaction in incomingrequests">
       <tjing-interaction interaction="interaction" user="currentUser"></tjing-interaction>

@@ -3,11 +3,10 @@
   <form ng-submit="addItem(newItem)">
     <input type="text" ng-model="newItem.title" placeholder="Titel" required/>
     <br/>
-    <textarea ng-model="newItem.description" placeholder="Beskrivning"></textarea>
-    <span>
-      <button type="submit" ng-disabled="!newItem.title">
-        <span class="glyphicon glyphicon-plus">Lägg till</span>
-      </button>
-    </span>
+    <textarea rows="4" cols="50" ng-model="newItem.description" placeholder="Beskrivning"></textarea>
+    <br>
+    <button type="submit" ng-disabled="!newItem.title" class="btn btn-standard">
+      <span class="glyphicon glyphicon-plus">Lägg till</span>
+    </button>
   </form>
 </div>

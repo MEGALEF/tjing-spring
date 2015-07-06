@@ -1,4 +1,4 @@
-package se.tjing.interaction;
+package se.tjing.interactionmessage;
 
 import org.springframework.data.repository.CrudRepository;
 

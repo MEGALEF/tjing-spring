@@ -14,6 +14,9 @@ import se.tjing.exception.TjingException;
 import se.tjing.feed.EventType;
 import se.tjing.feed.Notification;
 import se.tjing.feed.NotificationService;
+import se.tjing.interactionmessage.InteractionMessage;
+import se.tjing.interactionmessage.InteractionMessageRepository;
+import se.tjing.interactionmessage.QInteractionMessage;
 import se.tjing.item.Item;
 import se.tjing.item.ItemRepository;
 import se.tjing.item.ItemService;
@@ -94,8 +97,8 @@ public class InteractionService {
 		QInteraction interaction = QInteraction.interaction;
 		JPAQuery query = new JPAQuery(em);
 		query.from(interaction).where(
-				interaction.borrower.eq(person)
-						.and(interaction.active.isTrue()));
+				interaction.borrower.eq(person));
+						//.and(interaction.active.isTrue()));
 		return query.list(interaction);
 	}
 
@@ -108,7 +111,8 @@ public class InteractionService {
 		QItem item = QItem.item;
 		JPAQuery query = new JPAQuery(em).from(interaction)
 				.leftJoin(interaction.item, item)
-				.where(item.owner.eq(person).and(interaction.active.isTrue()));
+				.where(item.owner.eq(person));
+						//.and(interaction.active.isTrue()));
 		return query.list(interaction);
 	}
 
@@ -146,8 +150,8 @@ public class InteractionService {
 		QInteraction interaction = QInteraction.interaction;
 		QItem item = QItem.item;
 		query.from(interaction).leftJoin(interaction.item, item)
-		.where(interaction.borrower.eq(currentUser).or(item.owner.eq(currentUser))
-				.and(interaction.active.isTrue()));
+		.where(interaction.borrower.eq(currentUser).or(item.owner.eq(currentUser)));
+				//.and(interaction.active.isTrue()));
 		return query.list(interaction);
 	}
 

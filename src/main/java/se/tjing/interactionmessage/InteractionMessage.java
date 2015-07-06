@@ -1,4 +1,4 @@
-package se.tjing.interaction;
+package se.tjing.interactionmessage;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import se.tjing.common.TjingEntity;
+import se.tjing.interaction.Interaction;
 import se.tjing.user.Person;
 
 @Entity

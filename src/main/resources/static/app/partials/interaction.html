@@ -1,8 +1,11 @@
 <div>
-	<tjing-user user="currentInteraction.borrower"></tjing-user>
-	vill låna  
-	<tjing-item item="currentInteraction.item"></tjing-item>
-	<ul class="list-unstyled">
+	<h2>
+		<tjing-user user="currentInteraction.borrower"></tjing-user>
+		vill låna  
+		<tjing-item item="currentInteraction.item"></tjing-item>
+	</h2>
+	<h3>Meddelanden</h3>
+	<ul class="list-group">
 		<li ng-repeat="message in currentInteraction.conversation">
 			<tjing-message message="message" owner="isOwner"></tjing-message>
 		</li>
@@ -23,16 +26,16 @@
 	</div>
 
 	<div ng-show="!isOwner">
-		<div ng-show="currentInteraction.statusAccepted">(Accepted on {{currentInteraction.statusAccepted | date}})
+		<div ng-show="currentInteraction.statusAccepted">(Accepterades {{currentInteraction.statusAccepted | date}})
           <button  ng-hide="currentInteraction.statusHandedOver" ng-click="confirmHandover()">
-            Confirm handover
+            Bekräfta överlämning
           </button>
-          <div ng-show="currentInteraction.statusHandedOver">(Handed over on {{currentInteraction.statusHandedOver | date}})</div>
+          <div ng-show="currentInteraction.statusHandedOver">(Överlämnad {{currentInteraction.statusHandedOver | date}})</div>
         </div>
 	</div>
 
 	<form ng-submit="send()">
-<input type="text" ng-model="text" placeholder="Skriv ett meddelande..">
+<textarea rows="4" cols="50" ng-model="text" placeholder="Skriv ett meddelande.."></textarea>
 <input type="submit" value="Skicka"> 
 	</form>
 </div>
