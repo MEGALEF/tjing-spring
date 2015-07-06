@@ -6,23 +6,24 @@
 	<p>{{currentPool.description}}</p>
 	<p>{{currentPool.privacy}}</p>
 
-	<button ng-show="myMembership" ng-click="leavePool()">
+	<p ng-show="myMembership && !myMembership.approved">Väntar på godkännande</p>
+	<button class="btn btn-standard" ng-show="myMembership && myMembership.approved" ng-click="leavePool()">
 		Lämna grupp
 	</button>
 
-	<button ng-show="!myMembership" ng-click="joinPool()">
+	<button class="btn btn-standard" ng-show="!myMembership" ng-click="joinPool()">
 		<span class="glypicon glyphicon-plus"></span>Gå med i grupp
 	</button>
 
-	<div ng-show="myMembership">
+	<div ng-show="myMembership && myMembership.approved">
 		<h2>Medlemmar</h2>
 		<ul class="list-unstyled">
 			<li ng-repeat="membership in memberships">
 				<tjing-user user="membership.member"></tjing-user>
 				<span>({{membership.role}})</span>
 				<span ng-show="myMembership.role=='ADMIN' && membership.role!='ADMIN'">
-					<button ng-click="makeAdmin(membership)">Ge admin</button>
-					<button ng-click="kickMember(membership)">Ta bort</button>
+					<button class="btn btn-standard" ng-click="makeAdmin(membership)">Ge admin</button>
+					<button class="btn btn-standard" ng-click="kickMember(membership)">Ta bort</button>
 				</span>
 			</li>
 		</ul>
@@ -31,8 +32,8 @@
 			<ul class="list-unstyled">
 				<li ng-repeat="request in requests">
 					<tjing-user user="request.member"></tjing-user> 
-					<button ng-click="approveRequest(request)">Godkänn</button>
-					<button ng-click="denyRequest(request)">Neka</button>
+					<button class="btn btn-standard" ng-click="approveRequest(request)">Godkänn</button>
+					<button class="btn btn-standard" ng-click="denyRequest(request)">Neka</button>
 				</li>
 			</ul>
 		</div>	

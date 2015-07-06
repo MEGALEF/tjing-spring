@@ -27,9 +27,19 @@
 
   angular.module('tjingApp.controllers').controller("MyInteractionsController", 
     ["$scope", "Interaction", "User", function($scope, Interaction, User){
-      $scope.incomingrequests = Interaction.query({param:'incoming'});
-      $scope.outgoingrequests = Interaction.query({param:'outgoing'});
+      $scope.incomingrequests = [];
+      $scope.outgoingrequests = [];
       $scope.currentUser = User.current();
+
+      refresh();
+      function refresh(){
+         Interaction.query({param:'incoming'}, function(data){
+          $scope.incomingrequests = data;
+         });
+         Interaction.query({param:'outgoing'}, function(data){
+          $scope.outgoingrequests = data;
+         });
+      }
 
       $scope.acceptRequest = function(interaction){
         Interaction.accept(interaction, function(response){
@@ -54,6 +64,12 @@
     $scope.confirmReturn = function(interaction){
       Interaction.returnconfirm(interaction, function(){
         $scope.incomingrequests = Interaction.query({param:"incoming"});
+      });
+    }
+
+    $scope.remove = function(interaction){
+      Interaction.delete(interaction, function(){
+        refresh();
       });
     }
   }]);

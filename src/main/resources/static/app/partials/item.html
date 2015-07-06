@@ -27,11 +27,11 @@
 		<form enctype="multipart/form-data" encoding="multipart/form-data" method="POST" action="{{imgUploadUrl()}}" ng-upload="complete(content)">
 			<h2>Lägg till en bild</h2>
 			<input type="file" name="file">
-			<input type="submit" value="Lägg till">
+			<input class="btn btn-standard" type="submit" value="Lägg till">
 		</form>
 
 	</div>
 	<div ng-show="!isOwner">
-		<button ng-click="requestItem()">Låna</button>
+		<button class="btn btn-standard" ng-click="requestItem()">Låna</button>
 	</div>
 </div>

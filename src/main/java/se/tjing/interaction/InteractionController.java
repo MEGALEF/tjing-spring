@@ -156,4 +156,10 @@ public class InteractionController {
 		
 		return new ResponseEntity<Interaction>(result, null, HttpStatus.OK);
 	}
+	
+	@RequestMapping(value="{interactionId}", method=RequestMethod.DELETE)
+	public ResponseEntity<Object> cancelInteraction(@PathVariable Integer interactionId){
+		interactionService.cancel(interactionId, personService.getCurrentUser());
+		return new ResponseEntity<Object>(null, null, HttpStatus.ACCEPTED);
+	}
 }

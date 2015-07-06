@@ -22,16 +22,26 @@ import se.tjing.item.Item;
 import se.tjing.rating.Rating;
 import se.tjing.user.Person;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 public class Interaction extends TjingEntity{
 
-	private Boolean active = true;
-
 	@ManyToOne
 	@JsonIgnoreProperties("connection")
 	private Person borrower;
+	
+	@JsonIgnore
+	private  Boolean deleted = false;
+
+	public Boolean getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
+	}
 
 	@OneToOne
 	private Rating borrowerRating;
@@ -74,9 +84,10 @@ public class Interaction extends TjingEntity{
 		this.item = item2;
 		this.statusRequested = now;
 	}
-
-	public Boolean getActive() {
-		return active;
+	
+	public boolean getActive(){
+		if (this.statusAccepted == null || this.statusRequested!=null) return false;
+		else return true;
 	}
 
 	public Person getBorrower() {
@@ -123,10 +134,6 @@ public class Interaction extends TjingEntity{
 
 	public DateTime getStatusReturned() {
 		return statusReturned;
-	}
-
-	public void setActive(Boolean active) {
-		this.active = active;
 	}
 
 	public void setBorrower(Person borrower) {

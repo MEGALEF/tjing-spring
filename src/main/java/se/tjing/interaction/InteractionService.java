@@ -88,7 +88,6 @@ public class InteractionService {
 
 		notifService.sendNotification(new Notification(interaction, interaction.getBorrower(), EventType.INT_RET), true, true);
 		interaction.getItem().setActiveInteraction(null);
-		interaction.setActive(false);
 		sendMessage(new InteractionMessage(null, interaction.getBorrower(), ":returnconfirmed", interaction), true);
 		return interactionRepo.save(interaction);
 	}
@@ -97,7 +96,7 @@ public class InteractionService {
 		QInteraction interaction = QInteraction.interaction;
 		JPAQuery query = new JPAQuery(em);
 		query.from(interaction).where(
-				interaction.borrower.eq(person));
+				interaction.borrower.eq(person).and(interaction.deleted.isFalse()));
 						//.and(interaction.active.isTrue()));
 		return query.list(interaction);
 	}
@@ -111,7 +110,7 @@ public class InteractionService {
 		QItem item = QItem.item;
 		JPAQuery query = new JPAQuery(em).from(interaction)
 				.leftJoin(interaction.item, item)
-				.where(item.owner.eq(person));
+				.where(item.owner.eq(person).and(interaction.deleted.isFalse()));
 						//.and(interaction.active.isTrue()));
 		return query.list(interaction);
 	}
@@ -132,17 +131,13 @@ public class InteractionService {
 		}
 	}
 
-	public Interaction deny(Integer interactionId, Person currentUser) {
+	public Interaction deny(Integer interactionId, Person user) {
 		Interaction interaction = interactionRepo.findOne(interactionId);
-		if (!isPersonItemOwner(currentUser, interaction)) {
-			throw new TjingException("Only the owner of the item may do this");
-		}
 		if (interaction.getStatusAccepted() != null) {
 			throw new TjingException(
 					"The interaction has already been accepted.");
 		}
-		interaction.setActive(false);
-		return interactionRepo.save(interaction);
+		return this.cancel(interactionId, user);
 	}
 
 	public List<Interaction> getUserInteractions(Person currentUser) {
@@ -150,7 +145,7 @@ public class InteractionService {
 		QInteraction interaction = QInteraction.interaction;
 		QItem item = QItem.item;
 		query.from(interaction).leftJoin(interaction.item, item)
-		.where(interaction.borrower.eq(currentUser).or(item.owner.eq(currentUser)));
+		.where(interaction.borrower.eq(currentUser).or(item.owner.eq(currentUser)).and(interaction.deleted.isFalse()));
 				//.and(interaction.active.isTrue()));
 		return query.list(interaction);
 	}
@@ -160,12 +155,12 @@ public class InteractionService {
 		if (!isPersonItemOwner(currentUser, interaction) && !isPersonBorrower(currentUser, interaction)){
 			throw new TjingException("Only parties of the interaction may do this");
 		} else {
-			interaction.setStatusCancelled(DateTime.now());
-			interaction.setActive(false);
-			notifService.sendNotification(new Notification(interaction, interaction.getBorrower(), EventType.INT_CANCEL), true, true);
-			return interaction;
+			if (!interaction.getActive()){
+				interaction.setDeleted(true);
+				interaction.setStatusCancelled(DateTime.now());
+				return interactionRepo.save(interaction);
+			} else throw new TjingException("Interaction is active");
 		}
-		//TODO Cancel interactions even when item is handed over? Ok or not?
 	}
 	
 		public Interaction initiateRequest(Person currentUser, AddInteraction createInteraction) {
