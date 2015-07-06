@@ -55,7 +55,7 @@ public class InteractionController {
 	 * @return
 	 */
 	@RequestMapping(value = "/{interactionId}/accept", method = RequestMethod.PATCH)
-	public ResponseEntity<Interaction> approveRequest(
+	public ResponseEntity<Interaction> acceptRequest(
 			@PathVariable Integer interactionId) {
 		Interaction result = interactionService.accept(interactionId,
 				personService.getCurrentUser());

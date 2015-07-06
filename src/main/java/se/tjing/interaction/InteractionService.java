@@ -56,9 +56,6 @@ public class InteractionService {
 		}
 		interaction.setStatusAccepted(DateTime.now());
 		
-		Item item = interaction.getItem();
-		item.setActiveInteraction(interaction);
-		itemRepo.save(item);
 		interaction = interactionRepo.save(interaction);
 		notifService.sendNotification(new Notification(interaction, interaction.getBorrower(), EventType.INT_ACCEPT), true, true);
 		sendMessage(new InteractionMessage(null, interaction.getBorrower(), ":requestaccepted", interaction), true);
@@ -71,7 +68,10 @@ public class InteractionService {
 			throw new TjingException(
 					"Only the user who initially sent the request may do this");
 		}
-		//TODO interaction.setNotifyUser(interaction.getItem().getOwner());
+		Item item = interaction.getItem();
+		item.setActiveInteraction(interaction);
+		itemRepo.save(item);
+		
 		interaction.setStatusHandedOver(DateTime.now());
 		interaction = interactionRepo.save(interaction);
 		notifService.sendNotification(new Notification(interaction, interaction.getItem().getOwner(), EventType.INT_HAND), true, true);
@@ -87,7 +87,11 @@ public class InteractionService {
 		interaction.setStatusReturned(DateTime.now());
 
 		notifService.sendNotification(new Notification(interaction, interaction.getBorrower(), EventType.INT_RET), true, true);
-		interaction.getItem().setActiveInteraction(null);
+		
+		Item item = interaction.getItem();
+		item.setActiveInteraction(null);
+		itemRepo.save(item);
+		
 		sendMessage(new InteractionMessage(null, interaction.getBorrower(), ":returnconfirmed", interaction), true);
 		return interactionRepo.save(interaction);
 	}

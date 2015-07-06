@@ -120,6 +120,10 @@
 
     refreshMyItems();
 
+    $scope.interactionUrl = function(item){
+      return "/interaction/" + item.activeInteraction.id;
+    }
+
     function refreshMyItems(){
       $scope.myItems = Item.query({param:'owned'});
     }

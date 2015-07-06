@@ -9,10 +9,11 @@
   <ul class="list-unstyled">
     <li ng-repeat="item in myItems" >
       <tjing-item item="item"></tjing-item>
-      <button type="button" title="Delete" ng-click="deleteItem(item)">
+      
+      <span ng-show="item.activeInteraction"><a ng-href="{{interactionUrl(item)}}">(Utlånad till {{item.activeInteraction.borrower.firstName}})</a></span>
+      <button ng-hide="item.activeInteraction" type="button" title="Delete" ng-click="deleteItem(item)">
         <span class="glyphicon glyphicon-trash"></span>
       </button>
-      <div ng-show="item.activeInteraction"> utlånad till <tjing-user user="item.activeInteraction.borrower"/> on {{item.activeInteraction.statusHandedOver | date}}</div>
     </li>
   </ul>     
 </div>
