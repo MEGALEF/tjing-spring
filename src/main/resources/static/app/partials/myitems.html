@@ -10,7 +10,7 @@
     <li ng-repeat="item in myItems" >
       <tjing-item item="item"></tjing-item>
       
-      <span ng-show="item.activeInteraction"><a ng-href="{{interactionUrl(item)}}">(Utlånad till {{item.activeInteraction.borrower.firstName}})</a></span>
+      <span ng-show="item.activeInteraction"><a ng-href="#interaction/{{item.activeInteraction.id}}">(Utlånad till {{item.activeInteraction.borrower.firstName}})</a></span>
       <button ng-hide="item.activeInteraction" type="button" title="Delete" ng-click="deleteItem(item)">
         <span class="glyphicon glyphicon-trash"></span>
       </button>
