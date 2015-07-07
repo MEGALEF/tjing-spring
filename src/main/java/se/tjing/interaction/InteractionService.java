@@ -165,7 +165,7 @@ public class InteractionService {
 				interaction.setDeleted(true);
 				interaction.setStatusCancelled(DateTime.now());
 				return interactionRepo.save(interaction);
-			} else throw new TjingException("Interaction is active");
+			} 
 		}
 	}
 	
