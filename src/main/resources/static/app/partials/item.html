@@ -1,43 +1,47 @@
-<div class="container">
+<h1>{{currentItem.title}}</h1>
 
-	<h1>{{currentItem.title}}</h1>
+<h4>Kategori</h4> 
+<p>{{currentItem.category.name}}</p>
 
-	<h4>Kategori</h4> 
-	<p>{{currentItem.category.name}}</p>
+<h4>Beskrivning</h4>
+<p>{{currentItem.description}}</p>
 
-	<h4>Beskrivning</h4>
-	<p>{{currentItem.description}}</p>
+<div ng-show="!isOwner">
+	<h3>Ägare</h3>
+	<tjing-user user="currentItem.owner"></tjing-user>
+</div>
 
-	<div ng-show="!isOwner">
-		<h3>Ägare</h3>
-		<tjing-user user="currentItem.owner"></tjing-user>
-	</div>
+<div ng-show="isOwner">
+	<h3>Dela med</h3>
+	<ul class="list-unstyled">
+		<li>
+			<input type="checkbox" ng-model="currentItem.sharedPublic" ng-click="updatePublic()"/> <b>Alla användare</b> 
+		</li>
+		<li ng-repeat="pool in shareMap">
+			<input type="checkbox" ng-model="pool.itemIsShared" ng-click="pool.itemIsShared ? shareItem(currentItem, pool) : unshareItem(currentItem, pool)" >  <b>{{pool.title}}</b>
+		</li>
+	</ul>
 
-	<div ng-show="isOwner">
-		<h3>Dela med</h3>
-		<ul class="list-unstyled">
-			<li>
-				<input type="checkbox" ng-model="currentItem.sharedPublic" ng-click="updatePublic()"/> <b>Alla användare</b> 
-			</li>
-			<li ng-repeat="pool in shareMap">
-				<input type="checkbox" ng-model="pool.itemIsShared" ng-click="pool.itemIsShared ? shareItem(currentItem, pool) : unshareItem(currentItem, pool)" >  <b>{{pool.title}}</b>
-			</li>
-		</ul>
-		
-		<ul class="list-inline" ng-show="currentItem.images && currentItem.images.length>0">
-			<li ng-repeat="image in currentItem.images">
-				<img ng-src="{{image.imageUrl}}">
-			</li>
-		</ul>
-		
-		<form enctype="multipart/form-data" encoding="multipart/form-data" method="POST" action="{{imgUploadUrl()}}" ng-upload="complete(content)">
-			<h2>Lägg till en bild</h2>
-			<input type="file" name="file">
-			<input class="btn btn-standard" type="submit" value="Lägg till">
+	<ul class="list-inline" ng-show="currentItem.images && currentItem.images.length>0">
+		<li ng-repeat="image in currentItem.images">
+			<img ng-src="{{image.imageUrl}}">
+		</li>
+	</ul>
+
+	<form enctype="multipart/form-data" encoding="multipart/form-data" method="POST" action="{{imgUploadUrl()}}" ng-upload="complete(content)">
+		<h2>Lägg till en bild</h2>
+		<input type="file" name="file">
+		<input class="btn btn-default" type="submit" value="Lägg till">
+	</form>
+
+</div>
+<div ng-show="!isOwner">
+	<button class="btn btn-default" ng-click="startRequest=true" ng-hide="startRequest">Låna</button>
+	<div ng-show="startRequest" class="form-group">
+		<h3>Skriv ett meddelande</h3>
+		<form role="form">
+			<textarea class="form-control" ng-model="request.message"></textarea>
 		</form>
-
-	</div>
-	<div ng-show="!isOwner">
-		<button class="btn btn-standard" ng-click="requestItem()">Låna</button>
+		<button class="btn btn-default" ng-click="sendRequest(request)">Skicka</button>
 	</div>
 </div>

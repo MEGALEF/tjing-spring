@@ -306,8 +306,8 @@
       });
     }  
 
-    $scope.requestItem = function(){
-      Interaction.save({itemId:$scope.currentItem.id}, function(response){
+    $scope.sendRequest = function(request){
+      Interaction.save({itemId:$scope.currentItem.id, message: request.message}, function(response){
         $location.path("/interaction/"+response.id);
       })
     };
