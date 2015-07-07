@@ -14,7 +14,7 @@
 				<!--  <input type="hidden" name="_csrf" th:value="${_csrf.token}" /> -->
 				<h2 class="form-signin-heading">Skapa nytt konto</h2>
 				<div class="formInfo">
-					<div class="error" th:if="${#fields.hasErrors('*')}">Kunde inte skapa konto. Vänligen åtgärda felen i formuläret och försök igen.</div>
+					<div class="error" th:if="${#fields.hasErrors('*')}">Kunde inte skapa konto. V&auml;nligen &aring;tg&auml;rda felen i formul&auml;ret och f&ouml;rs&ouml;k igen.</div>
 				</div>
 				
 				<fieldset>
@@ -24,7 +24,7 @@
 					<input class="form-control" type="text" th:field="*{lastName}" />
 					<label for="username">E-post <span th:if="${#fields.hasErrors('username')}" class="error" th:text="${#fields.errors('username')[0]}">Fel</span></label>
 					<input class="form-control" type="email" th:field="*{username}" />
-					<label for="password">L&ouml;senord <span th:if="${#fields.hasErrors('password')}" class="error" th:text="${#fields.errors('password')[0]}">Fel</span></label>
+					<label for="password">L&ouml;senord (minst 6 tecken) <span th:if="${#fields.hasErrors('password')}" class="error" th:text="${#fields.errors('password')[0]}">Fel</span></label>
 					<input class="form-control" type="password" th:field="*{password}" />
 				</fieldset>
 				<p><button class="btn btn-lg btn-primary btn-block" type="submit">Skapa konto</button></p>

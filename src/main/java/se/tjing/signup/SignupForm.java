@@ -22,10 +22,10 @@ import org.springframework.social.connect.UserProfile;
 
 public class SignupForm {
 
-	@NotEmpty
+	@NotEmpty(message="*")
 	private String username;
 
-	@Size(min = 6, message = "must be at least 6 characters")
+	@Size(min = 6, message="*")
 	private String password;
 
 	@NotEmpty
