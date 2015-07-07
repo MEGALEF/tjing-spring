@@ -68,7 +68,7 @@
     }
 
     $scope.remove = function(interaction){
-      Interaction.delete(interaction, function(){
+      Interaction.delete({id: interaction.id}, function(){
         refresh();
       });
     }
