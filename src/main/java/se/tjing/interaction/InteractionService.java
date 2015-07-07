@@ -159,7 +159,9 @@ public class InteractionService {
 		if (!isPersonItemOwner(currentUser, interaction) && !isPersonBorrower(currentUser, interaction)){
 			throw new TjingException("Only parties of the interaction may do this");
 		} else {
-			if (!interaction.getActive()){
+			if (interaction.getActive()){
+				throw new TjingException("Can't delete an undergoing Interaction"); 
+			} else {
 				interaction.setDeleted(true);
 				interaction.setStatusCancelled(DateTime.now());
 				return interactionRepo.save(interaction);

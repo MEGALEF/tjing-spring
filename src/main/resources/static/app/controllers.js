@@ -48,7 +48,7 @@
       }
 
       $scope.denyRequest = function(interaction){
-        Interaction.deny(interaction, function(){
+        Interaction.delete({id: interaction.id}, function(){
           $scope.incomingrequests = Interaction.query({param:"incoming"});
         }); 
       }
@@ -204,15 +204,15 @@
   }]);
 
  angular.module("tjingApp.controllers").controller("NavbarController", 
-  ["$scope", "$location", "$http", "User", "Feed", "Messaging", "Notifications", "InteractionMessage",
-  function($scope, $location, $http, User, Feed, Messaging, Notifications, InteractionMessage){
+  ["$scope", "$location", "$http", "User", "Feed", "Notifications", "InteractionMessage",
+  function($scope, $location, $http, User, Feed, Notifications, InteractionMessage){
 
     $scope.searchResult = [];
     $scope.feedItems = Feed.query();
     $scope.notifService = Notifications;
 
     $scope.unreadMsgs = function(){
-      return Messaging.unread;
+      return Notifications.unread;
     };
 
     $scope.$watch('notifService.newNotification', function(newVal, oldVal, scope){
@@ -334,24 +334,26 @@
   }]);
 
  angular.module("tjingApp.controllers").controller("InteractionController",
-  ["$scope", "$routeParams", "Interaction", "User", "Messaging", "InteractionMessage",
-  function($scope, $routeParams, Interaction, User, Messaging, InteractionMessage){
+  ["$scope", "$routeParams", "Interaction", "User", "Notifications", "InteractionMessage",
+  function($scope, $routeParams, Interaction, User, Notifications, InteractionMessage){
 
     $scope.currentInteraction = {};  
     $scope.isOwner = null;
     $scope.currentUser = null;
     $scope.text = "";
-    $scope.Messaging = Messaging;
-    $scope.tick = Messaging.tick;
+    $scope.Notifications = Notifications;
+    $scope.tick = Notifications.tick;
 
     refresh();
 
-    $scope.$watch('Messaging.tick', function(newVal){
-      if(Messaging.unread && Messaging.unread.length>0){
-        var newMsg = Messaging.unread[Messaging.unread.length-1];
+    $scope.$watch('Notifications.tick', function(newVal){
+      if(Notifications.unread && Notifications.unread.length>0){
+        var newMsg = Notifications.unread[Notifications.unread.length-1];
         if(newMsg.interaction && newMsg.interaction.id == $scope.currentInteraction.id){
+          newMsg.read=true;
+          InteractionMessage.update(newMsg);
           $scope.currentInteraction.conversation.push(newMsg);
-          Messaging.unread.splice(Messaging.unread.length-1,1)
+          Notifications.unread.splice(Notifications.unread.length-1,1)
         }
       }
     });
@@ -359,7 +361,7 @@
 
     function refresh(){
       $scope.currentInteraction = Interaction.get({id: $routeParams.interactionId}, function(){
-        Messaging.markAsRead($scope.currentInteraction.id);
+        Notifications.markAsRead($scope.currentInteraction.id);
         $scope.currentUser = User.current({}, function(response){
           $scope.currentUser = response;
           $scope.isOwner = ($scope.currentUser.id == $scope.currentInteraction.item.owner.id);
@@ -374,7 +376,7 @@
     }
 
     $scope.denyRequest = function(){
-      Interaction.deny($scope.currentInteraction, function(response){
+      Interaction.delete({id: $scope.currentInteraction.id}, function(response){
         $scope.currentInteraction = response;
       });
     }
