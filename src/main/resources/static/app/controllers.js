@@ -424,6 +424,21 @@
     
     refresh();
 
+    $scope.addUser = function(){
+      $scope.invite.user.username = "";
+      var invite= {
+        member: {
+          username :$scope.invite.user.username
+        },
+        pool: {
+          id: $currentPool.id
+        }
+      }
+      Membership.save(invite, function(response){
+        $scope.newMembershio = response;
+      });
+    }
+
     $scope.makeAdmin = function(membership){
       Membership.update({id: membership.id, role:"ADMIN"}, function(response){
         membership = response;

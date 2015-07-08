@@ -26,7 +26,7 @@ public class Membership extends TjingEntity {
 	private PoolRole role = PoolRole.MEMBER;
 
 	private Boolean approved = false;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	Integer id;

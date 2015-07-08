@@ -3,7 +3,7 @@
   <p>
     <a href="#newpool"><span class="glyphicon glyphicon-plus"></span>Skapa ny grupp
     </a>
-</p>
+  </p>
   
   <p><a href="#groupimport">Importera grupper från facebook</a></p>
   <div ng-hide="myMemberships && myMemberships.length >0">
@@ -17,11 +17,13 @@
   
   <hr/>
 
-  <h2>Sök grupper</h2>
-  <form ng-submit="searchPools()">
-    <input type="text" ng-model="searchStr">
-    <button class="btn btn-standard" type="submit" title="Sök"><span class="glyphicon glyphicon-search"></span></button>
-  </form> 
+  <div class="form-group">
+    <h2>Sök grupper</h2>
+    <form ng-submit="searchPools()" role="form">
+      <input class="form-control" type="text" ng-model="searchStr">
+      <button class="btn btn-standard" type="submit" title="Sök"><span class="glyphicon glyphicon-search"></span></button>
+    </form> 
+  </div>
   <div ng-show="searchResults">
     <h3>Sökresultat</h3>
     <ul class="list-unstyled">

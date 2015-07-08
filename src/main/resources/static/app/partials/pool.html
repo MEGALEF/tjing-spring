@@ -27,7 +27,18 @@
 				</span>
 			</li>
 		</ul>
+		<div ng-show="myMembership.role=='ADMIN' || currentPool.approval=='MEMBER'" class="form-group">
+			<h3>Lägg till medlemmar</h3>
+			<form role="form" name="inviteForm">
+				<div class="form-control">
+				<input name="input" type="email" placeholder="Ange e-postadress" ng-model="invite.user.username" required>
+				<button class="btn btn-default" ng-disabled="!inviteForm.input.$valid" class="form-control" ng-click="addUser()">Lägg till</button>
+				</div>
+			</form>
+		</div>
 		<div ng-show="myMembership.role=='ADMIN'">
+			
+
 			<h3>Medlemsförfrågningar</h3>
 			<ul class="list-unstyled">
 				<li ng-repeat="request in requests">
