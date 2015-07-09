@@ -18,6 +18,7 @@ import se.tjing.feed.Notification;
 import se.tjing.pool.Pool;
 import se.tjing.pool.PoolRole;
 import se.tjing.user.Person;
+import se.tjing.user.PostPerson;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = { "pool", "member" }))

@@ -31,79 +31,28 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mysema.query.jpa.impl.JPAQuery;
 
-@Entity
-public class Person extends TjingEntity implements Serializable {
-	
-	public static Person nullUser(){
-		Person nullUser = new Person();
-		nullUser.setFirstName("NULL");
-		return nullUser;
-	}
+public class PostPerson {
 
-	// TODO sort out the fullname business. Plenty of opportunity for stuff to
-	// go wrong here. Sorry
 	private String firstName;
 	
 	private String description;
 	private String locationStr;
-	
-	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-	private DateTime lastAction;
 
-	public DateTime getLastAction() {
-		return lastAction;
-	}
 
-	public void setLastAction(DateTime lastLogin) {
-		this.lastAction = lastLogin;
-	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 
-	@OneToMany(mappedBy = "borrower")
-	@JsonIgnore
-	private Set<Interaction> interactions;
-
-	@OneToMany(mappedBy = "owner")
-	@JsonIgnore
-	private Set<Item> items;
-
 	private String lastName;
 
-	@OneToMany(mappedBy = "member")
-	@JsonIgnore
-	private List<Membership> memberships;
-
-	@JsonIgnore
-	private String password;
-
-	@JsonIgnore()
 	private String username;
 	
-	@OneToMany(mappedBy="person")
-	private List<UserConnection> connection;
 
-	public List<UserConnection> getConnection() {
-		return connection;
-	}
-
-	public void setConnection(List<UserConnection> connection) {
-		this.connection = connection;
-	}
-
-	public Person() {
+	public PostPerson() {
 		//super();
 	}
 
-	public Person(String email, String password, String firstName,
-			String lastName) {
-		this.username = email;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.password=password;
-	}
 
 	public String getFirstName() {
 		return firstName;
@@ -114,25 +63,12 @@ public class Person extends TjingEntity implements Serializable {
 		return id;
 	}
 
-	public Set<Interaction> getInteractions() {
-		return interactions;
-	}
 
-	public Set<Item> getItems() {
-		return items;
-	}
 
 	public String getLastName() {
 		return lastName;
 	}
 
-	public List<Membership> getMemberships() {
-		return memberships;
-	}
-
-	public String getPassword() {
-		return password;
-	}
 	
 	public String getUsername() {
 		return username;
@@ -146,25 +82,12 @@ public class Person extends TjingEntity implements Serializable {
 		this.id = id;
 	}
 
-	public void setInteractions(Set<Interaction> interactions) {
-		this.interactions = interactions;
-	}
 
-	public void setItems(Set<Item> items) {
-		this.items = items;
-	}
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
 
-	public void setMemberships(List<Membership> memberships) {
-		this.memberships = memberships;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
 
 	public void setUsername(String email) {
 		this.username = email;

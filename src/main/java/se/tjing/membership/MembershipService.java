@@ -45,8 +45,9 @@ public class MembershipService {
 			throw new TjingException("User is already a member of that pool");
 		}
 	}
-	public Membership createMembership(Person currentUser, Membership addMembership) {
+	public Membership createMembership(Person currentUser, PostMembership addMembership) {
 		Pool pool = poolRepo.findOne(addMembership.getPool().getId());
+		Membership add = new Membership();
 		
 		if (pool==null) throw new TjingException("No such pool");
 		
@@ -59,28 +60,28 @@ public class MembershipService {
 			Person user = personService.getPersonByEmail(addMembership.getMember().getUsername());
 			if (adderMembership.getRole().equals(PoolRole.ADMIN) || pool.getApproval().equals(PoolRole.MEMBER)){
 				checkForExistingMembership(user, pool);
-				Membership add = new Membership(user, pool, true, PoolRole.MEMBER);
+				add = new Membership(user, pool, true, PoolRole.MEMBER);
 				return membershipRepo.save(add);
 			} else {
 				throw new TjingException("You don't have rights to add new members");
 			}
 		} else {
-			addMembership.setMember(currentUser);
+			add.setMember(currentUser);
 			Membership result;
 
 			checkForExistingMembership(currentUser, pool);
 
 			// If the group is closed or secret, notify users to approve. If Pool is open, preapprove membership
 			if (PrivacyMode.CLOSED.equals(pool.getPrivacy())) {
-				addMembership.setApproved(false);
-				result = membershipRepo.save(addMembership);
+				add.setApproved(false);
+				result = membershipRepo.save(add);
 				for (Membership member : pool.getApprovedMemberships()){
-					notifService.sendNotification(new Notification(addMembership, member.getMember(), EventType.POOL_JOINREQUEST), true, true);
+					notifService.sendNotification(new Notification(add, member.getMember(), EventType.POOL_JOINREQUEST), true, true);
 				}
 
 			} else { //If PrivacyMode = OPEN
-				addMembership.setApproved(true);;
-				result = membershipRepo.save(addMembership);
+				add.setApproved(true);;
+				result = membershipRepo.save(add);
 			}
 
 			return result;

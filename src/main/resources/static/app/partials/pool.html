@@ -11,7 +11,7 @@
 		Lämna grupp
 	</button>
 
-	<button class="btn btn-standard" ng-show="!myMembership" ng-click="joinPool()">
+	<button class="btn btn-default" ng-show="!myMembership" ng-click="joinPool()">
 		<span class="glypicon glyphicon-plus"></span>Gå med i grupp
 	</button>
 
@@ -27,13 +27,13 @@
 				</span>
 			</li>
 		</ul>
-		<div ng-show="myMembership.role=='ADMIN' || currentPool.approval=='MEMBER'" class="form-group">
+		<div ng-show="myMembership.role=='ADMIN' || currentPool.approval=='MEMBER'">
 			<h3>Lägg till medlemmar</h3>
-			<form role="form" name="inviteForm">
-				<div class="form-control">
-				<input name="input" type="email" placeholder="Ange e-postadress" ng-model="invite.user.username" required>
-				<button class="btn btn-default" ng-disabled="!inviteForm.input.$valid" class="form-control" ng-click="addUser()">Lägg till</button>
+			<form role="form" name="inviteForm" class="form-inline">
+				<div class="form-group">
+				<input name="input" type="email" placeholder="Ange e-postadress" ng-model="invite.user.username" required class="form-control">
 				</div>
+				<button class="btn btn-default" ng-disabled="!inviteForm.input.$valid" ng-click="addUser()">Lägg till</button>
 			</form>
 		</div>
 		<div ng-show="myMembership.role=='ADMIN'">
@@ -43,8 +43,8 @@
 			<ul class="list-unstyled">
 				<li ng-repeat="request in requests">
 					<tjing-user user="request.member"></tjing-user> 
-					<button class="btn btn-standard" ng-click="approveRequest(request)">Godkänn</button>
-					<button class="btn btn-standard" ng-click="denyRequest(request)">Neka</button>
+					<button class="btn btn-default" ng-click="approveRequest(request)">Godkänn</button>
+					<button class="btn btn-default" ng-click="denyRequest(request)">Neka</button>
 				</li>
 			</ul>
 		</div>	

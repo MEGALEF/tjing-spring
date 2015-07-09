@@ -17,18 +17,20 @@
   
   <hr/>
 
-  <div class="form-group">
-    <h2>Sök grupper</h2>
-    <form ng-submit="searchPools()" role="form">
+  
+  <h2>Sök grupper</h2>
+  <form ng-submit="searchPools()" role="form" class="form-inline">
+    <div class="form-group">
       <input class="form-control" type="text" ng-model="searchStr">
-      <button class="btn btn-standard" type="submit" title="Sök"><span class="glyphicon glyphicon-search"></span></button>
-    </form> 
-  </div>
+    </div>
+    <button class="btn btn-standard" type="submit" title="Sök"><span class="glyphicon glyphicon-search"></span></button>
+  </form> 
+  
   <div ng-show="searchResults">
     <h3>Sökresultat</h3>
     <ul class="list-unstyled">
       <li ng-repeat="result in searchResults">
-      <tjing-pool pool=result></tjing-pool> ({{result.nbrMembers}} medlemmar/{{result.nbrShares}} prylar)
+        <tjing-pool pool=result></tjing-pool> ({{result.nbrMembers}} medlemmar/{{result.nbrShares}} prylar)
       </li>
     </ul> 
   </div>

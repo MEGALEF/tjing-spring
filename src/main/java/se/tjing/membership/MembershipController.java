@@ -38,8 +38,8 @@ public class MembershipController {
 	}
 	
 	@RequestMapping(method=RequestMethod.POST)
-	public ResponseEntity<Membership> join(@RequestBody Membership membership){
-		Membership newMembership = membershipService.createMembership(personService.getCurrentUser(), membership);
+	public ResponseEntity<Membership> join(@RequestBody PostMembership body){ //TODO PostMembership is a workaround because serialization problems with username
+		Membership newMembership = membershipService.createMembership(personService.getCurrentUser(), body);
 		return new ResponseEntity<Membership>(newMembership, null, HttpStatus.OK);
 	}
 

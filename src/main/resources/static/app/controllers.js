@@ -425,17 +425,18 @@
     refresh();
 
     $scope.addUser = function(){
-      $scope.invite.user.username = "";
+      
       var invite= {
         member: {
           username :$scope.invite.user.username
         },
         pool: {
-          id: $currentPool.id
+          id: $scope.currentPool.id
         }
       }
       Membership.save(invite, function(response){
-        $scope.newMembershio = response;
+        $scope.memberships.push(response);
+        $scope.invite.user.username = "";
       });
     }
 
@@ -460,7 +461,12 @@
 
     $scope.kickMember = function(membership){
       Membership.delete({membershipId: membership.id}, function(){ //TODO äuuuuuäuäuuähh
-        membership = null;
+        for(i=0; i<$scope.memberships.length; i++){
+          if ($scope.memberships[i].id == membership.id){
+            $scope.memberships.splice(i,1);
+            break;
+          }
+        }
       });
     };
 
