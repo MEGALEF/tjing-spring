@@ -1,4 +1,4 @@
-<h1>Skapa ny grupp</h1>
+<h3>Skapa ny grupp</h3>
 <form ng-submit="createPool(newPool)" role="form">
   <div class="form-group">
     <input class="form-control" type="text" ng-model="newPool.title" placeholder="Namn" required></input>
@@ -10,7 +10,7 @@
       <option value="CLOSED">Stängd</option>
       <option value="SECRET">Hemlig</option>
     </select>
-    <button class="btn btn-standard" type="submit" ng-disabled="!newPool.title">
+    <button class="btn btn-default" type="submit" ng-disabled="!newPool.title">
       Skapa
     </button>
   </div>

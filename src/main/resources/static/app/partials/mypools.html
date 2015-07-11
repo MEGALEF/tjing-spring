@@ -1,39 +1,36 @@
-<div>
-  <h1>Mina grupper</h1>
- 
-  <div ng-hide="myMemberships && myMemberships.length >0">
-    Du är inte medlem i någon grupp än. Gå med i en grupp eller skapa en egen.
-  </div>
-  <ul class="list-unstyled">
-    <li ng-repeat="membership in myMemberships">
-      <tjing-pool pool="membership.pool"></tjing-pool> ({{membership.pool.nbrMembers}} medlemmar/{{membership.pool.nbrShares}} prylar)
-    </li>
-  </ul>
-  <hr/>
-   <p>
-    <a href="#newpool"><span class="glyphicon glyphicon-plus"></span>Skapa ny grupp
-    </a>
-  </p>
-  
-  <p><a href="#groupimport">Importera grupper från facebook</a></p>
-  
-  <hr/>
 
-  
-  <h2>Sök grupper</h2>
-  <form ng-submit="searchPools()" role="form" class="form-inline">
-    <div class="form-group">
-      <input class="form-control" type="text" ng-model="searchStr">
-    </div>
-    <button class="btn btn-standard" type="submit" title="Sök"><span class="glyphicon glyphicon-search"></span></button>
-  </form> 
-  
-  <div ng-show="searchResults">
-    <h3>Sökresultat</h3>
-    <ul class="list-unstyled">
-      <li ng-repeat="result in searchResults">
-        <tjing-pool pool=result></tjing-pool> ({{result.nbrMembers}} medlemmar/{{result.nbrShares}} prylar)
-      </li>
-    </ul> 
+<h3>Mina grupper</h3>
+<div class="well">
+<div ng-hide="myMemberships && myMemberships.length >0">
+  Du är inte medlem i någon grupp än. Gå med i en grupp eller skapa en egen.
+</div>
+<ul class="list-unstyled">
+  <li ng-repeat="membership in myMemberships">
+    <span ng-show="membership.pool.facebookId" class="social social-facebook"></span><tjing-pool pool="membership.pool"></tjing-pool> ({{membership.pool.nbrMembers}} medlemmar/{{membership.pool.nbrShares}} prylar)
+  </li>
+</ul>
+</div>
+<hr/>
+  <a href="#newpool"><span class="glyphicon glyphicon-plus"></span>Skapa ny grupp
+  </a>
+
+<a href="#groupimport">Importera grupper från facebook</a>
+
+<hr/>
+
+<h4>Sök grupper</h4>
+<form ng-submit="searchPools()" role="form" class="form-inline">
+  <div class="form-group">
+    <input class="form-control" type="text" ng-model="searchStr">
   </div>
+  <button class="btn btn-default" type="submit" title="Sök"><span class="glyphicon glyphicon-search"></span></button>
+</form> 
+
+<div ng-show="searchResults" class="well">
+  <h5>Sökresultat</h5>
+  <ul class="list-unstyled">
+    <li ng-repeat="result in searchResults">
+      <tjing-pool pool=result></tjing-pool> ({{result.nbrMembers}} medlemmar/{{result.nbrShares}} prylar)
+    </li>
+  </ul> 
 </div>

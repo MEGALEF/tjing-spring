@@ -1,6 +1,6 @@
-<h1>{{currentItem.title}}</h1>
+<h3>{{currentItem.title}}</h3>
 <div ng-show="currentItem.activeInteraction">
-(Utlånad)
+<p class="text-muted">(Utlånad)</p>
 </div>
 
 <div ng-show="currentItem.category">
@@ -14,12 +14,12 @@
 
 
 <div ng-show="!isOwner">
-	<h3>Ägare</h3>
+	<h4>Ägare</h4>
 	<tjing-user user="currentItem.owner"></tjing-user>
 </div>
 
 <div ng-show="isOwner">
-	<h3>Dela med</h3>
+	<h4>Dela med</h4>
 	<ul class="list-unstyled">
 		<li>
 			<input type="checkbox" ng-model="currentItem.sharedPublic" ng-click="updatePublic()"/> <b>Alla användare</b> 
@@ -44,7 +44,7 @@
 </div>
 <div ng-show="!isOwner">
 	<div class="form-group">
-		<h3>Skicka en låneförfrågan</h3>
+		<h4>Skicka en låneförfrågan</h4>
 		<form role="form">
 			<textarea class="form-control" ng-model="request.message"></textarea>
 		</form>

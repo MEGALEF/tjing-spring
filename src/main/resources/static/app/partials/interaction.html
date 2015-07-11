@@ -1,28 +1,31 @@
-<div>
+
 	<h2>
 		<tjing-user user="currentInteraction.borrower"></tjing-user>
 		vill låna  
 		<tjing-item item="currentInteraction.item"></tjing-item>
 	</h2>
+	
 	<h3>Meddelanden</h3>
-	<ul class="list-group">
-		<li ng-repeat="message in currentInteraction.conversation">
+	<div class="well well-lg">
+	<ul class="list-unstyled">
+		<li ng-repeat="message in currentInteraction.conversation" class="well well-sm">
 			<tjing-message message="message" owner="isOwner"></tjing-message>
 		</li>
 	</ul>
+	</div>
 
 	<div ng-show="isOwner">
 		<div ng-hide="currentInteraction.statusAccepted">
 
-			<button class="btn btn-standard" ng-disabled="currentInteraction.statusAccepted" ng-click="acceptRequest()">Acceptera</button>
-			<button class="btn btn-standard" ng-disabled="currentInteraction.statusAccepted" ng-click="denyRequest()">Neka</button>
+			<button class="btn btn-default" ng-disabled="currentInteraction.statusAccepted" ng-click="acceptRequest()">Acceptera</button>
+			<button class="btn btn-default" ng-disabled="currentInteraction.statusAccepted" ng-click="denyRequest()">Neka</button>
 		</div>
 		<div ng-show="currentInteraction.statusAccepted">
 			(Accepterades {{currentInteraction.statusAccepted | date}})
 		</div>
 		<div ng-show="currentInteraction.statusHandedOver">
 			(Överlämnad {{currentInteraction.statusHandedOver | date}})
-			<button class="btn btn-standard" ng-show="!currentInteraction.statusReturned" ng-click="confirmReturn()">Bekräfta retur</button>
+			<button class="btn btn-default" ng-show="!currentInteraction.statusReturned" ng-click="confirmReturn()">Bekräfta retur</button>
 		</div>
 	</div>
 
@@ -30,16 +33,15 @@
 		<div ng-show="currentInteraction.statusAccepted">(Accepterades {{currentInteraction.statusAccepted | date}})
 			<div ng-show="currentInteraction.statusHandedOver">(Överlämnad {{currentInteraction.statusHandedOver | date}})</div>
 		</div>
-		<button class="btn btn-standard" ng-hide="currentInteraction.statusHandedOver" ng-click="confirmHandover()">
+		<button class="btn btn-default" ng-hide="currentInteraction.statusHandedOver" ng-click="confirmHandover()">
 			Bekräfta överlämning
 		</button>
 	</div>
 
-	<form ng-submit="send()" role="form"><div class="form-group">
-
+	<form ng-submit="send()" role="form">
+		<div class="form-group">
 		<textarea class="form-control" rows="4" cols="50" ng-model="text" placeholder="Skriv ett meddelande.."></textarea>
 		<br/>
-		<input class="btn btn-standard" type="submit" value="Skicka"> 
+		<input class="btn btn-default" type="submit" value="Skicka"> 
 	</div>
 </form>
-</div>

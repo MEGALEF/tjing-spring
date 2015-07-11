@@ -1,33 +1,35 @@
-<div>
-  <h3>Andras prylar</h3>
-  <ul class="list-group">
-    <li class="list-group-item" ng-repeat="interaction in outgoingrequests">
-         <button class="btn btn-xs pull-right" ng-show="!interaction.active" ng-click="remove(interaction)">X</button>
-        <tjing-interaction interaction="interaction" user="currentUser"></tjing-interaction>
-        <button class="btn btn-standard" ng-show="interaction.statusAccepted && !interaction.statusHandedOver" ng-click="confirmHandover(interaction)">
-          Bekräfta överlämning
-        </button>
-    </li>
-  </ul>
-  
-  <hr/>
 
-  <h3>Dina prylar</h3>
+<h3>Andras prylar</h3>
+<div class="well">
   <ul class="list-group">
-    <li class="list-group-item" ng-repeat="interaction in incomingrequests">
+    <li class="list-group-item well" ng-repeat="interaction in outgoingrequests">
+     <button class="btn btn-xs pull-right" ng-show="!interaction.active" ng-click="remove(interaction)">X</button>
+     <tjing-interaction interaction="interaction" user="currentUser"></tjing-interaction>
+     <button class="btn btn-default" ng-show="interaction.statusAccepted && !interaction.statusHandedOver" ng-click="confirmHandover(interaction)">
+      Bekräfta överlämning
+    </button>
+  </li>
+</ul>
+</div>
+<hr/>
+
+<h3>Dina prylar</h3>
+<div class="well">
+  <ul class="list-group">
+    <li class="list-group-item well" ng-repeat="interaction in incomingrequests">
       <button class="btn btn-xs pull-right" ng-show="!interaction.active" ng-click="remove(interaction)">X</button>
       <tjing-interaction interaction="interaction" user="currentUser"></tjing-interaction>
       
       <div ng-show="!interaction.statusAccepted">
-          <button class="btn btn-standard" ng-disabled="interaction.statusAccepted" ng-click="acceptRequest(interaction)"> 
-            Acceptera
-          </button>
-          <button class="btn btn-standard" ng-disabled="interaction.statusAccepted" ng-click="denyRequest(interaction)">
-            Neka
-          </button>
-        </div>
+        <button class="btn btn-default" ng-disabled="interaction.statusAccepted" ng-click="acceptRequest(interaction)"> 
+          Acceptera
+        </button>
+        <button class="btn btn-default" ng-disabled="interaction.statusAccepted" ng-click="denyRequest(interaction)">
+          Neka
+        </button>
+      </div>
       <div ng-show="interaction.statusHandedOver && !interaction.statusReturned">
-        <button class="btn btn-standard" ng-click="confirmReturn(interaction)">
+        <button class="btn btn-default" ng-click="confirmReturn(interaction)">
           Bekräfta återlämning
         </button>
       </div>

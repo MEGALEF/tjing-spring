@@ -1,5 +1,5 @@
 <div class="form-group">
-  <h1>Lägg till en ny pryl</h1>
+  <h3>Lägg till en ny pryl</h3>
   <form role="form" ng-submit="addItem(newItem)">
     <input class="form-control" type="text" ng-model="newItem.title" placeholder="Titel" required/>
     <br/>
@@ -7,7 +7,7 @@
     <br>
     <textarea class="form-control" ng-model="newItem.description" placeholder="Beskrivning"></textarea>
     <br>    
-    <button type="submit" ng-disabled="!newItem.title" class="btn btn-standard">
+    <button type="submit" ng-disabled="!newItem.title" class="btn btn-default">
       <span class="glyphicon glyphicon-plus"></span>Lägg till
     </button>
   </form>

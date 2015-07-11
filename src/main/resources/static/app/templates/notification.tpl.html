@@ -1,5 +1,5 @@
 <div ng-switch="notification.type">
-  <span ng-hide="notification.read">*</span>
+  <span class="glyphicon glyphicon-exclamation-sign" ng-hide="notification.read"></span>
   <span ng-switch-when="INTERACTION">
     <a href="#interaction/{{notification.interaction.id}}" ng-switch="notification.event">
       <span ng-switch-when="INT_RET">
@@ -28,6 +28,9 @@
     Nytt meddelande från {{notification.message.author.firstName}}.
     </a>
   </span>
+
+
+
   <span ng-switch-default>
     {{notification.type}}
   </span>

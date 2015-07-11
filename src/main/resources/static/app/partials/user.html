@@ -1,9 +1,9 @@
-<h1>{{currentUser.firstName}} {{currentUser.lastName}}</h1>
+<h3>{{currentUser.firstName}} {{currentUser.lastName}}</h3>
 <img ng-src="{{currentUser.connection[0].imageurl}}">
 
-<h3>Plats</h3>
+<h4>Plats</h4>
 {{currentUser.locationStr}}
-<h3>Presentation</h3>
+<h4>Presentation</h4>
 {{currentUser.description}}
 <div ng-show="currentUser.connection[0]">
 
@@ -12,7 +12,7 @@
 </div>
 
 <div ng-show="items">
-	<h2>Prylar</h2>
+	<h4>Prylar</h4>
 	<ul class="list-unstyled">
 		<li ng-repeat="item in items">
 			<tjing-item item="item"></tjing-item>
