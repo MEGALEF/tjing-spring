@@ -49,6 +49,7 @@ public class MembershipService {
 		Pool pool = poolRepo.findOne(addMembership.getPool().getId());
 		Membership add = new Membership();
 		
+		
 		if (pool==null) throw new TjingException("No such pool");
 		
 		if (addMembership.getMember()!= null && addMembership.getMember().getUsername() != null){
@@ -66,6 +67,7 @@ public class MembershipService {
 				throw new TjingException("You don't have rights to add new members");
 			}
 		} else {
+			add.setPool(pool);
 			add.setMember(currentUser);
 			Membership result;
 

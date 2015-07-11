@@ -1,10 +1,15 @@
 package se.tjing.interactionmessage;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -15,6 +20,11 @@ import se.tjing.user.Person;
 
 @Entity
 public class InteractionMessage extends TjingEntity {
+	
+	@Column(name = "sent_time")
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+	@JsonIgnore
+	private DateTime sentTime;
 	
 	@ManyToOne
 	@JsonIgnoreProperties("connection")
@@ -116,6 +126,12 @@ public class InteractionMessage extends TjingEntity {
 
 	public void setRead(Boolean read) {
 		this.read = read;
+	}
+	
+	@PrePersist
+	public void prePersist() {
+		DateTime now = DateTime.now();
+		this.sentTime = now;
 	}
 
 }

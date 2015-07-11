@@ -219,9 +219,23 @@ public class InteractionService {
 				msg.setRecipient(interaction.getBorrower());
 			} else throw new TjingException("Nope");
 			
+			if(timePassedSinceLastMessage(msg.getRecipient())){
+				notifService.sendNotification(new Notification(msg.getInteraction(), msg.getRecipient(), EventType.INT_MESSAGE), true, true);
+			}
+			
 			return sendMessage(msg, false);
 		}
 		
+		private boolean timePassedSinceLastMessage(Person recipient) {
+		JPAQuery query = new JPAQuery(em);
+		QInteractionMessage table = QInteractionMessage.interactionMessage;
+		
+		query.from(table).where(table.sentTime.between(DateTime.now(), DateTime.now()
+				.minusMinutes(10)).and(table.recipient.eq(recipient)));
+		
+		return !query.exists();
+		}
+
 		private InteractionMessage sendMessage(InteractionMessage msg, boolean systemMessage){
 			msg.setSystemMessage(systemMessage);
 			InteractionMessage message = msgRepo.save(msg);

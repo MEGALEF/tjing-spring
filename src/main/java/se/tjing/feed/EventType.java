@@ -13,5 +13,6 @@ public enum EventType {
 	POOL_ADDED,
 	POOL_JOINED,
 	
-	ITEMREQUEST
+	ITEMREQUEST, 
+	INT_MESSAGE
 }

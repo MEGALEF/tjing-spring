@@ -12,6 +12,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
+
+import org.springframework.beans.factory.annotation.Value;
 
 import se.tjing.common.TjingEntity;
 import se.tjing.feed.Notification;
@@ -33,10 +36,8 @@ public class Membership extends TjingEntity {
 	Integer id;
 	
 	@ManyToOne
+	@NotNull
 	private Person member;
-
-	@OneToMany(mappedBy="membership", cascade=CascadeType.ALL)
-	private List<Notification> notifications;
 
 	@OneToOne
 	private Pool notifyPool = null;
@@ -46,6 +47,7 @@ public class Membership extends TjingEntity {
 	private Person notifyUser = null;
 
 	@ManyToOne
+	@NotNull
 	private Pool pool;
 
 	public Membership() {
