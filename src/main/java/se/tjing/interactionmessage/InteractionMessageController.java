@@ -25,24 +25,27 @@ public class InteractionMessageController {
 	@Autowired
 	InteractionService interactionService;
 	
+	@Autowired
+	InteractionMessageService msgService;
+	
 	@Autowired 
 	PersonService personService;
 	
 	@RequestMapping(method=RequestMethod.GET)
 	public ResponseEntity<List<InteractionMessage>> getUnread(){
-		List<InteractionMessage> result = interactionService.getUnread(personService.getCurrentUser());
+		List<InteractionMessage> result = msgService.getUnread(personService.getCurrentUser());
 		return new ResponseEntity<List<InteractionMessage>>(result, null, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="{messageId}", method=RequestMethod.PATCH)
 	public ResponseEntity<InteractionMessage> markAsRead(@PathVariable Integer messageId, @RequestBody InteractionMessage update){
-		InteractionMessage result = interactionService.updateMessage(personService.getCurrentUser(), update);
+		InteractionMessage result = msgService.updateMessage(personService.getCurrentUser(), update);
 		return new ResponseEntity<InteractionMessage>(result, null, HttpStatus.ACCEPTED);
 	}
 	
 	@RequestMapping(method=RequestMethod.POST)
 	public ResponseEntity<InteractionMessage> sendMessage(@RequestBody InteractionMessage msg){
-		InteractionMessage result = interactionService.relayMessage(personService.getCurrentUser(), msg);
+		InteractionMessage result = msgService.relayMessage(personService.getCurrentUser(), msg);
 		
 		return new ResponseEntity<InteractionMessage>(result, null, HttpStatus.ACCEPTED);
 	}

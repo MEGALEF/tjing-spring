@@ -334,8 +334,8 @@
   }]);
 
  angular.module("tjingApp.controllers").controller("InteractionController",
-  ["$scope", "$routeParams", "Interaction", "User", "Notifications", "InteractionMessage",
-  function($scope, $routeParams, Interaction, User, Notifications, InteractionMessage){
+  ["$scope", "$routeParams","$location", "Interaction", "User", "Notifications", "InteractionMessage",
+  function($scope, $routeParams, $location, Interaction, User, Notifications, InteractionMessage){
 
     $scope.currentInteraction = {};  
     $scope.isOwner = null;
@@ -378,6 +378,7 @@
     $scope.denyRequest = function(){
       Interaction.delete({id: $scope.currentInteraction.id}, function(response){
         $scope.currentInteraction = response;
+        $location.path('/interactions');
       });
     }
 

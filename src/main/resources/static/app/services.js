@@ -38,9 +38,6 @@
       update: {
         method: "PATCH"
       },
-      remove: {
-        method: "DELETE"
-      },
       request:{
         method:"POST",
         url: itemlURL + '/request'
@@ -123,10 +120,6 @@
       accept: {
         method:"PATCH",
         url: interactionURL +'/accept'
-      },
-      deny: {
-        method:"DELETE",
-        url: interactionURL +'/deny'
       },
       handoverconfirm:{
         method:"PATCH",

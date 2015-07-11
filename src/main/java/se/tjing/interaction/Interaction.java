@@ -88,7 +88,7 @@ public class Interaction extends TjingEntity{
 		this.statusRequested = now;
 	}
 	
-	public boolean getActive(){
+	public boolean isActive(){
 		if (this.statusAccepted == null || this.statusRequested!=null) return false;
 		else return true;
 	}

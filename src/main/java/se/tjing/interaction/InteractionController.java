@@ -62,25 +62,6 @@ public class InteractionController {
 		return new ResponseEntity<Interaction>(result, null, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/{interactionId}/deny", method = RequestMethod.DELETE)
-	public ResponseEntity<Interaction> denyRequest(
-			@PathVariable Integer interactionId) {
-		Interaction result = interactionService.deny(interactionId,
-				personService.getCurrentUser());
-		return new ResponseEntity<Interaction>(result, null, HttpStatus.OK);
-	}
-	
-	/**
-	 * Cancels an interaction. Similar to deny except it can be done to an accepted interaction and should leave a mark on the users interaction history
-	 * @param interactionId
-	 * @return
-	 */
-	@RequestMapping(value ="{interactionId}/cancel", method = RequestMethod.PATCH)
-	public ResponseEntity<Interaction> cancelRequest(@PathVariable Integer interactionId){
-		Interaction result = interactionService.hide(interactionId, personService.getCurrentUser());
-		return new ResponseEntity<Interaction>(result, null, HttpStatus.OK);
-	}
-
 	/**
 	 * Confirm that the physical item has been handed over to the requesting
 	 * user.
@@ -129,7 +110,6 @@ public class InteractionController {
 	 * 
 	 * @return
 	 */
-	@ApiOperation(value = "Returns active interactions created by the user (requests)")
 	@RequestMapping(value = "/outgoing", method = RequestMethod.GET)
 	public ResponseEntity<List<Interaction>> getOutgoingRequests() {
 		List<Interaction> result = interactionService.getOutgoing(personService
@@ -158,7 +138,7 @@ public class InteractionController {
 	}
 	
 	@RequestMapping(value="{interactionId}", method=RequestMethod.DELETE)
-	public ResponseEntity<Object> cancelInteraction(@PathVariable Integer interactionId){
+	public ResponseEntity<Object> hide(@PathVariable Integer interactionId){
 		interactionService.hide(interactionId, personService.getCurrentUser());
 		return new ResponseEntity<Object>(null, null, HttpStatus.ACCEPTED);
 	}
