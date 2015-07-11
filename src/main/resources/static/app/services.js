@@ -66,7 +66,13 @@
   }]);
 
   tjingServices.factory('Feed', ['$resource', function($resource){
-    return $resource('/feed/:id', {});
+    return $resource('/notifications/:id', {
+      id:"@id"
+    },{
+      update:{
+        method:"PATCH"
+      }
+    });
   }]);
 
   tjingServices.factory("Share", ["$resource", function($resource){
@@ -168,12 +174,13 @@
     return $resource("/itemcategory");
   }]);
 
-  tjingServices.factory("Notifications",["$rootScope", "InteractionMessage", function($rootScope, InteractionMessage){
+  tjingServices.factory("Notifications",["$rootScope", "InteractionMessage","Feed", function($rootScope, InteractionMessage, Feed){
     var Service = function(){
       var self = this;
 
       self.newNotification = null;
       self.notifications = [];
+      self.notifTick=0;
 
       self.tick=0;
       self.unread=[];
@@ -183,6 +190,11 @@
         self.unread = response;
         self.tick++;
       }); 
+
+      Feed.query({}, function(response){
+        self.notifications = response;
+        self.notifTick++;
+      })
 
       self.markAsRead = function(interactionId){
         for(i=0; i<self.unread.length; i++){
@@ -202,6 +214,7 @@
             var notification = JSON.parse(data.body);
             self.notifications.unshift(notification);
             self.newNotification = notification;
+            self.notifTick++;
             $rootScope.$apply();
           });
 

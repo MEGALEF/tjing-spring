@@ -12,6 +12,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.stereotype.Service;
 
+import se.tjing.exception.TjingException;
 import se.tjing.pool.PoolService;
 import se.tjing.user.Person;
 
@@ -85,5 +86,16 @@ public class NotificationService {
 	
 	public void sendWebNotification(Notification notif){
 		simpTpl.convertAndSendToUser(notif.getTarget().getUsername(), "/queue/notifications/", notif);
+	}
+
+	public Notification markAsRead(Notification notif) {
+		if (notif.getId()==null)throw new TjingException("Error");
+		int id = notif.getId();
+		
+		JPAQuery query = new JPAQuery(em);
+		query.from(QNotification.notification).where(QNotification.notification.id.eq(id));
+		Notification not = query.singleResult(QNotification.notification);
+		not.setRead(notif.getRead());
+		return notifRepo.save(not);
 	}
 }

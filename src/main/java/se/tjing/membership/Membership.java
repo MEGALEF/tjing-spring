@@ -16,6 +16,8 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Value;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import se.tjing.common.TjingEntity;
 import se.tjing.notification.Notification;
 import se.tjing.pool.Pool;
@@ -39,16 +41,13 @@ public class Membership extends TjingEntity {
 	@NotNull
 	private Person member;
 
-	@OneToOne
-	private Pool notifyPool = null;
-	
-
-	@OneToOne
-	private Person notifyUser = null;
-
 	@ManyToOne
 	@NotNull
 	private Pool pool;
+	
+	@OneToMany(mappedBy="membership", cascade=CascadeType.ALL)
+	@JsonIgnore
+	private List<Notification> notifications;
 
 	public Membership() {
 	}

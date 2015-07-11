@@ -1,5 +1,6 @@
 package se.tjing.notification;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,19 +26,21 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonInclude(Include.NON_NULL)
 public class Notification extends BaseEntity {
 	
+	private Boolean read = false;
+	
 	private EventType event;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	Integer id;
+	private Integer id;
 	
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.ALL)
 	private Interaction interaction;
 	
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.ALL)
 	private ItemRequest itemrequest;
 	
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.ALL)
 	private Membership membership;
 	
 	@ManyToOne
@@ -142,5 +145,13 @@ public class Notification extends BaseEntity {
 
 	public void setType(NotificationType type) {
 		this.type = type;
+	}
+
+	public Boolean getRead() {
+		return read;
+	}
+
+	public void setRead(Boolean read) {
+		this.read = read;
 	}
 }

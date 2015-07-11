@@ -1,5 +1,6 @@
 <div ng-switch="notification.type">
-  <div ng-switch-when="INTERACTION">
+  <span ng-hide="notification.read">*</span>
+  <span ng-switch-when="INTERACTION">
     <a href="#interaction/{{notification.interaction.id}}" ng-switch="notification.event">
       <span ng-switch-when="INT_RET">
         {{notification.interaction.item.owner.firstName}} bekräftade återlämning av {{notification.interaction.item.title}}.
@@ -17,17 +18,17 @@
         {{notification.interaction.borrower.firstName}} vill låna {{notification.interaction.item.title}}.
       </span>
     </a>
-  </div>
-  <div ng-switch-when="ITEMREQUEST">
+  </span>
+  <span ng-switch-when="ITEMREQUEST">
     <tjing-itemrequest itemrequest="feedItem.itemrequest"></tjing-itemrequest>
-  </div>
+  </span>
 
-  <div ng-switch-when="MESSAGE">
+  <span ng-switch-when="MESSAGE">
     <a href="#/interaction/{{notification.message.interaction.id}}">
     Nytt meddelande från {{notification.message.author.firstName}}.
     </a>
-  </div>
-  <div ng-switch-default>
+  </span>
+  <span ng-switch-default>
     {{notification.type}}
-  </div>
+  </span>
 </div>

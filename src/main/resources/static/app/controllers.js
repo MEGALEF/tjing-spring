@@ -208,18 +208,37 @@
   function($scope, $location, $http, User, Feed, Notifications, InteractionMessage){
 
     $scope.searchResult = [];
-    $scope.feedItems = Feed.query();
+    
     $scope.notifService = Notifications;
+
+    $scope.feedItems = function(){
+      return Notifications.notifications;
+    }
 
     $scope.unreadMsgs = function(){
       return Notifications.unread;
     };
 
-    $scope.$watch('notifService.newNotification', function(newVal, oldVal, scope){
-      if(newVal){
-        $scope.feedItems.unshift(newVal);
+    $scope.newNotifs = function(){
+      for (i=0; i<Notifications.notifications.length; i++){
+        if (!Notifications.notifications[i].read){
+          return true;
+        }
       }
-    });
+      return false;
+    }
+
+    $scope.notifToggle = function(){
+      for (i=0; i<Notifications.notifications.length; i++){
+        var notif = Notifications.notifications[i];
+        if (notif.read==false){
+          notif.read = true;
+          Feed.update({id: notif.id, read: true}, function(response){
+          });  
+        }
+      }
+      Notifications.newNotification = null;
+    }
 
     $scope.currentUser = User.current(function(data){
        //connect();
