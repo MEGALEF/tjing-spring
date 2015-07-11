@@ -27,12 +27,12 @@ public abstract class BaseEntity {
 	@Column(name = "creation_time", nullable = false)
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	@JsonIgnore
-	private DateTime creationTime;
+	protected DateTime creationTime;
 
 	@Column(name = "modification_time", nullable = false)
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	@JsonIgnore
-	private DateTime modificationTime;
+	protected DateTime modificationTime;
 
 	@Version
 	@JsonIgnore

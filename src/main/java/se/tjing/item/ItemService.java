@@ -73,26 +73,28 @@ public class ItemService {
 		return itemRepo.save(item);
 	}
 
-	public List<Item> getAvailableItemsToUser(Person user) {
+	public List<Item> getAvailableItems(Person user, Integer limit) {
 		QItem item = QItem.item;
 		QShare share = QShare.share;
 		QPool pool = QPool.pool;
 		QMembership membership = QMembership.membership;
 		
-		//"Get all items shared with groups I am a member of and are not owned by me"
+		//"Get all items shared with groups I am a member of"
 		JPAQuery query = new JPAQuery(em).from(item)
 				.leftJoin(item.shares, share)
 				.leftJoin(share.pool, pool)
 				.leftJoin(pool.memberships, membership)
-				.where(itemIsAvailableToUser(user));
+				.where(itemIsAvailableToUser(user)).limit(limit);
 		List<Item> result = query.distinct().list(item);
 
 		//Get facebook shared items
-		List<Person> fbFriends = personService.getUsersFacebookFriends(user);
-		JPAQuery fbquery = new JPAQuery(em);
-		fbquery.from(item).where(item.owner.in(fbFriends).and(item.fbAvailable.isTrue()));
-		
-		result.addAll(fbquery.list(item));
+//		List<Person> fbFriends = personService.getUsersFacebookFriends(user);
+//		JPAQuery fbquery = new JPAQuery(em);
+//		fbquery.from(item)
+//		.where(item.owner.in(fbFriends).and(item.fbAvailable.isTrue()))
+//		.limit(limit);
+
+//		result.addAll(fbquery.list(item));
 
 		return result;
 	}
@@ -148,13 +150,19 @@ public class ItemService {
 		return query.exists();
 	}
 
+	private BooleanExpression itemIsAvailableToUserExcludingUser(Person user){
+		QItem item = QItem.item;
+		
+		return itemIsAvailableToUser(user)
+				.and(item.owner.ne(user));
+	}
+	
 	private BooleanExpression itemIsAvailableToUser(Person user){
 		QMembership membership = QMembership.membership;
 		QItem item = QItem.item;
 		
 		return membership.member.eq(user).and(membership.approved.isTrue())
-				.or(item.sharedPublic.isTrue())
-				.and(item.owner.ne(user));
+				.or(item.sharedPublic.isTrue());
 	}
 
 	public void removeItem(Person user, Integer itemId) {
@@ -180,7 +188,7 @@ public class ItemService {
 		.leftJoin(item.shares, share)
 		.leftJoin(share.pool, pool)
 		.leftJoin(pool.memberships, membership)
-		.where(itemIsAvailableToUser(person).or(item.sharedPublic.isTrue())
+		.where(itemIsAvailableToUserExcludingUser(person).or(item.sharedPublic.isTrue())
 				.and(item.title.containsIgnoreCase(searchStr)));
 		//TODO add facebook items
 
@@ -217,7 +225,7 @@ public class ItemService {
 				.leftJoin(item.shares, share)
 				.leftJoin(share.pool, pool)
 				.leftJoin(pool.memberships, membership)
-				.where(itemIsAvailableToUser(currentUser).and(item.owner.eq(otherUser)));
+				.where(itemIsAvailableToUserExcludingUser(currentUser).and(item.owner.eq(otherUser)));
 		
 		return query.list(item);
 	}

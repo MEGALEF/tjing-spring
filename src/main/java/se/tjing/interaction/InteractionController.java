@@ -77,7 +77,7 @@ public class InteractionController {
 	 */
 	@RequestMapping(value ="{interactionId}/cancel", method = RequestMethod.PATCH)
 	public ResponseEntity<Interaction> cancelRequest(@PathVariable Integer interactionId){
-		Interaction result = interactionService.cancel(interactionId, personService.getCurrentUser());
+		Interaction result = interactionService.hide(interactionId, personService.getCurrentUser());
 		return new ResponseEntity<Interaction>(result, null, HttpStatus.OK);
 	}
 
@@ -119,7 +119,7 @@ public class InteractionController {
 	@RequestMapping(value = "/incoming", method = RequestMethod.GET)
 	public ResponseEntity<List<Interaction>> getIncomingRequests() {
 		List<Interaction> result = interactionService
-				.getUserIncomingInteractions(personService.getCurrentUser());
+				.getIncoming(personService.getCurrentUser());
 		return new ResponseEntity<List<Interaction>>(result, null,
 				HttpStatus.OK);
 	}
@@ -159,7 +159,7 @@ public class InteractionController {
 	
 	@RequestMapping(value="{interactionId}", method=RequestMethod.DELETE)
 	public ResponseEntity<Object> cancelInteraction(@PathVariable Integer interactionId){
-		interactionService.cancel(interactionId, personService.getCurrentUser());
+		interactionService.hide(interactionId, personService.getCurrentUser());
 		return new ResponseEntity<Object>(null, null, HttpStatus.ACCEPTED);
 	}
 }

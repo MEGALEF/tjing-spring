@@ -63,7 +63,10 @@ public class ItemController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<List<Item>> getItems(@RequestParam(value = "param", required=false) String param, @RequestParam(value="owner", required=false) Integer ownerId) {
+	public ResponseEntity<List<Item>> getItems(
+			@RequestParam(value = "param", required=false) String param, 
+			@RequestParam(value="owner", required=false) Integer ownerId, 
+			@RequestParam(value="limit", defaultValue="20") Integer limit) {
 		List<Item> result;
 		Person currentUser = personService.getCurrentUser();
 		if(ownerId != null){
@@ -72,10 +75,8 @@ public class ItemController {
 		else {
 			if ("owned".equals(param)){
 				result = itemService.getUsersItems(currentUser);
-			} else if ("borrowed".equals(param)){
-				result = itemService.getUsersBorrowedItems(currentUser);
 			} else {
-				result = itemService.getAvailableItemsToUser(currentUser);
+				result = itemService.getAvailableItems(currentUser, limit);
 			}
 		}
 		

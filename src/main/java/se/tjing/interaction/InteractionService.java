@@ -21,9 +21,11 @@ import se.tjing.item.Item;
 import se.tjing.item.ItemRepository;
 import se.tjing.item.ItemService;
 import se.tjing.item.QItem;
+import se.tjing.membership.QMembership;
 import se.tjing.user.Person;
 
 import com.mysema.query.jpa.impl.JPAQuery;
+import com.mysema.query.types.expr.BooleanExpression;
 
 @Service
 public class InteractionService {
@@ -98,50 +100,48 @@ public class InteractionService {
 
 	public List<Interaction> getOutgoing(Person person) {
 		QInteraction interaction = QInteraction.interaction;
+		QInteractionMessage message = QInteractionMessage.interactionMessage;
 		JPAQuery query = new JPAQuery(em);
-		query.from(interaction).where(
-				interaction.borrower.eq(person).and(interaction.deleted.isFalse()));
-						//.and(interaction.active.isTrue()));
+		
+		query.from(interaction)
+		.leftJoin(interaction.conversation, message)
+		.where(
+				interaction.borrower.eq(person)
+				.and(messagesIsCurrent()
+						.and(interaction.borrowerHidden.isFalse()))).distinct();
+		
 		return query.list(interaction);
 	}
+	
+
 
 	/**
 	 * Gets a list of a users incoming interactions, ie interactions on items
 	 * owned by the user
 	 */
-	public List<Interaction> getUserIncomingInteractions(Person person) {
+	public List<Interaction> getIncoming(Person person) {
 		QInteraction interaction = QInteraction.interaction;
+		QInteractionMessage message = QInteractionMessage.interactionMessage;
+		
 		QItem item = QItem.item;
 		JPAQuery query = new JPAQuery(em).from(interaction)
+				.leftJoin(interaction.conversation, message)
 				.leftJoin(interaction.item, item)
-				.where(item.owner.eq(person).and(interaction.deleted.isFalse()));
-						//.and(interaction.active.isTrue()));
+				.where(
+						item.owner.eq(person)
+						.and(messagesIsCurrent()
+								.and(interaction.ownerHidden.isFalse()))).distinct();
 		return query.list(interaction);
 	}
 
-	private boolean isPersonItemOwner(Person p, Interaction i) {
-		if (!p.getId().equals(i.getItem().getOwner().getId())) {
-			return false;
-		} else {
-			return true;
-		}
-	}
-
-	private boolean isPersonBorrower(Person p, Interaction i) {
-		if (!p.getId().equals(i.getBorrower().getId())) {
-			return false;
-		} else {
-			return true;
-		}
-	}
-
+	
 	public Interaction deny(Integer interactionId, Person user) {
 		Interaction interaction = interactionRepo.findOne(interactionId);
 		if (interaction.getStatusAccepted() != null) {
 			throw new TjingException(
 					"The interaction has already been accepted.");
 		}
-		return this.cancel(interactionId, user);
+		return this.hide(interactionId, user);
 	}
 
 	public List<Interaction> getUserInteractions(Person currentUser) {
@@ -154,7 +154,7 @@ public class InteractionService {
 		return query.list(interaction);
 	}
 
-	public Interaction cancel(Integer interactionId, Person currentUser) { //TODO: Maybe this isn't useful
+	public Interaction hide(Integer interactionId, Person currentUser) { //TODO: Maybe this isn't useful
 		Interaction interaction = interactionRepo.findOne(interactionId);
 		if (!isPersonItemOwner(currentUser, interaction) && !isPersonBorrower(currentUser, interaction)){
 			throw new TjingException("Only parties of the interaction may do this");
@@ -162,8 +162,12 @@ public class InteractionService {
 			if (interaction.getActive()){
 				throw new TjingException("Can't delete an undergoing Interaction"); 
 			} else {
-				interaction.setDeleted(true);
-				interaction.setStatusCancelled(DateTime.now());
+				if (isPersonItemOwner(currentUser, interaction)) interaction.setOwnerHidden(true);
+				else if (isPersonBorrower(currentUser, interaction)) interaction.setBorrowerHidden(true);
+				if (interaction.getBorrowerHidden() && interaction.getOwnerHidden()){
+					interaction.setDeleted(true);
+					interaction.setStatusCancelled(DateTime.now());
+				}
 				return interactionRepo.save(interaction);
 			} 
 		}
@@ -202,16 +206,16 @@ public class InteractionService {
 			}
 		}
 
-		private boolean isAccessibleToUser(Person user,
-				Interaction interaction) {
-			if (isPersonBorrower(user, interaction) || isPersonItemOwner(user, interaction) ){
-				return true;
-			} else return false;
-		}
+		
 		
 		public InteractionMessage relayMessage(Person sender, InteractionMessage msg){
 			msg.setAuthor(sender);
 			Interaction interaction = interactionRepo.findOne(msg.getInteraction().getId());
+			if (interaction.getBorrowerHidden() || interaction.getOwnerHidden()){
+				interaction.setBorrowerHidden(false);
+				interaction.setOwnerHidden(false);
+				interactionRepo.save(interaction);
+			}
 			
 			if (sender.getId().equals(interaction.getBorrower().getId())){
 				msg.setRecipient(interaction.getItem().getOwner());
@@ -224,24 +228,6 @@ public class InteractionService {
 			}
 			
 			return sendMessage(msg, false);
-		}
-		
-		private boolean timePassedSinceLastMessage(Person recipient) {
-		JPAQuery query = new JPAQuery(em);
-		QInteractionMessage table = QInteractionMessage.interactionMessage;
-		
-		query.from(table).where(table.sentTime.between(DateTime.now(), DateTime.now()
-				.minusMinutes(10)).and(table.recipient.eq(recipient)));
-		
-		return !query.exists();
-		}
-
-		private InteractionMessage sendMessage(InteractionMessage msg, boolean systemMessage){
-			msg.setSystemMessage(systemMessage);
-			InteractionMessage message = msgRepo.save(msg);
-			
-			msgTpl.convertAndSendToUser(message.getRecipient().getUsername(), TjingURL.INTERACTION_MESSAGING_OUT, message);
-			return message;
 		}
 
 		public List<InteractionMessage> getUnread(Person currentUser) {
@@ -276,4 +262,63 @@ public class InteractionService {
 				return msgRepo.save(msg);
 			} return msg;			
 		}
+		
+		
+		/**
+		 * Private methods below
+		 * 
+		 */
+		
+		private InteractionMessage sendMessage(InteractionMessage msg, boolean systemMessage){
+			msg.setSystemMessage(systemMessage);
+			InteractionMessage message = msgRepo.save(msg);
+			
+			msgTpl.convertAndSendToUser(message.getRecipient().getUsername(), TjingURL.INTERACTION_MESSAGING_OUT, message);
+			return message;
+		}
+		
+		private BooleanExpression messagesIsCurrent(){
+			QInteractionMessage message = QInteractionMessage.interactionMessage;
+			
+			DateTime now = DateTime.now();
+			DateTime then = DateTime.now().minusWeeks(1);
+			
+			return message.sentTime.between(then, now)
+					.or(message.read.isFalse()); 
+			
+		}
+		
+		private boolean isAccessibleToUser(Person user,
+				Interaction interaction) {
+			if (isPersonBorrower(user, interaction) || isPersonItemOwner(user, interaction) ){
+				return true;
+			} else return false;
+		}
+		
+		private boolean timePassedSinceLastMessage(Person recipient) {
+			JPAQuery query = new JPAQuery(em);
+			QInteractionMessage table = QInteractionMessage.interactionMessage;
+			
+			query.from(table).where(table.sentTime.between(DateTime.now(), DateTime.now()
+					.minusMinutes(10)).and(table.recipient.eq(recipient)));
+			
+			return !query.exists();
+			}
+		
+		private boolean isPersonItemOwner(Person p, Interaction i) {
+			if (!p.getId().equals(i.getItem().getOwner().getId())) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+
+		private boolean isPersonBorrower(Person p, Interaction i) {
+			if (!p.getId().equals(i.getBorrower().getId())) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+		
 }

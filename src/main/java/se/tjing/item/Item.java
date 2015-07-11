@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,6 +12,10 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
+
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
 
 import se.tjing.common.TjingEntity;
 import se.tjing.image.ItemPicture;
@@ -29,6 +34,8 @@ public class Item extends TjingEntity {
 	private Integer id;
 
 	private String description;
+	
+	private DateTime addedTime;
 	
 	@OneToOne
 	private ItemCategory category;
@@ -160,6 +167,14 @@ public class Item extends TjingEntity {
 
 	public void setCategory(ItemCategory category) {
 		this.category = category;
+	}
+	
+	@PrePersist
+	public void prePersist() {
+		DateTime now = DateTime.now();
+		this.creationTime = now;
+		this.modificationTime = now;
+		this.addedTime = now;
 	}
 
 }

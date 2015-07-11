@@ -21,7 +21,6 @@ import se.tjing.user.Person;
 @Entity
 public class InteractionMessage extends TjingEntity {
 	
-	@Column(name = "sent_time")
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	@JsonIgnore
 	private DateTime sentTime;
@@ -131,7 +130,8 @@ public class InteractionMessage extends TjingEntity {
 	@PrePersist
 	public void prePersist() {
 		DateTime now = DateTime.now();
+		this.creationTime = now;
+		this.modificationTime = now;
 		this.sentTime = now;
 	}
-
 }

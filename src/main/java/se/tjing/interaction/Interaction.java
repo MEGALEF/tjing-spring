@@ -32,6 +32,9 @@ public class Interaction extends TjingEntity{
 	@JsonIgnoreProperties("connection")
 	private Person borrower;
 	
+	private Boolean borrowerHidden = false;
+	private Boolean ownerHidden = false;
+	
 	@JsonIgnore
 	private  Boolean deleted = false;
 
@@ -177,6 +180,22 @@ public class Interaction extends TjingEntity{
 
 	public void setStatusReturned(DateTime statusReturned) {
 		this.statusReturned = statusReturned;
+	}
+
+	public Boolean getBorrowerHidden() {
+		return borrowerHidden;
+	}
+
+	public void setBorrowerHidden(Boolean borrowerHidden) {
+		this.borrowerHidden = borrowerHidden;
+	}
+
+	public Boolean getOwnerHidden() {
+		return ownerHidden;
+	}
+
+	public void setOwnerHidden(Boolean ownerHidden) {
+		this.ownerHidden = ownerHidden;
 	}
 
 }

@@ -406,8 +406,8 @@
   }]);
 
  angular.module("tjingApp.controllers").controller("HomeController",
-  ["$scope", function($scope){
-
+  ["$scope", "Item", function($scope, Item){
+    $scope.recentItems = Item.query();
   }]);
 
  angular.module("tjingApp.controllers").controller("PoolController", 
