@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 
 import se.tjing.common.TjingEntity;
-import se.tjing.feed.Notification;
+import se.tjing.notification.Notification;
 import se.tjing.pool.Pool;
 import se.tjing.pool.PoolRole;
 import se.tjing.user.Person;

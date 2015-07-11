@@ -32,6 +32,7 @@ import se.tjing.user.Person;
 import se.tjing.user.PersonService;
 
 import com.mysema.query.jpa.impl.JPAQuery;
+import com.mysema.query.types.OrderSpecifier;
 import com.mysema.query.types.expr.BooleanExpression;
 
 @Service
@@ -84,7 +85,7 @@ public class ItemService {
 				.leftJoin(item.shares, share)
 				.leftJoin(share.pool, pool)
 				.leftJoin(pool.memberships, membership)
-				.where(itemIsAvailableToUser(user)).limit(limit);
+				.where(itemIsAvailableToUser(user)).orderBy(item.addedTime.desc()).limit(limit);
 		List<Item> result = query.distinct().list(item);
 
 		//Get facebook shared items
@@ -170,7 +171,7 @@ public class ItemService {
 		if (!item.getOwner().equals(user)){
 			throw new TjingException("Only the item owner may delete it");
 		} else if (item.getActiveInteraction() != null){
-			throw new TjingException("This item is in active transaction"); //TODO: PRobabla stuff to do here
+			throw new TjingException("This item is in active transaction");
 		} else {
 			shareRepo.delete(item.getShares());
 			interactionRepo.delete(item.getInteractions());

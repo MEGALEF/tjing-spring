@@ -1,4 +1,4 @@
-package se.tjing.feed;
+package se.tjing.notification;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +68,7 @@ public class NotificationService {
 		message.setTo(notif.getTarget().getUsername());
 		message.setFrom("johannes@tribeofsales.com");
 		message.setSubject("[Tjing] Notis"); //TODO
-		message.setText("Det har hänt någonting på ditt Tjing-konto. Gå dit och kolla!"); //TODO
+		message.setText("Någon vill dig något på Tjing. Gå dit och kolla! \n\n\nPS: De här mailen är fula och går inte att stänga av i appen. I framtiden kommer de vara både snygga och avstängningsbara :) \n/Johannes"); //TODO
 		mailSender.send(message);
 	}
 	

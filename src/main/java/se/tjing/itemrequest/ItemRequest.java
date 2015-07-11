@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import se.tjing.common.TjingEntity;
-import se.tjing.feed.Notification;
+import se.tjing.notification.Notification;
 import se.tjing.user.Person;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

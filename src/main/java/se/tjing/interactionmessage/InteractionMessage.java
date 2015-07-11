@@ -37,6 +37,14 @@ public class InteractionMessage extends TjingEntity {
 	@ManyToOne
 	private Interaction interaction;
 	
+	public DateTime getSentTime() {
+		return sentTime;
+	}
+
+	public void setSentTime(DateTime sentTime) {
+		this.sentTime = sentTime;
+	}
+
 	@ManyToOne
 	@JsonIgnoreProperties("connection")
 	private Person recipient;

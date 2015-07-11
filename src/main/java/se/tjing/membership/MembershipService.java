@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 import com.mysema.query.jpa.impl.JPAQuery;
 
 import se.tjing.exception.TjingException;
-import se.tjing.feed.EventType;
-import se.tjing.feed.Notification;
-import se.tjing.feed.NotificationService;
+import se.tjing.notification.EventType;
+import se.tjing.notification.Notification;
+import se.tjing.notification.NotificationService;
 import se.tjing.pool.Pool;
 import se.tjing.pool.PoolRepository;
 import se.tjing.pool.PoolRole;

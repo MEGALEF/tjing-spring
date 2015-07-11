@@ -11,9 +11,6 @@ import org.springframework.stereotype.Service;
 
 import se.tjing.TjingURL;
 import se.tjing.exception.TjingException;
-import se.tjing.feed.EventType;
-import se.tjing.feed.Notification;
-import se.tjing.feed.NotificationService;
 import se.tjing.interactionmessage.InteractionMessage;
 import se.tjing.interactionmessage.InteractionMessageRepository;
 import se.tjing.interactionmessage.QInteractionMessage;
@@ -22,6 +19,9 @@ import se.tjing.item.ItemRepository;
 import se.tjing.item.ItemService;
 import se.tjing.item.QItem;
 import se.tjing.membership.QMembership;
+import se.tjing.notification.EventType;
+import se.tjing.notification.Notification;
+import se.tjing.notification.NotificationService;
 import se.tjing.user.Person;
 
 import com.mysema.query.jpa.impl.JPAQuery;
@@ -223,8 +223,10 @@ public class InteractionService {
 				msg.setRecipient(interaction.getBorrower());
 			} else throw new TjingException("Nope");
 			
-			if(timePassedSinceLastMessage(msg.getRecipient())){
-				notifService.sendNotification(new Notification(msg.getInteraction(), msg.getRecipient(), EventType.INT_MESSAGE), true, true);
+			boolean sendNotif = !recentMessages(msg.getRecipient());
+			msg = msgRepo.save(msg);
+			if(sendNotif){
+				notifService.sendNotification(new Notification(msg, msg.getRecipient(), EventType.INT_MESSAGE), true, true);
 			}
 			
 			return sendMessage(msg, false);
@@ -295,14 +297,18 @@ public class InteractionService {
 			} else return false;
 		}
 		
-		private boolean timePassedSinceLastMessage(Person recipient) {
+		private boolean recentMessages(Person recipient) {
 			JPAQuery query = new JPAQuery(em);
 			QInteractionMessage table = QInteractionMessage.interactionMessage;
 			
-			query.from(table).where(table.sentTime.between(DateTime.now(), DateTime.now()
-					.minusMinutes(10)).and(table.recipient.eq(recipient)));
+			DateTime now = DateTime.now();
+			DateTime then = now.minusMinutes(10);
 			
-			return !query.exists();
+			query.from(table)
+			.where(table.recipient.eq(recipient).and(table.sentTime.after(then)));
+			
+			boolean result = query.exists();
+			return result;
 			}
 		
 		private boolean isPersonItemOwner(Person p, Interaction i) {

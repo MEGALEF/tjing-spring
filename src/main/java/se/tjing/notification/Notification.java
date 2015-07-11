@@ -1,4 +1,4 @@
-package se.tjing.feed;
+package se.tjing.notification;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +10,7 @@ import javax.persistence.MappedSuperclass;
 import se.tjing.common.BaseEntity;
 import se.tjing.common.TjingEntity;
 import se.tjing.interaction.Interaction;
+import se.tjing.interactionmessage.InteractionMessage;
 import se.tjing.itemrequest.ItemRequest;
 import se.tjing.membership.Membership;
 import se.tjing.user.Person;
@@ -43,6 +44,9 @@ public class Notification extends BaseEntity {
 	private Person target;
 	
 	private NotificationType type = NotificationType.GENERIC;
+
+	@ManyToOne
+	private InteractionMessage message;
 	
 	public Notification(){
 		
@@ -52,6 +56,13 @@ public class Notification extends BaseEntity {
 		this.setInteraction(interaction);
 		this.target = target;
 		this.event = event;
+	}
+
+	public Notification(InteractionMessage msg, Person recipient,
+			EventType intMessage) {
+		this.setMessage(msg);
+		this.target = recipient;
+		this.event = intMessage;
 	}
 
 	public Notification(ItemRequest itemrequest, Person target, EventType event){
@@ -87,12 +98,16 @@ public class Notification extends BaseEntity {
 		return membership;
 	}
 
+	public InteractionMessage getMessage() {
+		return message;
+	}
 	public Person getTarget() {
 		return target;
 	}
 	public NotificationType getType() {
 		return type;
 	}
+
 	public void setEvent(EventType event) {
 		this.event = event;
 	}
@@ -114,6 +129,11 @@ public class Notification extends BaseEntity {
 	public void setMembership(Membership membership) {
 		this.membership = membership;
 		this.type = NotificationType.MEMBERSHIP;
+	}
+
+	public void setMessage(InteractionMessage message) {
+		this.message = message;
+		this.type = NotificationType.MESSAGE;
 	}
 
 	public void setTarget(Person target) {

@@ -1,4 +1,4 @@
-package se.tjing.feed;
+package se.tjing.notification;
 
 public enum EventType {
 	INT_REQUEST,

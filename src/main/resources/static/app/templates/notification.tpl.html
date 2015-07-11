@@ -21,7 +21,13 @@
   <div ng-switch-when="ITEMREQUEST">
     <tjing-itemrequest itemrequest="feedItem.itemrequest"></tjing-itemrequest>
   </div>
+
+  <div ng-switch-when="MESSAGE">
+    <a href="#/interaction/{{notification.message.interaction.id}}">
+    Nytt meddelande från {{notification.message.author.firstName}}.
+    </a>
+  </div>
   <div ng-switch-default>
-    {{notification.event}}
+    {{notification.type}}
   </div>
 </div>

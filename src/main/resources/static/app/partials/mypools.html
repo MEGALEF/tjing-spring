@@ -1,11 +1,6 @@
 <div>
   <h1>Mina grupper</h1>
-  <p>
-    <a href="#newpool"><span class="glyphicon glyphicon-plus"></span>Skapa ny grupp
-    </a>
-  </p>
-  
-  <p><a href="#groupimport">Importera grupper från facebook</a></p>
+ 
   <div ng-hide="myMemberships && myMemberships.length >0">
     Du är inte medlem i någon grupp än. Gå med i en grupp eller skapa en egen.
   </div>
@@ -14,6 +9,13 @@
       <tjing-pool pool="membership.pool"></tjing-pool> ({{membership.pool.nbrMembers}} medlemmar/{{membership.pool.nbrShares}} prylar)
     </li>
   </ul>
+  <hr/>
+   <p>
+    <a href="#newpool"><span class="glyphicon glyphicon-plus"></span>Skapa ny grupp
+    </a>
+  </p>
+  
+  <p><a href="#groupimport">Importera grupper från facebook</a></p>
   
   <hr/>
 

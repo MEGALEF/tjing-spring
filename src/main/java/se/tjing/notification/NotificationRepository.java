@@ -1,4 +1,4 @@
-package se.tjing.feed;
+package se.tjing.notification;
 
 import org.springframework.data.repository.CrudRepository;
 

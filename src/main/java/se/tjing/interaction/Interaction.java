@@ -16,9 +16,9 @@ import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import se.tjing.common.TjingEntity;
-import se.tjing.feed.Notification;
 import se.tjing.interactionmessage.InteractionMessage;
 import se.tjing.item.Item;
+import se.tjing.notification.Notification;
 import se.tjing.rating.Rating;
 import se.tjing.user.Person;
 

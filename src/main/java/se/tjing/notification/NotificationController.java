@@ -1,4 +1,4 @@
-package se.tjing.feed;
+package se.tjing.notification;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ import se.tjing.user.PersonService;
 
 @RestController
 @RequestMapping("/feed")
-public class FeedController {
+public class NotificationController {
 	@Autowired
 	NotificationService feedService;
 	

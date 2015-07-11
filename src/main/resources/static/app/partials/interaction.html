@@ -11,7 +11,6 @@
 		</li>
 	</ul>
 
-
 	<div ng-show="isOwner">
 		<div ng-hide="currentInteraction.statusAccepted">
 
@@ -29,11 +28,11 @@
 
 	<div ng-show="!isOwner">
 		<div ng-show="currentInteraction.statusAccepted">(Accepterades {{currentInteraction.statusAccepted | date}})
-			<button class="btn btn-standard" ng-hide="currentInteraction.statusHandedOver" ng-click="confirmHandover()">
-				Bekräfta överlämning
-			</button>
 			<div ng-show="currentInteraction.statusHandedOver">(Överlämnad {{currentInteraction.statusHandedOver | date}})</div>
 		</div>
+		<button class="btn btn-standard" ng-hide="currentInteraction.statusHandedOver" ng-click="confirmHandover()">
+			Bekräfta överlämning
+		</button>
 	</div>
 
 	<form ng-submit="send()" role="form"><div class="form-group">

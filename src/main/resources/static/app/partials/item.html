@@ -1,14 +1,17 @@
 <h1>{{currentItem.title}}</h1>
+<div ng-show="currentItem.activeInteraction">
+(Utlånad)
+</div>
 
+<div ng-show="currentItem.category">
 <h4>Kategori</h4> 
 <p>{{currentItem.category.name}}</p>
+</div>
 
 <h4>Beskrivning</h4>
 <p>{{currentItem.description}}</p>
 
-<div ng-show="currentItem.activeInteraction">
-(Utlånad)
-</div>
+
 
 <div ng-show="!isOwner">
 	<h3>Ägare</h3>
@@ -40,9 +43,8 @@
 
 </div>
 <div ng-show="!isOwner">
-	<button class="btn btn-default" ng-click="startRequest=true" ng-hide="startRequest" ng-disabled="currentItem.activeInteraction">Låna</button>
-	<div ng-show="startRequest" class="form-group">
-		<h3>Skriv ett meddelande</h3>
+	<div class="form-group">
+		<h3>Skicka en låneförfrågan</h3>
 		<form role="form">
 			<textarea class="form-control" ng-model="request.message"></textarea>
 		</form>
